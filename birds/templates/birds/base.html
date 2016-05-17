@@ -1,0 +1,24 @@
+{% load staticfiles %}
+<html>
+    <head>
+	    <title>My Birding Book</title>
+	    <link rel="stylesheet" type="text/css" href="{% static 'birds/style.css' %}" />
+    </head>
+    <body>
+        <div class="control-bar">
+		<a href="/">My Birding Book</a>
+		<div id="user_bar">
+		{% if user.is_authenticated %}
+			user: {{ user.username }} <a href="{% url 'logout'  %}">logout</a>
+		{% else %}
+			<a href="{% url 'login' %}">login</a>
+		{% endif %}
+		</div>
+        </div>
+
+        <div class="content container">
+	{% block content %}
+	{% endblock %}	
+        </div>
+    </body>
+</html>
