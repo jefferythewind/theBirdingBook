@@ -12,10 +12,11 @@ body a:visited {
 
 .control-bar {
 	width: 100%;
-	background: LightBlue;
+	background: #2e5cb8;
 	padding-left: 10px;
 	padding-top: 10px;
 	padding-bottom: 10px;
+	color: #ffffcc;
 }
 
 .control-bar a {
