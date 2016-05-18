@@ -1,9 +1,25 @@
-body {
-    background: white url("images/background.gif") no-repeat center;
+.birdlanding {
+    position: relative;
+    background: url("https://mediashower.com/img/BB162164-B048-11E5-9AF7-FB0EBC9714B4/bird%20landing.jpg") center top no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 800px;
 }
-
+.maplanding {
+    position: relative;
+    background: url("https://cdn-locations.tripomatic.com/attractions-maps/prague-attractions-map-small.jpg") center top no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 400px;
+}
+.booklanding {
+    position: relative;
+    background: url("http://www.nesta.org.uk/sites/default/files/styles/large/public/digital_book_icon_square.jpg?itok=5EqUELZc") center top no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 400px;
+}
 
 li a {
     color: green;
 }
-

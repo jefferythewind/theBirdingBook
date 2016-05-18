@@ -1,8 +1,8 @@
-{% load staticfiles %}
+{% extends "polls/base.html" %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
-
-{% if latest_question_list %}
+{% block content %}
+	
+<!--{% if latest_question_list %}
     <ul>
     {% for question in latest_question_list %}
         <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
@@ -10,4 +10,25 @@
     </ul>
 {% else %}
     <p>No polls are available.</p>
-{% endif %}
+{% endif %}-->
+
+  	<div class="mdl-layout__content birdlanding">
+        <a name="top"></a>
+		<div class="mdl-typography--text-center">
+          <h1>Share the Birding world Around you</h1>
+        </div>
+    </div>
+    <div class="mdl-layout__content maplanding">
+        <a name="top"></a>
+		<div class="mdl-typography--text-center">
+          <h1>Mark where and when you spot a bird</h1>
+        </div>
+    </div> 
+    <div class="mdl-layout__content booklanding">
+        <a name="top"></a>
+		<div class="mdl-typography--text-center">
+          <h1>Save images & details about your spotting in your very own digital birding book</h1>
+        </div>
+    </div>
+{% endblock %}
+
