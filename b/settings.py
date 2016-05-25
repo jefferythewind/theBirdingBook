@@ -29,7 +29,6 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = (
-    'datetimewidget',
     'birds.apps.BirdsConfig',
     'polls.apps.PollsConfig',
     'django.contrib.admin',
