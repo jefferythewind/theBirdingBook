@@ -29,6 +29,7 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = (
+    'datetimewidget',
     'birds.apps.BirdsConfig',
     'polls.apps.PollsConfig',
     'django.contrib.admin',
@@ -59,6 +60,7 @@ TEMPLATES = (
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+		'django.template.context_processors.media',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -143,3 +145,7 @@ DEFAULT_TO_EMAIL = os.environ.get('DEFAULT_TO_EMAIL')
 
 #LOGIN
 LOGIN_REDIRECT_URL = '/'
+
+#Uploaded Files
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, '../birds/media')
+MEDIA_URL = '/media/'

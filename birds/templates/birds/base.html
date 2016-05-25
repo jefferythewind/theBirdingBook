@@ -3,20 +3,27 @@
     <head>
 	    <title>My Birding Book</title>
 	    <link rel="stylesheet" type="text/css" href="{% static 'birds/style.css' %}" />
+	    <link rel="stylesheet" type="text/css" href="{% static 'birds/jquery-ui-1.11.4.custom/jquery-ui.css' %}" />
+	    <script type="text/javascript" src='http://maps.google.com/maps/api/js?sensor=false&libraries=places'></script>
+	    <script src="{% static 'birds/jquery-ui-1.11.4.custom/external/jquery/jquery.js' %}"></script>
+	    <script src="{% static 'birds/jquery-ui-1.11.4.custom/jquery-ui.js' %}"></script>
+	    <script src="{% static 'birds/js/locationpicker.jquery.js' %}"></script>
+	    {{ form.media }}
     </head>
     <body>
         <div class="control-bar">
-		<a href="/">My Birding Book</a>
+		<a href="/">My Birding Book</a> | 
+		<a href="{% url 'birds:new_sighting' %}">new sighting</a>
 		<div id="user_bar">
 		{% if user.is_authenticated %}
-			user: {{ user.username }} <a href="{% url 'logout'  %}">logout</a>
+		<a href="">{{ user.username }}</a> | <a href="{% url 'logout'  %}">logout</a>
 		{% else %}
 			<a href="{% url 'login' %}">login</a>
 		{% endif %}
 		</div>
         </div>
 
-        <div class="content container">
+        <div id="content" class="content container">
 	{% block content %}
 	{% endblock %}	
         </div>

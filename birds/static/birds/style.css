@@ -1,22 +1,25 @@
 body {
 
-	font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+	/* font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+	*/
 	padding: 0;
 	margin: 0;
+
 
 }
 
 body a:visited {
-	color: #f5dd5d;
+	color: #336600;
 }
 
 .control-bar {
 	width: 100%;
-	background: #2e5cb8;
+	background: #ebfaeb;
 	padding-left: 10px;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	color: #ffffcc;
+	color: #336600;
+	border-bottom: solid 1px #336600;
 }
 
 .control-bar a {
@@ -26,4 +29,15 @@ body a:visited {
 #user_bar {
 	float:right;
 	padding-right: 20px;
+}
+
+#map {
+	margin: auto;
+	width:100%;
+	height: 400px;
+}
+
+#content {
+	margin: auto;
+	width:75%;
 }

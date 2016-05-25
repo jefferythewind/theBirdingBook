@@ -1,0 +1,17 @@
+{% extends 'birds/base.html' %}
+
+
+
+{% block content %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+	<p>{{ sighting.species }}</p>
+	<p>{{ sighting.location }}</p>
+	<p>{{ sighting.sighting_date }}</p>
+	<img style="width:40%" src="{{ sighting.image.url }}">
+</form>
+<script type="text/javascript">
+</script>
+{% endblock %}
