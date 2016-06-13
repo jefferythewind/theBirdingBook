@@ -96,7 +96,7 @@
                 {% if user.is_authenticated %}
                     <span>{{ user.username }}</span>
                 {% else %}
-                    <span><a href="{% url 'login' %}">Login</a></span>
+                    <span><a class="mdl-button mdl-js-button mdl-button--accent" href="{% url 'login' %}">Login</a></span>
                 {% endif %}
             <div class="mdl-layout-spacer"></div>
             <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
