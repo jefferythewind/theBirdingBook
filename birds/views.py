@@ -5,6 +5,9 @@ from .models import Sighting
 
 from .forms import SightingsForm
 
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def new_sighting(request):
 	if request.method == "POST":
 		form = SightingsForm(request.POST, request.FILES)
