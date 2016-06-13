@@ -19,13 +19,22 @@
         <div class="mdl-cell mdl-cell--5-col mdl-cell--1-offset-desktop">
         <div class="card-bird mdl-card mdl-shadow--3dp"> 
                 <div class="mdl-card__title news-title">
-                    <h2 class="mdl-card__title-text">Log into your Birding Book </h2>
+                    <h2 class="mdl-card__title-text">Log into your Birding Book</h2>
                 </div>
                 <div class="mdl-card__supporting-text news-text">
                 <img class="birding-sign-in-logo" src="https://www.iconexperience.com/_img/o_collection_png/green_dark_grey/512x512/plain/bird.png" alt="birding-logo"/>
 <form method="post" action="{% url 'login' %}">
 {% csrf_token %}
+<!--<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <input class="mdl-textfield__input" type="text" id="username">
+    <label class="mdl-textfield__label" for="username">{{ form.username.label_tag }}</label>
+</div>
+<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <input class="mdl-textfield__input" type="password" id="password">
+    <label class="mdl-textfield__label" for="password">{{ form.password.label_tag }}</label>
+</div>-->
 <table>
+
 <tr>
     <td>{{ form.username.label_tag }}</td>
     <td>{{ form.username }}</td>
@@ -36,12 +45,12 @@
 </tr>
 </table>
 
-<input type="submit" value="login" />
+<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="login"> Log In</button>
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
 {# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+<a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" href="{% url 'password_reset' %}">Lost password?</a>
 </div>
 </div>
 </div>
