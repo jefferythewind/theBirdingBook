@@ -25,24 +25,12 @@
                 <img class="birding-sign-in-logo" src="https://www.iconexperience.com/_img/o_collection_png/green_dark_grey/512x512/plain/bird.png" alt="birding-logo"/>
 <form method="post" action="{% url 'login' %}">
 {% csrf_token %}
-<!--<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="text" id="username">
-    <label class="mdl-textfield__label" for="username">{{ form.username.label_tag }}</label>
-</div>
+{% for field in form %}
 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="password" id="password">
-    <label class="mdl-textfield__label" for="password">{{ form.password.label_tag }}</label>
-</div>-->
-<table>
-
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
+    <label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
+    <input class="mdl-textfield__input" type="text" id="{{ field.auto_id }}" name="{{ field.name }}"></input>
+</div>
+{% endfor %}
 </table>
 
 <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="login"> Log In</button>

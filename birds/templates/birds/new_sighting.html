@@ -15,16 +15,14 @@
 					<h2 class="mdl-card__title-text">New Sighting </h2>
 				</div>
 				<div class="mdl-card__supporting-text news-text">
-					<form action="#">
-					  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-					    <input class="mdl-textfield__input" type="text" id="sample3">
-					    <label class="mdl-textfield__label" for="sample3">Text...</label>
-					  </div>
-					</form>
 					<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-						{{ form.as_p }}
-						
-						<input id="save_button" type="submit" value="Save" />
+                        {% for field in form %}
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
+                            <input class="mdl-textfield__input" type="text" id="{{ field.auto_id }}" name="{{ field.name }}"></input>
+                        </div>
+                        {% endfor %}
+                        <input id="save_button" type="submit" value="Save" />
 						
 					</form>
 					<div id="msg"><p>Please indicate sighting location.</p></div>
