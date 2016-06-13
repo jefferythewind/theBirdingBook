@@ -13,7 +13,9 @@
   margin-left: 4em;
   margin-bottom: 1em;
 }
-
+.login-error p{
+color:#f44336;
+}
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
  *
