@@ -40,9 +40,11 @@ class Subspecies(models.Model):
 
 class Sighting(models.Model):
         caption = models.CharField(max_length=100,default=None)
-        subspecies = models.ForeignKey(Subspecies, default=None)
+        subspecies = models.ForeignKey(Subspecies, default=None, blank=True)
+        species_tags = models.CharField(max_length=100,default=None, blank=True, null=True)
         lat = models.FloatField(default=None)
         lng = models.FloatField(default= None)
+        #location = models.CharField(max_length=100, default=None, null=True, blank=True)
         sighting_date = models.DateTimeField()
         image = models.ImageField(default=None)
         user_id = models.IntegerField(default=None)
