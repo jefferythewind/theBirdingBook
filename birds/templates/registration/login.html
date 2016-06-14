@@ -4,16 +4,15 @@
 
 
 <div class="page-content">
-    {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
-    {% endif %}
+    
 
     <section class="mdl-grid">
-        <div class="mdl-cell mdl-cell--5-col mdl-cell--1-offset-desktop">
+        <div class="mdl-cell mdl-cell--4-col mdl-cell--1-offset-desktop">
             <div class="card-bird mdl-card mdl-shadow--3dp">
-                <div class="mdl-card__title news-title">
+                <div class="mdl-card__title">
                     <h2 class="mdl-card__title-text">Log into your Birding Book</h2>
                 </div>
+                
                 <div class="mdl-card__supporting-text news-text">
                     <img class="birding-sign-in-logo" src="https://www.iconexperience.com/_img/o_collection_png/green_dark_grey/512x512/plain/bird.png" alt="birding-logo"/>
                         <form method="post" action="{% url 'login' %}">
@@ -21,10 +20,14 @@
                             {% for field in form %}
                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                 <label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
-                                <input class="mdl-textfield__input" type="text" id="{{ field.auto_id }}" name="{{ field.name }}"></input>
+                                <input class="mdl-textfield__input" type="text" id="{{ field.auto_id }}" name="{{ field.name }}"/>
                             </div>
                             {% endfor %}
-
+                            {% if form.errors %}
+                                <div class="login-error">
+                                    <p>Your username and password didn't match.<br> Please try again.</p>
+                                </div>    
+                            {% endif %}
                             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="login"> Log In</button>
                             <input type="hidden" name="next" value="{{ next }}" />
                         </form>
