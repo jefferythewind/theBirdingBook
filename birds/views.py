@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from django.utils import timezone
 from .models import Sighting
+from django.http import HttpResponse
+
+import urllib2
 
 from .forms import SightingsForm
 
@@ -19,6 +22,14 @@ def new_sighting(request):
 	else:
 		form = SightingsForm()
 	return render(request, 'birds/new_sighting.html', {'form': form})
+
+def weather(req):
+	if 'city' in req.GET and 'appid' in req.GET:
+		result = urllib2.urlopen('http://api.openweathermap.org/data/2.5/forecast/city?q='+req.GET.get('city')+'&APPID='+req.GET.get("appid"))
+		content = result.read()
+		return HttpResponse(content, content_type='application/json')
+	else:
+		return HttpResponse('{"error":"need to supply city and appid."}', content_type='application/json')
 
 class view_sighting(generic.DetailView):
 	model = Sighting

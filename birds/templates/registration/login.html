@@ -17,12 +17,14 @@
                     <img class="birding-sign-in-logo" src="https://www.iconexperience.com/_img/o_collection_png/green_dark_grey/512x512/plain/bird.png" alt="birding-logo"/>
                         <form method="post" action="{% url 'login' %}">
                             {% csrf_token %}
-                            {% for field in form %}
                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
-                                <input class="mdl-textfield__input" type="text" id="{{ field.auto_id }}" name="{{ field.name }}"/>
+                                <label class="mdl-textfield__label" for="username">Username</label>
+                                <input class="mdl-textfield__input" type="text" id="id_username" name="username"/>
                             </div>
-                            {% endfor %}
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <label class="mdl-textfield__label" for="password">Password</label>
+                                <input class="mdl-textfield__input" type="password" id="id_password" name="password"/>
+                            </div>
                             {% if form.errors %}
                                 <div class="login-error">
                                     <p>Your username and password didn't match.<br> Please try again.</p>

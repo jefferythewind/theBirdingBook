@@ -2,6 +2,9 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+class SpeciesFile(models.Model):
+    species_list = models.FileField()
+
 class Order(models.Model):
 	order = models.CharField(max_length=100)
 
@@ -24,19 +27,19 @@ class Genus(models.Model):
 		return self.genus
 
 class Species(models.Model):
-	genus = models.ForeignKey(Genus, default=None)
-	species = models.CharField(max_length=100, default=None)
+    genus = models.ForeignKey(Genus, default=None)
+    species = models.CharField(max_length=100, default=None)
+    species_english = models.CharField(max_length=100, default=None, blank=True, null=True)
 
-	def __str__(self):
-		return self.species
+    def __str__(self):
+		return self.species+" "+self.species_english
 
 class Subspecies(models.Model):
 	species = models.ForeignKey(Species)
 	subspecies = models.CharField(max_length=100)
-	common_name = models.CharField(max_length=100, default=None, blank=True)
 
 	def __str__(self):
-		return self.common_name+" "+self.subspecies
+		return self.species.species_english+" "+self.species.species+" "+self.subspecies
 
 class Sighting(models.Model):
         caption = models.CharField(max_length=100,default=None)
