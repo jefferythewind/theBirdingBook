@@ -5,6 +5,7 @@ from .models import Sighting
 from django.http import HttpResponse
 
 import urllib2
+import json
 
 from .forms import SightingsForm
 
@@ -24,10 +25,16 @@ def new_sighting(request):
 	return render(request, 'birds/new_sighting.html', {'form': form})
 
 def weather(req):
-	if 'city' in req.GET and 'appid' in req.GET:
-		result = urllib2.urlopen('http://api.openweathermap.org/data/2.5/forecast/city?q='+req.GET.get('city')+'&APPID='+req.GET.get("appid"))
-		content = result.read()
-		return HttpResponse(content, content_type='application/json')
+	if 'ids' in req.GET and 'appid' in req.GET:
+		cities = req.GET.get('ids').split(',')
+		json_output = "["
+		for city in cities:
+			result = urllib2.urlopen('http://api.openweathermap.org/data/2.5/forecast/city?id='+city+'&APPID='+req.GET.get("appid"))
+			content = result.read()
+			content_dict = json.loads(content)
+			json_output += '{"city":"'+content_dict['city']['name']+'","desc":"'+content_dict['list'][0]['weather'][0]['description']+'","icon":"'+content_dict['list'][0]['weather'][0]['icon']+'"},'
+
+		return HttpResponse(json_output[:-1]+"]", content_type='application/json')
 	else:
 		return HttpResponse('{"error":"need to supply city and appid."}', content_type='application/json')
 
