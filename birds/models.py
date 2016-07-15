@@ -35,11 +35,14 @@ class Species(models.Model):
 		return self.species+" "+self.species_english
 
 class Subspecies(models.Model):
-	species = models.ForeignKey(Species)
-	subspecies = models.CharField(max_length=100)
+    species = models.ForeignKey(Species)
+    subspecies = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.species.species_english+" "+self.species.species+" "+self.subspecies
 
-	def __str__(self):
-		return self.species.species_english+" "+self.species.species+" "+self.subspecies
+    def __unicode__(self):
+        return self.species.species_english+" "+self.species.species+" "+self.subspecies
 
 class Sighting(models.Model):
     caption = models.CharField(max_length=100,default=None)

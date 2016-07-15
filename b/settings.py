@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -146,5 +147,15 @@ DEFAULT_TO_EMAIL = os.environ.get('DEFAULT_TO_EMAIL')
 LOGIN_REDIRECT_URL = '/'
 
 #Uploaded Files
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, '../birds/media')
-MEDIA_URL = '/media/'
+AWS_HEADERS = {  # see http://developer.yahoo.com/performance/rules.html#expires
+    'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+    'Cache-Control': 'max-age=94608000',
+}
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % os.environ.get('AWS_STORAGE_BUCKET_NAME')
+MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+# MEDIA_ROOT = os.path.join(PROJECT_ROOT, '../birds/media')
+# MEDIA_URL = '/media/'

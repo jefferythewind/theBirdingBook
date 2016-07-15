@@ -18,7 +18,7 @@ with open("birds/media/"+csv_file.split('/')[1], 'rU') as c:
     Genus.objects.all().delete()
     Species.objects.all().delete()
     Subspecies.objects.all().delete()
-    reader = csv.reader(c, delimiter=';', quotechar='"')
+    reader = csv.reader(c, delimiter=',', quotechar='"')
     ini_rows = 4
     for row in reader:
         if ini_rows > 0:
