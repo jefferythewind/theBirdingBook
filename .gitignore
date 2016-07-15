@@ -1,6 +1,7 @@
 venv
 *.pyc
 staticfiles
-.env
+.env*
 db.sqlite3
 birds/media
+.DS_Store
