@@ -6,25 +6,25 @@ class SpeciesFile(models.Model):
     species_list = models.FileField()
 
 class Order(models.Model):
-	order = models.CharField(max_length=100)
+    order = models.CharField(max_length=100)
 
-	def __str__(self):
-		return self.order
+    def __str__(self):
+        return self.order
 
 class Family(models.Model):
-	order = models.ForeignKey(Order)
-	family_scientific = models.CharField(max_length=100)
-	family_english = models.CharField(max_length=100)
+    order = models.ForeignKey(Order)
+    family_scientific = models.CharField(max_length=100)
+    family_english = models.CharField(max_length=100)
 
-	def __str__(self):
-		return self.family_english+" "+self.family_scientific
+    def __str__(self):
+        return self.family_english+" "+self.family_scientific
 
 class Genus(models.Model):
-	family = models.ForeignKey(Family)
-	genus = models.CharField(max_length=100)
+    family = models.ForeignKey(Family)
+    genus = models.CharField(max_length=100)
 
-	def __str__(self):
-		return self.genus
+    def __str__(self):
+        return self.genus
 
 class Species(models.Model):
     genus = models.ForeignKey(Genus, default=None)
@@ -32,7 +32,7 @@ class Species(models.Model):
     species_english = models.CharField(max_length=100, default=None, blank=True, null=True)
 
     def __str__(self):
-		return self.species+" "+self.species_english
+        return self.species+" "+self.species_english
 
 class Subspecies(models.Model):
     species = models.ForeignKey(Species)
