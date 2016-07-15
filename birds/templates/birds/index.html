@@ -4,7 +4,7 @@
 {% if latest_sighting_list %}
 	<ul>
 	{% for sighting in latest_sighting_list %}
-    <li><a href="{% url 'birds:view_sighting' sighting.id %}"><img style="height:45px" src="{{ sighting.image.url }}"> {{ sighting.caption }} {{ sighting.sighting_date }}</a></li>
+    <li><a href="{% url 'birds:view_sighting' sighting.id %}"><img style="height:90px" src="{{ sighting.image.url }}"> {{ sighting.caption }} {{ sighting.sighting_date }}</a></li>
 	{% endfor %}
 	</ul>
 {% else %}
