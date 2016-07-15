@@ -1,13 +1,65 @@
 {% extends 'birds/base.html' %}
 
 {% block content %}
+<div class="page-content">
+	<section class="mdl-grid">
+		<div class="mdl-cell mdl-cell--12-col">
 {% if latest_sighting_list %}
-	<ul>
+	
 	{% for sighting in latest_sighting_list %}
-    <li><a href="{% url 'birds:view_sighting' sighting.id %}"><img style="height:90px" src="{{ sighting.image.url }}"> {{ sighting.caption }} {{ sighting.sighting_date }}</a></li>
+    <div class="card-bird-full mdl-card mdl-shadow--2dp">
+    		<a href="{% url 'birds:view_sighting' sighting.id %}">
+				<img src="{{ sighting.image.url }}"> 
+				{{ sighting.caption }} 
+				{{ sighting.sighting_date }}
+			</a>
+    </div>
 	{% endfor %}
-	</ul>
+	
 {% else %}
-	<p>No sightings are available.</p>
+	<div class="mdl-components__warning">
+		<b>Note:</b> No sightings are available.
+	</div>
+	<div class="mdl-grid">
+		<!--<div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
+			<div class="card-bird-full mdl-card mdl-shadow--2dp no-decoration">
+				<a class="no-decoration" href="www.google.com">
+				<img class="no-decoration"src="https://birdingapp.s3.amazonaws.com/DSC_0416.jpg"></a>
+				 <div class="mdl-card__title no-decoration">
+				    <h2 class="mdl-card__title-text no-decoration">April 13, 2016, midnight</h2>
+				  </div>
+				<div class="mdl-card__supporting-text no-decoration">
+				Tufted Titmouse at Feeder
+				</div>
+			</div>
+		</div>-->
+		<div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
+		
+				<a class="no-decoration" href="www.google.com">
+					<div class="image image-block-m" style="background: url(https://birdingapp.s3.amazonaws.com/DSC_0416.jpg) no-repeat center;background-size:cover;">
+						<h4>
+							<span>4/3/2016, midnight</span>
+						</h4>
+	                </div>
+	            </a>
+				<div class="mdl-card__supporting-text no-decoration">Tufted Titmouse at Feeder</div>		
+			
+		</div>
+		<div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
+			
+				<a class="no-decoration" href="www.google.com">
+					<div class="image image-block-m" style="background: url(https://birdingapp.s3.amazonaws.com/DSC_0416.jpg) no-repeat center;background-size:cover;">
+						<h4>
+							<span>Tufted Titmouse at Feeder</span>
+						</h4>
+	                </div>
+	            </a>
+				<div class="mdl-card__supporting-text">April 13, 2016, midnight</div>		
+				
+		</div>
+   	</div>	
 {% endif %}
+		</div>
+	</section>
+</div>
 {% endblock %}
