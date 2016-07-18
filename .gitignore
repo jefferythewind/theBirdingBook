@@ -5,3 +5,4 @@ staticfiles
 db.sqlite3
 birds/media
 .DS_Store
+latest.dump
