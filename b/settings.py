@@ -79,8 +79,8 @@ WSGI_APPLICATION = 'b.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -110,7 +110,8 @@ USE_TZ = True
 
 # Update database configuration with $DATABASE_URL.
 # DATABASES['default'] =  dj_database_url.config()
-db_from_env = dj_database_url.config(conn_max_age=500)
+db_from_env = dj_database_url.config()
+#print "db config var --> ",db_from_env  #debugging
 DATABASES['default'].update(db_from_env)
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
