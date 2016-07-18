@@ -48,6 +48,7 @@
 
         var pos = { lat: 0, lng: 0 }
         var map = new google.maps.Map(document.getElementById('map'), { zoom: 14, center: pos })
+        var geocoder = new google.maps.Geocoder;
 
         var marker = new google.maps.Marker({
             position: pos, icon: {
@@ -63,13 +64,7 @@
             $('#id_lat').val(pos.lat())
             $('#id_lng').val(pos.lng())
             marker.setPosition(pos)
-            $.ajax({
-                url: "https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=AIzaSyDcWjuyosd0o5iQ2am9FFN2IC568p6-VCU",
-                dataType: "json",
-                succes: function(data, textStatus, jqXHR){
-                    alert(data);
-                })
-            })
+            geocodeLatLng(geocoder, map, pos.lat(), pos.lng())
         })
 
         if (navigator.geolocation) {
@@ -85,6 +80,21 @@
         } else {
             // Browser doesn't support Geolocation
             $('#msg').html("<p>Browser doesn't support geolocation.</p>")
+        }
+           
+        function geocodeLatLng(geocoder, map, lat, lng) {
+            var latlng = {lat: lat, lng: lng};
+            geocoder.geocode({'location': latlng, 'region': 'us'}, function(results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    if (results[0]) {
+                        $('#id_location').val(results[1].formatted_address);
+                    } else {
+                        window.alert('No results found');
+                    }
+                } else {
+                    window.alert('Geocoder failed due to: ' + status);
+                }
+            });
         }
     })
 </script>

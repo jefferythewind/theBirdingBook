@@ -50,10 +50,10 @@ class Sighting(models.Model):
     species_tags = models.CharField(max_length=100,default=None, blank=True, null=True)
     lat = models.FloatField(default=None)
     lng = models.FloatField(default= None)
-    #location = models.CharField(max_length=200, default=None, null=True, blank=True)
     sighting_date = models.DateTimeField()
     image = models.ImageField(default=None)
     user_id = models.IntegerField(default=None)
+    location = models.CharField(max_length=200, default=None, null=True, blank=True)
 
     def __str__(self):
         return self.caption
