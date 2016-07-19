@@ -100,8 +100,8 @@
                         lng: position.coords.longitude
                     }
                     map.setCenter(pos);
-                }, function() {
-                    $('#msg').html("<p>Geolocation Service Failed.</p>")
+                }, function(err) {
+                    $('#msg').html("<p>ERROR(" + err.code + "): " + err.message + "</p>")
                 })
             }
         } else {
