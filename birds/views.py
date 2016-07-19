@@ -53,7 +53,8 @@ class IndexView(generic.ListView):
 def species_query(request):
 	if request.method == "GET":
 		l = list(Subspecies.objects.filter(subspecies__contains=request.GET.get('term')).order_by('subspecies')[:10])
-		data = json.dumps(l)
+		l2 = [str(i) for i in l]
+		data = json.dumps(l2)
 		print data
 		return HttpResponse(data, content_type='application/json')
 	

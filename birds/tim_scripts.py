@@ -12,7 +12,7 @@ csv_file = str(SpeciesFile.objects.all()[0].species_list)
 #5 - SubSpecies
 
 
-with open("birds/media/"+csv_file.split('/')[1], 'rU') as c:
+with open("birds/media/"+csv_file, 'rU') as c:
     Order.objects.all().delete()
     Family.objects.all().delete()
     Genus.objects.all().delete()
