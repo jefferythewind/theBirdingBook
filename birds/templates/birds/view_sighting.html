@@ -18,9 +18,11 @@
             </h4>
         </div>
         <div class="mdl-card__menu md-light">
+			{% if sighting.user_id == user.id %}
             <button id="edit_button" class="mdl-button md-light mdl-button--icon mdl-js-button mdl-js-ripple-effect">
                 <i class="material-icons md-light">mode_edit</i>
             </button>
+			{% endif %}
         </div>	
     </div> 
     <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
