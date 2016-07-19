@@ -10,46 +10,47 @@
 	</div>
 {% endif %}
 
-<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-	<div class="mdl-grid">
-		<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
-			<div class="image image-block-m sighting-page" style="background: url({{ sighting.image.url }}) no-repeat center;background-size:cover;">
-				<h4>
-					<span>{{ sighting.caption }} </span>
-				</h4>
-            </div>
-	        <div class="mdl-card__menu md-light">
-				    <button class="mdl-button md-light mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-				      <i class="material-icons md-light">mode_edit</i>
-				    </button>
-			</div>	
-    	</div> 
-    	<div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
-    		<p>{{ sighting.lat }}</p>
-    	</div>
-    	<div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
-    		<p>{{ sighting.sighting_date }}</p>
-    	</div>
-    	<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
-    		<div class="mdl-card__title">
-			    <h2 class="mdl-card__title-text">Comments</h2>
-			</div>
-			<div class="mdl-card__supporting-text">
-			    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-			    Mauris sagittis pellentesque lacus eleifend lacinia...
-			</div>
-			<div class="mdl-card__actions mdl-card--border">
-			    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-			      New Comment
-			    </a>
-			</div>
-    	</div>
-    </div>       
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
+        <div class="image image-block-m sighting-page" style="background: url({{ sighting.image.url }}) no-repeat center;background-size:cover;">
+            <h4>
+                <span>{{ sighting.caption }} </span>
+            </h4>
+        </div>
+        <div class="mdl-card__menu md-light">
+            <button id="edit_button" class="mdl-button md-light mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                <i class="material-icons md-light">mode_edit</i>
+            </button>
+        </div>	
+    </div> 
+    <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
+        <p>{{ sighting.lat }}</p>
+    </div>
+    <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
+        <p>{{ sighting.sighting_date }}</p>
+    </div>
+    <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__title">
+            <h2 class="mdl-card__title-text">Comments</h2>
+        </div>
+        <div class="mdl-card__supporting-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Mauris sagittis pellentesque lacus eleifend lacinia...
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+              New Comment
+            </a>
+        </div>
+    </div>
+</div>       
 
-	<!--<p>{{ sighting.caption }}</p>
-	<img style="width:40%" src="{{ sighting.image.url }}">-->
-</form>
 <script type="text/javascript">
+    jQuery(function($){
+        $('#edit_button').click(function(){
+			window.location = "{% url 'birds:edit_sighting' sighting.id %}";
+		})
+    })
 </script>
 
 {% endblock %}

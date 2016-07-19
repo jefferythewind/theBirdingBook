@@ -51,7 +51,7 @@ class Sighting(models.Model):
     lat = models.FloatField(default=None)
     lng = models.FloatField(default= None)
     sighting_date = models.DateTimeField()
-    image = models.ImageField(default=None)
+    image = models.ImageField(default=None, blank=True, null=True)
     user_id = models.IntegerField(default=None)
     location = models.CharField(max_length=200, default=None, null=True, blank=True)
 

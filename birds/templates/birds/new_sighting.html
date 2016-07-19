@@ -6,6 +6,12 @@
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
+{% for field, errors in form.errors.items %}
+    {% for error in errors %}
+        <p><strong>{{ error }} {{ field }}</strong></p>
+    {% endfor %}
+{% endfor %}
+
 
 <div class="page-content">
 	<section class="mdl-grid">
@@ -46,7 +52,17 @@
     jQuery(function($){
         $('#id_sighting_date').datepicker();
 
-        var pos = { lat: 0, lng: 0 }
+		$('#id_species_tags').autocomplete({
+			source: "{% url 'birds:species_query' %}",
+			minLength: 2,
+			response: function( event, ui ) {
+			
+				//alert('got response');
+			
+			}
+		});
+
+        var pos = { lat: {{ form.lat.value|default:0 }}, lng: {{ form.lng.value|default:0 }} }
         var map = new google.maps.Map(document.getElementById('map'), { zoom: 14, center: pos })
         var geocoder = new google.maps.Geocoder;
 
@@ -59,24 +75,35 @@
             map: map
         })
 
+        var moved = 0;
+           
         map.addListener('center_changed', function() {
             pos = map.getCenter()
             $('#id_lat').val(pos.lat())
             $('#id_lng').val(pos.lng())
             marker.setPosition(pos)
-            geocodeLatLng(geocoder, map, pos.lat(), pos.lng())
+            moved = 1;
         })
+           
+        setInterval(function(){
+            if (moved == 1){
+                geocodeLatLng(geocoder, map, pos.lat(), pos.lng())
+                moved = 0;
+            }
+        }, 3000);
 
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                pos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                }
-                map.setCenter(pos);
-            }, function() {
-                $('#msg').html("<p>Geolocation Service Failed.</p>")
-            })
+            if (pos.lat == 0 && pos.lng == 0) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    }
+                    map.setCenter(pos);
+                }, function() {
+                    $('#msg').html("<p>Geolocation Service Failed.</p>")
+                })
+            }
         } else {
             // Browser doesn't support Geolocation
             $('#msg').html("<p>Browser doesn't support geolocation.</p>")
