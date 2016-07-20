@@ -1,7 +1,15 @@
 import csv
 from birds.models import SpeciesFile, Order, Family, Genus, Species, Subspecies
+from boto.s3.connection import S3Connection
 
 csv_file = str(SpeciesFile.objects.all()[0].species_list)
+
+conn = S3Connection()
+bucket = conn.get_bucket('birdingapp')
+
+for file_key in bucket.list():
+    if file_key.name == csv_file:
+        file_key.get_contents_to_filename("birds/media/"+csv_file)
 
 #COLUMNS
 #0 - Order
