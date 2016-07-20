@@ -14,7 +14,7 @@
     <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
         <div class="image image-block-m sighting-page" style="background: url({{ sighting.image.url }}) no-repeat center;background-size:cover;">
             <h4>
-                <span>{{ sighting.caption }} </span>
+                <span>{{ sighting.caption }}</span>
             </h4>
         </div>
         <div class="mdl-card__menu md-light">
@@ -26,7 +26,7 @@
         </div>	
     </div> 
     <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
-        <p>{{ sighting.lat }}</p>
+        <div id="map"></div>
     </div>
     <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
         <p>{{ sighting.sighting_date }}</p>
@@ -52,6 +52,19 @@
         $('#edit_button').click(function(){
 			window.location = "{% url 'birds:edit_sighting' sighting.id %}";
 		})
+		
+		var pos = { lat: {{ sighting.lat|default:0 }}, lng: {{ sighting.lng|default:0 }} }
+        var map = new google.maps.Map(document.getElementById('map'), { zoom: 14, center: pos })
+		var marker = new google.maps.Marker({
+            position: pos, icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 5
+            },
+            draggable: false,
+            map: map
+        })
+		
+		
     })
 </script>
 

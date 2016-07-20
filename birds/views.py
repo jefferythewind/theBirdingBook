@@ -4,6 +4,7 @@ from django.utils import timezone
 from .models import Sighting, Subspecies
 from django.http import HttpResponse
 import json
+from django.db.models import Q
 
 
 
@@ -11,6 +12,9 @@ from .forms import SightingsForm
 
 from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponseForbidden
+
+def about(request):
+	return render(request, 'birds/about.html')
 
 @login_required
 def new_sighting(request):
@@ -52,10 +56,10 @@ class IndexView(generic.ListView):
 		
 def species_query(request):
 	if request.method == "GET":
-		l = list(Subspecies.objects.filter(subspecies__contains=request.GET.get('term')).order_by('subspecies')[:10])
-		l2 = [str(i) for i in l]
+		term = request.GET.get('term')
+		l = list(Subspecies.objects.filter( Q(subspecies__icontains=term) | Q(species__species__icontains=term) | Q(species__species_english__icontains=term) ).order_by('subspecies')[:10])
+		l2 = [unicode(i) for i in l]
 		data = json.dumps(l2)
-		print data
 		return HttpResponse(data, content_type='application/json')
 	
 #import urllib2

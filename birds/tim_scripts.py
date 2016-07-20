@@ -33,11 +33,9 @@ with open("birds/media/"+csv_file, 'rU') as c:
         elif row[3]:
             new_genus = Genus(family = new_fam, genus=row[3])
             new_genus.save()
-        elif row[4]:
-            print row[4]
-            new_species = Species(genus=new_genus, species=row[4], species_english=row[7])
-            new_species.save()
-        elif row[5]:
-            print row[5]
+        elif row[4] or row[5]:
+            if row[4]:
+                new_species = Species(genus=new_genus, species=row[4], species_english=row[7])
+                new_species.save()
             new_subspecies = Subspecies(species=new_species, subspecies=row[5])
             new_subspecies.save()

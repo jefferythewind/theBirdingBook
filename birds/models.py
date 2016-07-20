@@ -39,10 +39,10 @@ class Subspecies(models.Model):
     subspecies = models.CharField(max_length=100)
     
     def __str__(self):
-        return self.species.species_english+" "+self.species.species+" "+self.subspecies
+        return self.species.species_english+" "+self.species.genus.genus+" "+self.species.species+" "+self.subspecies
 
     def __unicode__(self):
-        return self.species.species_english+" "+self.species.species+" "+self.subspecies
+        return self.species.species_english+" "+self.species.genus.genus+" "+self.species.species+" "+self.subspecies
 
 class Sighting(models.Model):
     caption = models.CharField(max_length=100,default=None)
@@ -50,7 +50,7 @@ class Sighting(models.Model):
     species_tags = models.CharField(max_length=100,default=None, blank=True, null=True)
     lat = models.FloatField(default=None)
     lng = models.FloatField(default= None)
-    sighting_date = models.DateTimeField()
+    sighting_date = models.DateField()
     image = models.ImageField(default=None, blank=True, null=True)
     user_id = models.IntegerField(default=None)
     location = models.CharField(max_length=200, default=None, null=True, blank=True)

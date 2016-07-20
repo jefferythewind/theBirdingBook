@@ -39,6 +39,7 @@
                             {{ field }}
                         {% endfor %}
                         <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="save_button" type="submit" value="Save" />
+						<a class="mdl-button mdl-js-button mdl-button--accent" href="{% url 'birds:index' %}">Cancel</a>
 						
 					</form>
 					<div id="msg"><p>Please indicate sighting location.</p></div>
