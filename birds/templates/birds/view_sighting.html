@@ -40,9 +40,16 @@
             Mauris sagittis pellentesque lacus eleifend lacinia...
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+            <!--<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
               New Comment
-            </a>
+            </a>-->
+			<form action="#">
+				<div style="width:99%" class="mdl-textfield mdl-js-textfield">
+					<textarea style="width:100%" class="mdl-textfield__input" type="text" rows= "3" id="comment" ></textarea>
+					<label class="mdl-textfield__label" for="comment">New comment...</label>
+				</div>
+				<input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="save_button" type="submit" value="Save" />
+			</form>
         </div>
     </div>
 </div>       
@@ -54,7 +61,7 @@
 		})
 		
 		var pos = { lat: {{ sighting.lat|default:0 }}, lng: {{ sighting.lng|default:0 }} }
-        var map = new google.maps.Map(document.getElementById('map'), { zoom: 14, center: pos })
+        var map = new google.maps.Map(document.getElementById('map'), { zoom: 10, center: pos })
 		var marker = new google.maps.Marker({
             position: pos, icon: {
                 path: google.maps.SymbolPath.CIRCLE,
