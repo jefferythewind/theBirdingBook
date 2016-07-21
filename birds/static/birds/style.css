@@ -44,6 +44,7 @@ color:#f44336;
 //===============*/
 .image-block-m {
   /*border: 3px solid white;*/
+  position: relative;
   background-color: black;
   padding: 0px;
   margin: 0px;
@@ -69,8 +70,8 @@ color:#f44336;
   color: white;
   font: bold 24px/45px Roboto, Helvetica, Sans-Serif;
   letter-spacing: -1px;
-  background: black;
-  background: rgba(0, 0, 0, 0.5);
+  /*background: rgba(0, 0, 0, 0.3);*/
+  text-shadow: 2px 2px 4px #000000;
   padding: 10px;
 }
 
@@ -99,6 +100,21 @@ color:#f44336;
     padding: 16px;
     border-radius: 2px;
     color: #212121;
+}
+
+/* ADDED BY TIM */
+.mdl-card__actions i {
+	vertical-align: middle;
+}
+
+.index-species-tag {
+	position: absolute;
+	bottom: 0;
+	text-align:right;
+}
+
+.index-species-tag span {
+	text-shadow: 2px 2px 4px #000000;
 }
 
 
@@ -284,3 +300,4 @@ _:-ms-input-placeholder, :root .demo-graph {
   box-sizing: border-box;
   align-items: center;
 }
+

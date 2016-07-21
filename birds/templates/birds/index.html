@@ -19,13 +19,16 @@
 			<a class="no-decoration" href="{% url 'birds:view_sighting' sighting.id %}">
 				<div class="image image-block-m" style="background: url({{ sighting.image.url }}) no-repeat center;background-size:cover;">
 					<h4>
-						<span>{{ sighting.caption }} </span>
+						<span>{{ sighting.caption }}</span>
 					</h4>
+					<div class="mdl-card__actions index-species-tag">
+						<span>
+							<i class="material-icons">local_offer</i><span> {{sighting.species_tags}}</span>
+						</span>
+					</div>
                 </div>
             </a>
-			<div class="mdl-card__actions">
-				<i class="material-icons">label</i><span>{{sighting.species_tags}}</span>
-			</div>
+			
 			<div class="mdl-card__supporting-text">
 				<!--<i class="material-icons">date_range</i>-->{{ sighting.sighting_date }}
 			
