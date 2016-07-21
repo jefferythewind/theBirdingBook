@@ -107,6 +107,10 @@ color:#f44336;
 	vertical-align: middle;
 }
 
+.mdl-card__supporting-text i {
+	vertical-align: middle;
+	}
+
 .index-species-tag {
 	position: absolute;
 	bottom: 0;
