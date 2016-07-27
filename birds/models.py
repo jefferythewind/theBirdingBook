@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-
+from django.contrib.auth.models import User
 from django.db import models
 
 class SpeciesFile(models.Model):
@@ -57,3 +57,10 @@ class Sighting(models.Model):
 
     def __str__(self):
         return self.caption
+    
+class Comment(models.Model):
+    comment = models.CharField(max_length=1000)
+    user = models.ForeignKey(User)
+    sighting = models.ForeignKey(Sighting)
+    post_ts = models.DateTimeField(auto_now_add=True)
+    

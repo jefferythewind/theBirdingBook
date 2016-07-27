@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.views import generic
 from django.utils import timezone
-from .models import Sighting, Subspecies
+from .models import Sighting, Subspecies, Comment
 from django.http import HttpResponse
 import json
 from django.db.models import Q
@@ -40,11 +40,11 @@ def edit_sighting(request, pk):
 			form.save()
 			return redirect('/view_sighting/'+str(pk), pk=pk)
 		
-	return render(request, 'birds/new_sighting.html', {'form': form})
+	return render(request, 'birds/new_sighting.html', { 'form': form })
 
-class view_sighting(generic.DetailView):
-	model = Sighting
-	template_name = 'birds/view_sighting.html'
+def view_sighting(request, pk):
+	this_sighting = get_object_or_404(Sighting, pk=pk)
+	return render(request, 'birds/view_sighting.html', { 'sighting': this_sighting })
 
 class IndexView(generic.ListView):
 	template_name = 'birds/index.html'
@@ -61,6 +61,22 @@ def species_query(request):
 		l2 = [unicode(i) for i in l]
 		data = json.dumps(l2)
 		return HttpResponse(data, content_type='application/json')
+
+@login_required
+def get_comments(request):
+	if request.is_ajax():
+		comments = Comment.objects.filter( user = request.user, sighting = request.POST.get('this_sighting') ).order_by('post_ts')
+		return render_to_response('birds/comments.html', {'comments': comments})
+
+@login_required
+def new_comment(request):
+	if request.is_ajax():
+		comment = Comment()
+		comment.comment = request.POST.get('new_comment')
+		comment.sighting_id = request.POST.get('sighting_id')
+		comment.user_id = request.user.id
+		comment.save()
+		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
 	
 #import urllib2
 #import json

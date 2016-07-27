@@ -28,10 +28,14 @@ with open("birds/media/"+csv_file, 'rU') as c:
     Subspecies.objects.all().delete()
     reader = csv.reader(c, delimiter=',', quotechar='"')
     ini_rows = 4
+    i = 0
     for row in reader:
         if ini_rows > 0:
             ini_rows -= 1
             continue
+        i = i + 1
+        if i > 5000:
+            break
         if row[0]:
             new_order = Order(order=row[0])
             new_order.save()

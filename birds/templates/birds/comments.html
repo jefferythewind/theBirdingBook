@@ -1,0 +1,5 @@
+{% for comment in comments %}
+	<div class="mdl-card__supporting-text">
+		{{ comment.user }} {{ comment.comment }}
+	</div>
+{% endfor %}
