@@ -65,7 +65,7 @@ def species_query(request):
 @login_required
 def get_comments(request):
 	if request.is_ajax():
-		comments = Comment.objects.filter( user = request.user, sighting = request.POST.get('this_sighting') ).order_by('post_ts')
+		comments = Comment.objects.filter( sighting = request.POST.get('this_sighting') ).order_by('post_ts')
 		return render_to_response('birds/comments.html', {'comments': comments})
 
 @login_required
