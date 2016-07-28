@@ -5,6 +5,7 @@ from . import views
 app_name = 'birds'
 urlpatterns = [
 	url(r'^$', views.IndexView.as_view(), name='index'),
+	url(r'^user/(?P<pk>[-\w]+)/$', views.user, name='user'),
 	url(r'^about/', views.about, name='about'),
 	url(r'^new_sighting/', views.new_sighting, name='new_sighting'),
 	url(r'^edit_sighting/(?P<pk>[-\w]+)/$', views.edit_sighting, name='edit_sighting'),

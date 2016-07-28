@@ -16,6 +16,9 @@ from django.http.response import HttpResponseForbidden
 def about(request):
 	return render(request, 'birds/about.html')
 
+def user(request, pk):
+	return render(request, 'birds/user.html')
+
 @login_required
 def new_sighting(request):
 	if request.method == "POST":
