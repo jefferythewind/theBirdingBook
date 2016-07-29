@@ -305,3 +305,12 @@ _:-ms-input-placeholder, :root .demo-graph {
   align-items: center;
 }
 
+/*COMMENTS*/
+.comments-chain {
+    margin: 8px 0px 8px 8px;
+    padding: 0px 16px 0px 0px;
+    border-left: 5px solid rgb(255,64,129);
+}
+.comments-chain .mdl-card__supporting-text{
+  padding: 8px 16px 8px 16px;
+}
