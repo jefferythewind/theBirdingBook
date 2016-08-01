@@ -49,7 +49,7 @@
         <div class="mdl-card__supporting-text comments-chain" id="existing_comments">
         </div>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="reveal-comments">Comment</button>
-		<div class="mdl-card__actions mdl-card--border">
+		<div class="mdl-card__actions mdl-card--border" id="save-comment-block" style="display:none">
 			<form id="new_comment_form">
 				<div style="width:100%" class="mdl-textfield mdl-js-textfield">
 					<textarea style="width:100%" class="mdl-textfield__input" type="text" rows= "3" name="new_comment" id="new_comment_input" ></textarea>
@@ -59,6 +59,7 @@
 				<input name="sighting_id" value="{{ sighting.id }}" type="hidden"></input>
 			</form>
 			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="new_comment_save_button">Post</button>
+			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="new_comment_cancel_button">Cancel</button>
 		</div>
 	</div>
 	
@@ -96,6 +97,16 @@
 		}
 		
 		load_comments();
+		
+		$('#reveal-comments').click(function(){
+			$('#save-comment-block').slideToggle("slow");
+			$(this).slideToggle("fast");
+		});
+		
+		$('#new_comment_cancel_button').click(function(){
+			$('#save-comment-block').slideToggle("fast");
+			$('#reveal-comments').slideToggle("slow");
+		});
 		
 		$('#new_comment_save_button').click(function(){
 			$.ajax({
