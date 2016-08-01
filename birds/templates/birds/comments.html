@@ -1,5 +1,5 @@
 {% for comment in comments %}
 	<div class="mdl-card__supporting-text">
-		<a href="{% url 'birds:user' comment.user.id %}"><b>{{ comment.user }}:</b></a> {{ comment.comment }}
+		<a href="{% url 'birds:user' comment.user.id %}"><b>{{ comment.user }}</b></a>: {{ comment.comment }}
 	</div>
 {% endfor %}
