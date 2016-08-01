@@ -70,6 +70,9 @@
         <div class="mdl-layout__header-row">
           <span class="mdl-layout-title">My Birding Book</span>
           <div class="mdl-layout-spacer"></div>
+		  {% if user.is_authenticated %}
+			<div class="material-icons mdl-badge mdl-badge--overlap" data-badge="1">insert_comment</div>
+		  {% endif %}
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
             <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
               <i class="material-icons">search</i>

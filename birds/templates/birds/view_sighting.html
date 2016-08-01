@@ -46,8 +46,8 @@
 		<div class="mdl-card__title">
 			<h2 class="mdl-card__title-text">Comments</h2>
 		</div>
-        <div class="mdl-card__supporting-text comments-chain" id="existing_comments">
-        </div>
+        <div class="mdl-card__supporting-text comments-chain" id="existing_comments"></div>
+		{% if user.is_authenticated %}
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="reveal-comments">Comment</button>
 		<div class="mdl-card__actions mdl-card--border" id="save-comment-block" style="display:none">
 			<form id="new_comment_form">
@@ -61,6 +61,7 @@
 			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="new_comment_save_button">Post</button>
 			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="new_comment_cancel_button">Cancel</button>
 		</div>
+		{% endif %}
 	</div>
 	
 	
@@ -97,6 +98,7 @@
 		
 		load_comments();
 		
+		{% if user.is_authenticated %}
 		$('#reveal-comments').click(function(){
 			$('#save-comment-block').slideToggle("slow");
 			$(this).slideToggle("fast");
@@ -124,6 +126,7 @@
 			});
 		
 		});
+		{% endif %}
 		
     })
 </script>

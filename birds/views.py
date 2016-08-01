@@ -49,13 +49,9 @@ def view_sighting(request, pk):
 	this_sighting = get_object_or_404(Sighting, pk=pk)
 	return render(request, 'birds/view_sighting.html', { 'sighting': this_sighting })
 
-class IndexView(generic.ListView):
-	template_name = 'birds/index.html'
-	context_object_name = 'latest_sighting_list'
-
-	def get_queryset(self):
-		"""Return the last ten sightings."""
-		return Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-sighting_date')[:10]
+def index_view(request):
+	latest_sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-sighting_date')[:10]
+	return render(request, 'birds/index.html', { 'latest_sighting_list': latest_sighting_list})
 		
 def species_query(request):
 	if request.method == "GET":
@@ -65,7 +61,6 @@ def species_query(request):
 		data = json.dumps(l2)
 		return HttpResponse(data, content_type='application/json')
 
-@login_required
 def get_comments(request):
 	if request.is_ajax():
 		comments = Comment.objects.filter( sighting = request.POST.get('this_sighting') ).order_by('post_ts')
