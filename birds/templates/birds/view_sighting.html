@@ -91,7 +91,6 @@
 				dataType: "html",
 				success: function(data) {
 					$("#existing_comments").html(data);
-					$('#new_comment_input').val("");
 				}
 			});
 		}
@@ -116,6 +115,8 @@
 				dataType: "json",
 				success: function(data) {
 					load_comments();
+					$('#new_comment_input').val("");
+					$('#new_comment_input').parent().removeClass('is-dirty');
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					alert(textStatus);

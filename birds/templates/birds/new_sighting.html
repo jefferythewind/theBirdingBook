@@ -15,9 +15,9 @@
 
 <div class="page-content">
 	<section class="mdl-grid">
-        <div class="mdl-components__warning">
-                <b>Note:</b> Broswer location access must be enabled.
-            </div>
+        <div class="mdl-components__warning" id="warning-msg" style="display:none">
+			<b>Alert:</b> Broswer location access should be enabled for automatic positioning.
+		</div>
 		<div class="mdl-cell mdl-cell--8-col mdl-cell--1-offset-desktop">
             
 			<div class="card-bird mdl-card mdl-shadow--3dp"> 
@@ -46,7 +46,7 @@
 						<a class="mdl-button mdl-js-button mdl-button--accent" href="{% url 'birds:index' %}">Cancel</a>
 						
 					</form>
-					<div id="msg"><p>Please indicate sighting location.</p></div>
+					<div id="msg"><p>Indicate sighting location by re-positioning the map.</p></div>
 					<div id="map"></div>
 				</div>
 			</div>
@@ -55,7 +55,14 @@
 </div>
 <script type="text/javascript">
     jQuery(function($){
-        $('#id_sighting_date').datepicker();
+        $('#id_sighting_date').datepicker({
+			onClose: function(dateText){
+				if (dateText !== ""){
+					$('#id_sighting_date').parent().addClass('is-dirty');
+				}
+			}
+		
+		});
 
 		$('#id_species_tags').autocomplete({
 			source: "{% url 'birds:species_query' %}",
@@ -111,7 +118,8 @@
             }
         } else {
             // Browser doesn't support Geolocation
-            $('#msg').html("<p>Browser doesn't support geolocation.</p>")
+            $('#msg').html("<p>Browser didn't allow geolocation.</p>")
+			$('#warning-msg').slideToggle('slow');
         }
            
         function geocodeLatLng(geocoder, map, lat, lng) {
@@ -120,6 +128,7 @@
                 if (status === google.maps.GeocoderStatus.OK) {
                     if (results[0]) {
                         $('#id_location').val(results[1].formatted_address);
+						$('#id_location').parent().addClass('is-dirty');
                     } else {
                         window.alert('No results found');
                     }
