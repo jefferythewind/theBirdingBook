@@ -1,0 +1,20 @@
+{% if comments|length > 0 %}
+<button id="comment_notification_button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+	<div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{ comments|length }}">insert_comment</div>
+</button>
+<ul id="new_comment_menu" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="comment_notification_button">
+	{% for comment in comments %}
+	<li class="mdl-menu__item" href="{% url 'birds:view_sighting' comment.sighting.id %}">
+		<a class="mdl-navigation__link" href="{% url 'birds:view_sighting' comment.sighting.id %}">
+			<div>
+				<div class="item-header">Comment</div>
+				<div class="item-location">{{ comment.sighting.caption }}</div>
+				<div class="item-summary">{{ comment.user }}: {{ comment.comment }}</div>
+			</div>
+		</a>
+	</li>
+	{% endfor %}
+</ul>
+{% endif %}
+
+

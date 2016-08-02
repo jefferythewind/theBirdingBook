@@ -14,4 +14,5 @@ urlpatterns = [
 	url(r'^species_query/', views.species_query, name='species_query'),
 	url(r'^new_comment/', views.new_comment, name='new_comment'),
 	url(r'^get_comments/', views.get_comments, name='get_comments'),
+	url(r'^get_new_comments_for_user/', views.get_new_comments_for_user, name='get_new_comments_for_user'),
 ]

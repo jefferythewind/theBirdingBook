@@ -125,6 +125,40 @@ color:#f44336;
 	background: rgba(255, 255, 255, 0.3);
 }
 
+.mdl-button {
+	overflow: visible;
+}
+
+#new_comment_menu {
+	max-height: 300px;
+	overflow: scroll;
+}
+
+#new_comment_menu .mdl-menu__item {
+	height: auto;
+	padding: 0px 0px 10px 0px;
+}
+
+.mdl-menu__item .item-header {
+	color: grey;
+	line-height: 16px;
+	font-size: 12px;
+}
+
+.mdl-menu__item .item-location {
+	color: grey;
+	line-height: 16px;
+	font-size: 14px;
+}
+
+.mdl-menu__item .item-summary {
+	color: black;
+	line-height: 16px;
+	font-size: 12px;
+}
+
+/* END ADDED BY TIM */
+
 
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.

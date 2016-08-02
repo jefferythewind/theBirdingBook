@@ -69,10 +69,7 @@
       <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
         <div class="mdl-layout__header-row">
           <span class="mdl-layout-title">My Birding Book</span>
-          <div class="mdl-layout-spacer"></div>
-		  {% if user.is_authenticated %}
-			<div class="material-icons mdl-badge mdl-badge--overlap" data-badge="1">insert_comment</div>
-		  {% endif %}
+          <div id="top-layout-spacer" class="mdl-layout-spacer"></div>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
             <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
               <i class="material-icons">search</i>
@@ -261,6 +258,28 @@
       </svg>
       <!--<a href="https://github.com/google/material-design-lite/blob/master/templates/dashboard/" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white">View Source</a>-->
       <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+	  
+	  <script type="text/javascript">
+		jQuery(function($){
+			{% if user.is_authenticated %}
+				$.ajax({
+					url: "{% url 'birds:get_new_comments_for_user' %}",
+					data: { 'csrfmiddlewaretoken': '{{ csrf_token }}' },
+					type: "POST",
+					dataType: "html",
+					success: function(data) {
+						$('#top-layout-spacer').after(data);
+					},
+					error: function(jqXHR, textStatus, errorThrown){
+						alert(textStatus);
+					}
+				});
+			
+			
+			{% endif %}
+		
+		})
+	  </script>
       
   </body>
 </html>

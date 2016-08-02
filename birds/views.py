@@ -47,10 +47,11 @@ def edit_sighting(request, pk):
 
 def view_sighting(request, pk):
 	this_sighting = get_object_or_404(Sighting, pk=pk)
+	Comment.objects.filter( sighting = this_sighting, sighting__user_id = request.user.id ).all().update(viewed_by_user = True)
 	return render(request, 'birds/view_sighting.html', { 'sighting': this_sighting })
 
 def index_view(request):
-	latest_sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-sighting_date')[:10]
+	latest_sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
 	return render(request, 'birds/index.html', { 'latest_sighting_list': latest_sighting_list})
 		
 def species_query(request):
@@ -65,6 +66,13 @@ def get_comments(request):
 	if request.is_ajax():
 		comments = Comment.objects.filter( sighting = request.POST.get('this_sighting') ).order_by('post_ts')
 		return render_to_response('birds/comments.html', {'comments': comments})
+
+@login_required
+def get_new_comments_for_user(request):
+	if request.is_ajax():
+		comments = Comment.objects.filter( sighting__user_id = request.user.id, viewed_by_user = False ).order_by('-post_ts')
+		return render_to_response('birds/user_comments.html', {'comments': comments})
+		
 
 @login_required
 def new_comment(request):
