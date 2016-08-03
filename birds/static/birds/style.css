@@ -162,6 +162,10 @@ color:#f44336;
 	height: 100px;
 }
 
+.mdl-card {
+	min-height: auto;
+}
+
 /* END ADDED BY TIM */
 
 

@@ -18,13 +18,37 @@
             </h4>
         </div>
         <div class="mdl-card__menu md-light">
-			{% if sighting.user_id == user.id %}
-            <button id="edit_button" class="mdl-button md-light mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                <i class="material-icons md-light">mode_edit</i>
-            </button>
+			{% if user.is_authenticated %}
+				<div id="num_likes">
+					{{ sighting.num_likes }}
+				</div>
+				{% if is_liked > 0 %}
+				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons" id="unlike_button">
+				  <i class="material-icons md-light">star</i>
+				</button>
+				<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons" id="like_button">
+				  <i class="material-icons md-light">star_border</i>
+				</button>
+				{% else %}
+				<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons" id="unlike_button">
+				  <i class="material-icons md-light">star</i>
+				</button>
+				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons" id="like_button">
+				  <i class="material-icons md-light">star_border</i>
+				</button>
+				{% endif %}
+				
+				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons">
+				  <i class="material-icons md-light">flag</i>			      
+				</button>
+				{% if sighting.user_id == user.id %}
+				<button id="edit_button" class="mdl-button md-light mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons">
+					<i class="material-icons md-light">mode_edit</i>
+				</button>
+				{% endif %}
 			{% endif %}
-        </div>	
-    </div> 
+        </div>
+    </div>
 	
     <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
         <div class="mdl-card__title">
@@ -35,8 +59,7 @@
 
         </div>
         <div class="mdl-card__supporting-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Mauris sagittis pellentesque lacus eleifend lacinia...
+            {{ sighting.post_text }}
         </div>
     </div>
 	<div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
@@ -125,6 +148,42 @@
 				}
 			});
 		
+		});
+		
+		$('#like_button').click(function(){
+			$.ajax({
+				url: "{% url 'birds:like' %}",
+				data: {'sighting_id': {{ sighting.id }}, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+				type: "POST",
+				dataType: "json",
+				success: function(data) {
+					$('#like_button,#unlike_button').toggle();
+					if ( 'new_likes' in data ){
+						$('#num_likes').text(data.new_likes);
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					alert(textStatus);
+				}
+			});
+		});
+		
+		$('#unlike_button').click(function(){
+			$.ajax({
+				url: "{% url 'birds:unlike' %}",
+				data: {'sighting_id': {{ sighting.id }}, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+				type: "POST",
+				dataType: "json",
+				success: function(data) {
+					$('#like_button,#unlike_button').toggle();
+					if ( 'new_likes' in data ){
+						$('#num_likes').text(data.new_likes);
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					alert(textStatus);
+				}
+			});
 		});
 		{% endif %}
 		

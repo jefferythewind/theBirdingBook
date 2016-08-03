@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.views import generic
 from django.utils import timezone
-from .models import Sighting, Subspecies, Comment
+from .models import Sighting, Subspecies, Comment, Like
 from django.http import HttpResponse
 import json
 from django.db.models import Q
@@ -48,7 +48,8 @@ def edit_sighting(request, pk):
 def view_sighting(request, pk):
 	this_sighting = get_object_or_404(Sighting, pk=pk)
 	Comment.objects.filter( sighting = this_sighting, sighting__user_id = request.user.id ).all().update(viewed_by_user = True)
-	return render(request, 'birds/view_sighting.html', { 'sighting': this_sighting })
+	is_liked = Like.objects.filter( user = request.user, sighting = this_sighting ).count()
+	return render(request, 'birds/view_sighting.html', { 'sighting': this_sighting, 'is_liked': is_liked })
 
 def index_view(request):
 	latest_sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
@@ -83,6 +84,29 @@ def new_comment(request):
 		comment.user_id = request.user.id
 		comment.save()
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
+	
+@login_required 
+def like(request):
+	if request.is_ajax():
+		if Like.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id') ).count() > 0:
+			return HttpResponse(json.dumps({'msg':'you already liked this one'}), content_type='application/json')
+		else:
+			like = Like()
+			like.user = request.user
+			like.sighting_id = request.POST.get('sighting_id')
+			like.save()
+			new_likes = Sighting.objects.get( pk = request.POST.get('sighting_id') ).num_likes
+			return HttpResponse(json.dumps({'msg':'success', 'new_likes': new_likes}), content_type='application/json')
+		
+@login_required 
+def unlike(request):
+	if request.is_ajax():
+		if Like.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id') ).count() < 1:
+			return HttpResponse(json.dumps({'msg':'you have not liked this one'}), content_type='application/json')
+		else:
+			Like.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id') ).delete()
+			new_likes = Sighting.objects.get( pk = request.POST.get('sighting_id') ).num_likes
+			return HttpResponse(json.dumps({'msg':'success', 'new_likes': new_likes}), content_type='application/json')
 	
 #import urllib2
 #import json

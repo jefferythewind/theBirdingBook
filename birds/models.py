@@ -58,7 +58,6 @@ class Sighting(models.Model):
     user_id = models.IntegerField(default=None)
     location = models.CharField(max_length=200, default=None, null=True, blank=True)
     post_ts = models.DateTimeField(auto_now_add=True)
-    likes = models.IntegerField(default=0)
 
     @property
     def time_diff(self):
@@ -76,9 +75,17 @@ class Sighting(models.Model):
     @property
     def num_comments(self):
         return Comment.objects.filter( sighting = self.id ).count()
+    
+    @property
+    def num_likes(self):
+        return Like.objects.filter( sighting = self.id ).count()
 
     def __str__(self):
         return self.caption
+    
+class Like(models.Model):
+    sighting = models.ForeignKey(Sighting)
+    user = models.ForeignKey(User)
     
 class Comment(models.Model):
     comment = models.CharField(max_length=1000)
