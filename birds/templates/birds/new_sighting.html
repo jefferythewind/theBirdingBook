@@ -27,7 +27,12 @@
 				<div class="mdl-card__supporting-text news-text">
 					<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
                         {% for field in form.visible_fields %}
-                            {% if field.field.widget.attrs.class == "mdl-textfield__input" %}
+							{% if field.field.widget.attrs.id == "post_text_textarea" %}
+								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="post_text_wrapper">
+                                    <label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
+                                    {{ field }}
+                                </div>
+                            {% elif field.field.widget.attrs.class == "mdl-textfield__input" %}
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                     <label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
                                     {{ field }}

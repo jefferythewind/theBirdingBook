@@ -47,7 +47,8 @@ class Subspecies(models.Model):
         return self.species.species_english+" "+self.species.genus.genus+" "+self.species.species+" "+self.subspecies
 
 class Sighting(models.Model):
-    caption = models.CharField(max_length=100,default=None)
+    caption = models.CharField(max_length=100, default=None)
+    post_text = models.CharField(max_length=1000, default=None, blank=True, null=True)
     subspecies = models.ForeignKey(Subspecies, default=None, blank=True, null=True)
     species_tags = models.CharField(max_length=100,default=None, blank=True, null=True)
     lat = models.FloatField(default=None)
@@ -57,6 +58,7 @@ class Sighting(models.Model):
     user_id = models.IntegerField(default=None)
     location = models.CharField(max_length=200, default=None, null=True, blank=True)
     post_ts = models.DateTimeField(auto_now_add=True)
+    likes = models.IntegerField(default=0)
 
     @property
     def time_diff(self):
