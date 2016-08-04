@@ -17,11 +17,27 @@
                 <span>{{ sighting.caption }}</span>
             </h4>
         </div>
-        <div class="mdl-card__menu md-light">
+    </div>
+	
+    <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__title">
+            <h2 class="mdl-card__title-text">{{ sighting.sighting_date }}</h2>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <i class="material-icons">local_offer</i><b> {{ sighting.species_tags }}</b>
+        </div>
+        <div class="mdl-card__supporting-text">
+            {{ sighting.post_text }}
+        </div>
+		<div class="mdl-card__menu md-light">
 			{% if user.is_authenticated %}
-				<div id="num_likes">
-					{{ sighting.num_likes }}
-				</div>
+				<span id="num_likes">
+					{% if sighting.num_likes == 1 %}
+						{{ sighting.num_likes }} like
+					{% elif sighting.num_likes > 1 %}
+						{{ sighting.num_likes }} likes
+					{% endif %}
+				</span>
 				{% if is_liked > 0 %}
 				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons" id="unlike_button">
 				  <i class="material-icons md-light">star</i>
@@ -37,6 +53,12 @@
 				  <i class="material-icons md-light">star_border</i>
 				</button>
 				{% endif %}
+				<div class="mdl-tooltip" for="like_button">
+					Like
+				</div>
+				<div class="mdl-tooltip" for="unlike_button">
+					Unlike
+				</div>
 				
 				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons">
 				  <i class="material-icons md-light">flag</i>			      
@@ -47,19 +69,6 @@
 				</button>
 				{% endif %}
 			{% endif %}
-        </div>
-    </div>
-	
-    <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
-        <div class="mdl-card__title">
-            <h2 class="mdl-card__title-text">{{ sighting.sighting_date }}</h2>
-        </div>
-        <div class="mdl-card__supporting-text">
-            <i class="material-icons">local_offer</i><b> {{ sighting.species_tags }}</b>
-
-        </div>
-        <div class="mdl-card__supporting-text">
-            {{ sighting.post_text }}
         </div>
     </div>
 	<div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
@@ -150,34 +159,27 @@
 		
 		});
 		
-		$('#like_button').click(function(){
+		$('#like_button,#unlike_button').click(function(){
+			if ( $(this).attr('id') == "like_button" ) {
+				var url_location = "{% url 'birds:like' %}"
+			}else{
+				var url_location = "{% url 'birds:unlike' %}"
+			}
 			$.ajax({
-				url: "{% url 'birds:like' %}",
+				url: url_location,
 				data: {'sighting_id': {{ sighting.id }}, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
 				type: "POST",
 				dataType: "json",
 				success: function(data) {
 					$('#like_button,#unlike_button').toggle();
 					if ( 'new_likes' in data ){
-						$('#num_likes').text(data.new_likes);
-					}
-				},
-				error: function(jqXHR, textStatus, errorThrown){
-					alert(textStatus);
-				}
-			});
-		});
-		
-		$('#unlike_button').click(function(){
-			$.ajax({
-				url: "{% url 'birds:unlike' %}",
-				data: {'sighting_id': {{ sighting.id }}, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
-				type: "POST",
-				dataType: "json",
-				success: function(data) {
-					$('#like_button,#unlike_button').toggle();
-					if ( 'new_likes' in data ){
-						$('#num_likes').text(data.new_likes);
+						if ( data.new_likes == 1) {
+							$('#num_likes').text("1 like");
+						}else if ( data.new_likes > 1 ) {
+							$('#num_likes').text(data.new_likes+" like");
+						}else{
+							$('#num_likes').text("");
+						}
 					}
 				},
 				error: function(jqXHR, textStatus, errorThrown){
