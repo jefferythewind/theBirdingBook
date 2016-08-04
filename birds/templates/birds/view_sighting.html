@@ -25,6 +25,24 @@
         </div>
         <div class="mdl-card__supporting-text">
             <i class="material-icons">local_offer</i><b> {{ sighting.species_tags }}</b>
+			<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="up_vote_species">
+				<i class="material-icons md-light">expand_less</i>
+			</button>
+			<div class="mdl-tooltip" for="up_vote_species">
+				agree
+			</div>
+			<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species">
+				<i class="material-icons md-light">expand_more</i>
+			</button>
+			<div class="mdl-tooltip" for="down_vote_species">
+				disagree
+			</div>
+			<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="suggest_species">
+				<i class="material-icons md-light">add</i>
+			</button>
+			<div class="mdl-tooltip" for="suggest_species">
+				suggest species
+			</div>
         </div>
         <div class="mdl-card__supporting-text">
             {{ sighting.post_text }}
@@ -39,17 +57,17 @@
 					{% endif %}
 				</span>
 				{% if is_liked > 0 %}
-				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons" id="unlike_button">
+				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="unlike_button">
 				  <i class="material-icons md-light">star</i>
 				</button>
-				<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons" id="like_button">
+				<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="like_button">
 				  <i class="material-icons md-light">star_border</i>
 				</button>
 				{% else %}
-				<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons" id="unlike_button">
+				<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="unlike_button">
 				  <i class="material-icons md-light">star</i>
 				</button>
-				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons" id="like_button">
+				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="like_button">
 				  <i class="material-icons md-light">star_border</i>
 				</button>
 				{% endif %}
