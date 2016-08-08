@@ -49,8 +49,8 @@ class Subspecies(models.Model):
 class Sighting(models.Model):
     caption = models.CharField(max_length=100, default=None)
     post_text = models.CharField(max_length=1000, default=None, blank=True, null=True)
-    subspecies = models.ForeignKey(Subspecies, default=None, blank=True, null=True)
-    species_tags = models.CharField(max_length=100,default=None, blank=True, null=True)
+    #subspecies = models.ForeignKey(Subspecies, default=None, blank=True, null=True)
+    species_tag = models.ForeignKey(Subspecies, default=None, blank=True, null=True)
     lat = models.FloatField(default=None)
     lng = models.FloatField(default= None)
     sighting_date = models.DateField()
@@ -93,4 +93,9 @@ class Comment(models.Model):
     sighting = models.ForeignKey(Sighting)
     viewed_by_user = models.BooleanField(default=False)
     post_ts = models.DateTimeField(auto_now_add=True)
+    
+class SpeciesVotes(models.Model):
+    user = models.ForeignKey(User)
+    species = models.ForeignKey(Subspecies)
+    sighting = models.ForeignKey(Sighting)
     
