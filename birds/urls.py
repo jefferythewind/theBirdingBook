@@ -16,5 +16,9 @@ urlpatterns = [
 	url(r'^get_comments/', views.get_comments, name='get_comments'),
 	url(r'^get_new_comments_for_user/', views.get_new_comments_for_user, name='get_new_comments_for_user'),
 	url(r'^like/', views.like, name='like'),
-	url(r'^unlike/', views.unlike, name='unlike')
+	url(r'^unlike/', views.unlike, name='unlike'),
+	url(r'^up_vote_species/', views.up_vote_species, name='up_vote_species'),
+	url(r'^down_vote_species/', views.down_vote_species, name='down_vote_species'),
+	url(r'^suggest_new_species/', views.suggest_new_species, name='suggest_new_species'),
+	url(r'^get_species_suggestions/', views.get_species_suggestions, name='get_species_suggestions'),
 ]

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.views import generic
 from django.utils import timezone
-from .models import Sighting, Subspecies, Comment, Like
+from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions
 from django.http import HttpResponse
 import json
 from django.db.models import Q
@@ -47,9 +47,14 @@ def edit_sighting(request, pk):
 
 def view_sighting(request, pk):
 	this_sighting = get_object_or_404(Sighting, pk=pk)
-	Comment.objects.filter( sighting = this_sighting, sighting__user_id = request.user.id ).all().update(viewed_by_user = True)
-	is_liked = Like.objects.filter( user = request.user, sighting = this_sighting ).count()
-	return render(request, 'birds/view_sighting.html', { 'sighting': this_sighting, 'is_liked': is_liked })
+	species_votes = SpeciesVote.objects.filter( sighting = this_sighting, species = this_sighting.species_tag ).count()
+	if request.user.is_authenticated():
+		Comment.objects.filter( sighting = this_sighting, sighting__user_id = request.user.id ).all().update(viewed_by_user = True)
+		is_liked = Like.objects.filter( user = request.user, sighting = this_sighting ).count()
+		is_voted = SpeciesVote.objects.filter( user = request.user, sighting = this_sighting, species = this_sighting.species_tag ).count()	
+		return render(request, 'birds/view_sighting.html', { 'sighting': this_sighting, 'is_liked': is_liked, 'is_voted': is_voted,'species_votes': species_votes})
+	else:
+		return render(request, 'birds/view_sighting.html', { 'sighting': this_sighting, 'species_votes': species_votes})
 
 def index_view(request):
 	latest_sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
@@ -78,11 +83,7 @@ def get_new_comments_for_user(request):
 @login_required
 def new_comment(request):
 	if request.is_ajax():
-		comment = Comment()
-		comment.comment = request.POST.get('new_comment')
-		comment.sighting_id = request.POST.get('sighting_id')
-		comment.user_id = request.user.id
-		comment.save()
+		Comment.objects.create( comment = request.POST.get('new_comment'), sighting_id = request.POST.get('sighting_id'), user_id = request.user.id )
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
 	
 @login_required 
@@ -91,10 +92,7 @@ def like(request):
 		if Like.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id') ).count() > 0:
 			return HttpResponse(json.dumps({'msg':'you already liked this one'}), content_type='application/json')
 		else:
-			like = Like()
-			like.user = request.user
-			like.sighting_id = request.POST.get('sighting_id')
-			like.save()
+			Like.objects.create( user = request.user, sighting_id = request.POST.get('sighting_id') )
 			new_likes = Sighting.objects.get( pk = request.POST.get('sighting_id') ).num_likes
 			return HttpResponse(json.dumps({'msg':'success', 'new_likes': new_likes}), content_type='application/json')
 		
@@ -107,6 +105,40 @@ def unlike(request):
 			Like.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id') ).delete()
 			new_likes = Sighting.objects.get( pk = request.POST.get('sighting_id') ).num_likes
 			return HttpResponse(json.dumps({'msg':'success', 'new_likes': new_likes}), content_type='application/json')
+		
+@login_required 
+def up_vote_species(request):
+	if request.is_ajax():
+		if SpeciesVote.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id') ).count() > 0:
+			return HttpResponse(json.dumps({'msg':'you have already voted this one'}), content_type='application/json')
+		else:
+			SpeciesVote.objects.create(  user = request.user, sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id') )
+			new_votes = SpeciesVote.objects.filter( sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id') ).count()
+			return HttpResponse(json.dumps({'msg':'success', 'new_votes': new_votes}), content_type='application/json')
+		
+@login_required 
+def down_vote_species(request):
+	if request.is_ajax():
+		if SpeciesVote.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id') ).count() < 1:
+			return HttpResponse(json.dumps({'msg':'you have not voted this one'}), content_type='application/json')
+		else:
+			SpeciesVote.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id') ).delete()
+			new_votes = SpeciesVote.objects.filter( sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id') ).count()
+			return HttpResponse(json.dumps({'msg':'success', 'new_votes': new_votes}), content_type='application/json')
+
+@login_required
+def suggest_new_species(request):
+	if request.is_ajax():
+		if SpeciesSuggestions.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id') ).count() > 0:
+			return HttpResponse(json.dumps({'msg':'you have already suggested a species for this post'}), content_type='application/json')
+		else:
+			SpeciesSuggestions.objects.create( user = request.user, sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id'))
+			return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
+
+def get_species_suggestions(request):
+	if request.is_ajax():
+		species_suggestions = SpeciesSuggestions.objects.filter( sighting_id = request.POST.get('sighting_id') )
+		return render_to_response('birds/species_suggestions.html', {'species_suggestions': species_suggestions})
 	
 #import urllib2
 #import json

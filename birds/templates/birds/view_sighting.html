@@ -25,24 +25,51 @@
         </div>
         <div class="mdl-card__supporting-text">
             <i class="material-icons">local_offer</i><b> {{ sighting.species_tag }}</b>
-			<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="up_vote_species">
-				<i class="material-icons md-light">expand_less</i>
-			</button>
-			<div class="mdl-tooltip" for="up_vote_species">
-				agree
-			</div>
-			<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species">
-				<i class="material-icons md-light">expand_more</i>
-			</button>
-			<div class="mdl-tooltip" for="down_vote_species">
-				disagree
-			</div>
-			<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="suggest_species">
-				<i class="material-icons md-light">add</i>
-			</button>
-			<div class="mdl-tooltip" for="suggest_species">
-				suggest species
-			</div>
+			<span id="num_votes">
+				{{ species_votes }}
+			</span>
+			{% if user.is_authenticated %}
+				{% if is_voted > 0 %}
+					<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="up_vote_species" style="display:none">
+						<i class="material-icons md-light">expand_less</i>
+					</button>
+					<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species">
+						<i class="material-icons md-light">expand_more</i>
+					</button>
+				{% else %}
+					<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="up_vote_species">
+						<i class="material-icons md-light">expand_less</i>
+					</button>
+					<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species" style="display:none">
+						<i class="material-icons md-light">expand_more</i>
+					</button>
+				{% endif %}
+				<div class="mdl-tooltip" for="up_vote_species">
+					agree
+				</div>
+				<div class="mdl-tooltip" for="down_vote_species">
+					undo agree
+				</div>
+				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="suggest_species">
+					<i class="material-icons md-light">add</i>
+				</button>
+				<div class="mdl-tooltip" for="suggest_species">
+					suggest species
+				</div>
+				<form id="new_species_form" style="display:none">
+					<div class="mdl-textfield mdl-js-textfield">
+						<input style="width:100%" class="mdl-textfield__input" name="new_species" id="new_species_input"></input>
+						<label class="mdl-textfield__label" for="new_species">new species</label>
+						<input id="id_species_tag" name="species_id" type="hidden">
+					</div>
+					{% csrf_token %}
+					<input name="sighting_id" value="{{ sighting.id }}" type="hidden"></input>
+					<button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="new_species_save_button">Submit</button>
+					<button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" id="new_species_cancel_button">Cancel</button>
+				</form>
+			{% endif %}
+			 <div class="mdl-card__supporting-text" id="species_suggestion_info">
+			 </div>
         </div>
         <div class="mdl-card__supporting-text">
             {{ sighting.post_text }}
@@ -109,7 +136,7 @@
 			<form id="new_comment_form">
 				<div style="width:100%" class="mdl-textfield mdl-js-textfield">
 					<textarea style="width:100%" class="mdl-textfield__input" type="text" rows= "3" name="new_comment" id="new_comment_input" ></textarea>
-					<label class="mdl-textfield__label" for="comment">New comment...</label>
+					<label class="mdl-textfield__label" for="new_comment">New comment...</label>
 				</div>
 				{% csrf_token %}
 				<input name="sighting_id" value="{{ sighting.id }}" type="hidden"></input>
@@ -154,7 +181,34 @@
 		
 		load_comments();
 		
+		function load_species_suggestions() {
+			$.ajax({
+				url: "{% url 'birds:get_species_suggestions' %}",
+				data: {'sighting_id': {{ sighting.id }}, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+				type: "POST",
+				dataType: "html",
+				success: function(data) {
+					$('#species_suggestion_info').html(data);
+				}
+			});
+		}
+		
+		load_species_suggestions();
+		
 		{% if user.is_authenticated %}
+		$('#new_species_input').autocomplete({
+			source: "{% url 'birds:species_query' %}",
+			minLength: 2,
+			response: function( event, ui ) {
+			
+				//alert('got response');
+			
+			},
+			select: function( event, ui ){
+				$('#id_species_tag').val(ui.item.id);
+			}
+		});
+		
 		$('#reveal-comments').click(function(){
 			$('#save-comment-block').slideToggle("slow");
 			$(this).slideToggle("fast");
@@ -210,6 +264,55 @@
 					alert(textStatus);
 				}
 			});
+		});
+		
+		$('#up_vote_species,#down_vote_species').click(function(){
+			if ( $(this).attr('id') == "up_vote_species" ) {
+				var url_location = "{% url 'birds:up_vote_species' %}"
+			}else{
+				var url_location = "{% url 'birds:down_vote_species' %}"
+			}
+			$.ajax({
+				url: url_location,
+				data: {
+					'sighting_id': {{ sighting.id }},
+					'species_id': {{ sighting.species_tag.id }},
+					'csrfmiddlewaretoken': '{{ csrf_token }}'
+				},
+				type: "POST",
+				dataType: "json",
+				success: function(data) {
+					$('#up_vote_species,#down_vote_species').toggle();
+					if ( 'new_votes' in data ){
+						$('#num_votes').text(data.new_votes);
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					alert(textStatus);
+				}
+			});
+		});
+		
+		$('#suggest_species,#new_species_cancel_button').click(function(){
+			$('#new_species_form').slideToggle();
+			$('#suggest_species').slideToggle();
+		});
+		
+		$('#new_species_save_button').click(function(){
+			$.ajax({
+				url: "{% url 'birds:suggest_new_species' %}",
+				data: $('#new_species_form').serialize(),
+				type: "POST",
+				dataType: "json",
+				success: function(data) {
+					load_species_suggestions();
+					$('#new_species_form').slideToggle();
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					alert(textStatus);
+				}
+			});
+		
 		});
 		{% endif %}
 		

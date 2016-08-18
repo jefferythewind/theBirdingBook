@@ -1,0 +1,32 @@
+{% for suggestion in species_suggestions %}
+	<div>
+		{{ suggestion.species }}
+		<span id="{{ suggestion.species.id }}_num_votes">
+			{{ suggestion.species.num_votes }}
+		</span>
+		{% if user.is_authenticated %}
+			{% if suggestion.is_voted > 0 %}
+				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="up_vote_species" style="display:none">
+					<i class="material-icons md-light">expand_less</i>
+				</button>
+				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species">
+					<i class="material-icons md-light">expand_more</i>
+				</button>
+			{% else %}
+				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="up_vote_species">
+					<i class="material-icons md-light">expand_less</i>
+				</button>
+				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species" style="display:none">
+					<i class="material-icons md-light">expand_more</i>
+				</button>
+			{% endif %}
+			<div class="mdl-tooltip" for="up_vote_species">
+				agree
+			</div>
+			<div class="mdl-tooltip" for="down_vote_species">
+				undo agree
+			</div>
+		{% endif %}
+	</div>
+
+{% endfor %}
