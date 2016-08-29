@@ -89,6 +89,7 @@ class Sighting(models.Model):
 class BirdPhoto(models.Model):
     sighting = models.ForeignKey(Sighting)
     photo = models.ImageField()
+    order = models.IntegerField()
     
 class Like(models.Model):
     sighting = models.ForeignKey(Sighting)
