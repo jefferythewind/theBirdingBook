@@ -4,7 +4,7 @@ from .models import Sighting
 class SightingsForm(forms.ModelForm):
     class Meta:
         model = Sighting
-        fields = ('caption','species_tag','lat','lng','sighting_date', 'image', 'location', 'post_text')
+        fields = ('caption','species_tag','lat','lng','sighting_date', 'location', 'post_text')
         widgets = {
             'caption': forms.TextInput(attrs={'class':"mdl-textfield__input"}),
             'sighting_date': forms.TextInput(attrs={'class':"mdl-textfield__input"}),

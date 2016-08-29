@@ -53,7 +53,7 @@ class Sighting(models.Model):
     lat = models.FloatField(default=None)
     lng = models.FloatField(default= None)
     sighting_date = models.DateField()
-    image = models.ImageField(default=None, blank=True, null=True)
+    #image = models.ImageField(default=None, blank=True, null=True)
     user_id = models.IntegerField(default=None)
     location = models.CharField(max_length=200, default=None, null=True, blank=True)
     post_ts = models.DateTimeField(auto_now_add=True)
@@ -78,9 +78,17 @@ class Sighting(models.Model):
     @property
     def num_likes(self):
         return Like.objects.filter( sighting = self.id ).count()
+    
+    @property
+    def images(self):
+        return BirdPhoto.objects.filter( sighting = self.id )
 
     def __str__(self):
         return self.caption
+    
+class BirdPhoto(models.Model):
+    sighting = models.ForeignKey(Sighting)
+    photo = models.ImageField()
     
 class Like(models.Model):
     sighting = models.ForeignKey(Sighting)

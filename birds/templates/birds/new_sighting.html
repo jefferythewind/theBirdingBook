@@ -28,6 +28,9 @@
 					<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
                         {% for field in form.visible_fields %}
 							{% if field.field.widget.attrs.id == "post_text_textarea" %}
+								<div id="photo_container">
+								</div>
+								<button type="button" id="add_photo" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add Photo</button>
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="post_text_wrapper">
                                     <label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
                                     {{ field }}
