@@ -30,17 +30,17 @@
 			</span>
 			{% if user.is_authenticated %}
 				{% if is_voted > 0 %}
-					<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="up_vote_species" style="display:none">
+					<button data-species_tag-id="{{ sighting.species_tag.id }}" class="up_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" style="display:none">
 						<i class="material-icons md-light">expand_less</i>
 					</button>
-					<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species">
+					<button data-species_tag-id="{{ sighting.species_tag.id }}" class="down_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species">
 						<i class="material-icons md-light">expand_more</i>
 					</button>
 				{% else %}
-					<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="up_vote_species">
+					<button data-species_tag-id="{{ sighting.species_tag.id }}" class="up_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="up_vote_species">
 						<i class="material-icons md-light">expand_less</i>
 					</button>
-					<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species" style="display:none">
+					<button data-species_tag-id="{{ sighting.species_tag.id }}" class="down_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species" style="display:none">
 						<i class="material-icons md-light">expand_more</i>
 					</button>
 				{% endif %}
@@ -189,6 +189,7 @@
 				dataType: "html",
 				success: function(data) {
 					$('#species_suggestion_info').html(data);
+					init_species_vote_buttons();
 				}
 			});
 		}
@@ -266,32 +267,34 @@
 			});
 		});
 		
-		$('#up_vote_species,#down_vote_species').click(function(){
-			if ( $(this).attr('id') == "up_vote_species" ) {
-				var url_location = "{% url 'birds:up_vote_species' %}"
-			}else{
-				var url_location = "{% url 'birds:down_vote_species' %}"
-			}
-			$.ajax({
-				url: url_location,
-				data: {
-					'sighting_id': {{ sighting.id }},
-					'species_id': {{ sighting.species_tag.id }},
-					'csrfmiddlewaretoken': '{{ csrf_token }}'
-				},
-				type: "POST",
-				dataType: "json",
-				success: function(data) {
-					$('#up_vote_species,#down_vote_species').toggle();
-					if ( 'new_votes' in data ){
-						$('#num_votes').text(data.new_votes);
-					}
-				},
-				error: function(jqXHR, textStatus, errorThrown){
-					alert(textStatus);
+		function init_species_vote_buttons() {
+			$('.up_vote_species,.down_vote_species').click(function(){
+				if ( $(this).hasClass("up_vote_species") ) {
+					var url_location = "{% url 'birds:up_vote_species' %}"
+				}else{
+					var url_location = "{% url 'birds:down_vote_species' %}"
 				}
+				$.ajax({
+					url: url_location,
+					data: {
+						'sighting_id': {{ sighting.id }},
+						'species_id': $(this).attr("data-species_tag-id"),
+						'csrfmiddlewaretoken': '{{ csrf_token }}'
+					},
+					type: "POST",
+					dataType: "json",
+					success: function(data) {
+						$('.up_vote_species[data-species_tag-id="'+data.species_id+'"],.down_vote_species[data-species_tag-id="'+data.species_id+'"]').toggle();
+						if ( 'new_votes' in data ){
+							$('#'+data.species_id+'_num_votes').text(data.new_votes);
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown){
+						alert(textStatus);
+					}
+				});
 			});
-		});
+		}
 		
 		$('#suggest_species,#new_species_cancel_button').click(function(){
 			$('#new_species_form').slideToggle();

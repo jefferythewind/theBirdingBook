@@ -4,7 +4,8 @@ from django.utils import timezone
 from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions
 from django.http import HttpResponse
 import json
-from django.db.models import Q
+from django.db.models import Q, IntegerField
+from django.db.models.functions import Value
 
 
 
@@ -114,7 +115,7 @@ def up_vote_species(request):
 		else:
 			SpeciesVote.objects.create(  user = request.user, sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id') )
 			new_votes = SpeciesVote.objects.filter( sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id') ).count()
-			return HttpResponse(json.dumps({'msg':'success', 'new_votes': new_votes}), content_type='application/json')
+			return HttpResponse(json.dumps({'msg':'success', 'new_votes': new_votes, 'species_id': request.POST.get('species_id')}), content_type='application/json')
 		
 @login_required 
 def down_vote_species(request):
@@ -124,11 +125,11 @@ def down_vote_species(request):
 		else:
 			SpeciesVote.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id') ).delete()
 			new_votes = SpeciesVote.objects.filter( sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id') ).count()
-			return HttpResponse(json.dumps({'msg':'success', 'new_votes': new_votes}), content_type='application/json')
+			return HttpResponse(json.dumps({'msg':'success', 'new_votes': new_votes, 'species_id': request.POST.get('species_id')}), content_type='application/json')
 
 @login_required
 def suggest_new_species(request):
-	if request.is_ajax():
+	if request.is_ajax():  
 		if SpeciesSuggestions.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id') ).count() > 0:
 			return HttpResponse(json.dumps({'msg':'you have already suggested a species for this post'}), content_type='application/json')
 		else:
@@ -137,8 +138,10 @@ def suggest_new_species(request):
 
 def get_species_suggestions(request):
 	if request.is_ajax():
-		species_suggestions = SpeciesSuggestions.objects.filter( sighting_id = request.POST.get('sighting_id') )
-		return render_to_response('birds/species_suggestions.html', {'species_suggestions': species_suggestions})
+		species_suggestions = SpeciesSuggestions.objects.filter( sighting_id = request.POST.get('sighting_id') ).annotate(is_voted=Value(0, output_field=IntegerField()))
+		for suggestion in species_suggestions:
+			suggestion.is_voted = SpeciesVote.objects.filter( sighting_id = request.POST.get('sighting_id'), species = suggestion.species, user = request.user ).count()
+		return render_to_response('birds/species_suggestions.html', {'species_suggestions': species_suggestions,'user': request.user})
 	
 #import urllib2
 #import json

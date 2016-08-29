@@ -103,3 +103,7 @@ class SpeciesSuggestions(models.Model):
     species = models.ForeignKey(Subspecies)
     sighting = models.ForeignKey(Sighting)
     
+    @property
+    def num_votes(self):
+        return SpeciesVote.objects.filter( sighting = self.sighting, species = self.species ).count()
+    
