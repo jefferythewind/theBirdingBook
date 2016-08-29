@@ -30,8 +30,20 @@
 							{% if field.field.widget.attrs.id == "post_text_textarea" %}
 								<div id="photo_container">
 								</div>
-								<button type="button" id="add_photo" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add Photo</button>
+                               <h5 style="font-weight:700;"> Add photos</h5>
+								<!--<button type="button" id="add_photo" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add Photo</button>-->
+                                
+                                <div class="mdl-grid">
+                                
+                                    <a href="#" class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
+                                        <div class="image image-block-m sighting-page sub-image" style="background: url({{ sighting.image.url }}) no-repeat center;background-size:cover;">
+                                            <i class="material-icons">add_a_photo</i>
+                                        </div>
+                                    </a>
+                                 
+                                </div>
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="post_text_wrapper">
+
                                     <label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
                                     {{ field }}
                                 </div>
