@@ -9,18 +9,31 @@
 			{% for sighting in latest_sighting_list %}
 				<div class="hover-card mdl-cell mdl-cell--6-col-desktop mdl-cell--8-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
 					<a class="no-decoration" href="{% url 'birds:view_sighting' sighting.id %}">
-						{% if sighting.images.
-						<!--<div class="image image-block-m" style="background: url({{ sighting.image.url }}) no-repeat center;background-size:cover;">-->
-						<div class="image image-block-m">
-							<h4>
-								<span>{{ sighting.caption }} {{ sighting.images.count }}</span>
-							</h4>
-							<div class="mdl-card__actions index-species-tag">
-								<span>
-									<i class="material-icons">local_offer</i><span> {{sighting.species_tag}}</span>
-								</span>
+						{% if sighting.images.count == 0 %}
+							<div class="image image-block-m">
+								<h4>
+									<span>{{ sighting.caption }} {{ sighting.images.count }}</span>
+								</h4>
+								<div class="mdl-card__actions index-species-tag">
+									<span>
+										<i class="material-icons">local_offer</i><span> {{sighting.species_tag}}</span>
+									</span>
+								</div>
 							</div>
-						</div>
+						{% else %}
+							{% with sighting.images.all|first as image %}
+								<div class="image image-block-m" style="background: url({{ image.photo.url }}) no-repeat center;background-size:cover;">
+									<h4>
+										<span>{{ sighting.caption }} {{ sighting.images.count }}</span>
+									</h4>
+									<div class="mdl-card__actions index-species-tag">
+										<span>
+											<i class="material-icons">local_offer</i><span> {{sighting.species_tag}}</span>
+										</span>
+									</div>
+								</div>
+							{% endwith %}
+						{% endif %}
 					</a>
 					<div class="mdl-card__supporting-text">
 						<div style="float:left">{{ sighting.time_diff }}</div>
