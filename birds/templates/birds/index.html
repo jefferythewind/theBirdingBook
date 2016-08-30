@@ -21,18 +21,20 @@
 								</div>
 							</div>
 						{% else %}
-							{% with sighting.images.all|first as image %}
-								<div class="image image-block-m" style="background: url({{ image.photo.url }}) no-repeat center;background-size:cover;">
-									<h4>
-										<span>{{ sighting.caption }}</span>
-									</h4>
-									<div class="mdl-card__actions index-species-tag">
-										<span>
-											<i class="material-icons">local_offer</i><span> {{sighting.species_tag}}</span>
-										</span>
+							{% for image in sighting.images %}
+								{% if forloop.counter == 1 %}
+									<div class="image image-block-m" style="background: url({{ image.photo.url }}) no-repeat center;background-size:cover;">
+										<h4>
+											<span>{{ sighting.caption }}</span>
+										</h4>
+										<div class="mdl-card__actions index-species-tag">
+											<span>
+												<i class="material-icons">local_offer</i><span> {{sighting.species_tag}}</span>
+											</span>
+										</div>
 									</div>
-								</div>
-							{% endwith %}
+								{% endif %}
+							{% endfor %}
 						{% endif %}
 					</a>
 					{% if sighting.images.count == 0 %}
