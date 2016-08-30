@@ -1,18 +1,24 @@
 /*SUB IMAGE */
+
 .sub-image{
   max-height: 100px;
 }
 
 /*==========*/
 
-/*SUB IMAGE */
+
+/*HOVER CARD INSTRUCTIONS*/
+
 .hover-card:hover {
-    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 1px 8px 0 rgba(0, 0, 0, 0.12);
+    /*box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 1px 8px 0 rgba(0, 0, 0, 0.12);
     -moz-transform: translate3d(0, -3px, 0) !important;
     -ms-transform: translate3d(0, -3px, 0) !important;
     -webkit-transform: translate3d(0, -3px, 0) !important;
-    transform: translate3d(0, -3px, 0) !important;
+    transform: translate3d(0, -3px, 0) !important;*/
+
+    box-shadow: 0 0 3px rgba(0,0,0,.13),0 3px 6px rgba(0,0,0,.26);
 }
+
 /*==========*/
 #map {
     margin: auto;
