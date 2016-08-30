@@ -84,7 +84,8 @@ class Sighting(models.Model):
         return BirdPhoto.objects.filter( sighting = self.id )
 
     def __str__(self):
-        return self.caption
+        return str(self.id)
+        
     
 class BirdPhoto(models.Model):
     sighting = models.ForeignKey(Sighting)

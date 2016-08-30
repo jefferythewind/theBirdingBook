@@ -31,21 +31,22 @@ def new_sighting(request):
 			return redirect('/view_sighting/'+str(s.pk), pk=s.pk)
 	else:
 		new_sighting = Sighting.objects.create(user_id = request.user.id)
-		form = SightingsForm()
-	return render(request, 'birds/new_sighting.html', {'form': form, 'this_sighting': new_sighting})
+		return redirect('/edit_sighting/'+str(new_sighting.id), pk=new_sighting.id)
+# 	return render(request, 'birds/new_sighting.html', {'form': form, 'this_sighting': new_sighting})
+	
 
 @login_required
 def edit_sighting(request, pk):
 	this_sighting = get_object_or_404(Sighting, pk=pk)
-	if this_sighting.user_id != request.user.id:
-		return HttpResponseForbidden()
 	form = SightingsForm( request.POST or None, request.FILES or None, instance=this_sighting )
 	if request.method == "POST":
+		if this_sighting.user_id != request.user.id:
+			return HttpResponseForbidden()
 		if form.is_valid():
 			form.save()
 			return redirect('/view_sighting/'+str(pk), pk=pk)
-		
-	return render(request, 'birds/new_sighting.html', { 'form': form, 'this_sighting': this_sighting })
+	elif request.method == "GET":
+		return render(request, 'birds/new_sighting.html', { 'form': form, 'this_sighting': this_sighting })
 
 def view_sighting(request, pk):
 	this_sighting = get_object_or_404(Sighting, pk=pk)
