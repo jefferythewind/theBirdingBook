@@ -68,8 +68,12 @@ class Sighting(models.Model):
                 return "%0.0f seconds ago" % s
             elif s < 3600:
                 return "%0.0f minutes ago" % ( s / 60.0 )
-            else:
+            elif s < 3600 * 24:
                 return "%0.0f hours ago" % ( s / 3600.0 )
+            elif s < 3600 * 24 * 7:
+                return "%0.0f days ago" % ( s / (3600 * 24) )
+            else:
+                return self.post_ts.strftime("%b %d, %Y")
         
     @property
     def num_comments(self):
