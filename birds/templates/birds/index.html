@@ -36,8 +36,10 @@
 						{% endif %}
 					</a>
 					<div class="mdl-card__supporting-text">
+						
 						<div style="float:left">{{ sighting.time_diff }}</div>
-						<div style="float:right">{{ sighting.num_likes }} likes {{ sighting.num_comments }} comments</div>
+
+						<div style="float:right"><i class="material-icons">photo_album</i>{{ sighting.num_likes }} likes {{ sighting.num_comments }} comments</div>
 					</div>	
 					<!--<div class="mdl-card__menu">
 						<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons">
