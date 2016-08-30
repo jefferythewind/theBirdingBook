@@ -61,13 +61,13 @@
 						<div style="float:left">{{ sighting.time_diff }}</div>
 
 						<div style="float:right">
-							<i class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{ sighting.images.count }}">photo_album</i>
-							{% if sighting.num_likes  == 0 %}
-							{% else %}
+							{% if sighting.images.count > 0 %}
+								<i class="material-icons">photo_album</i>{{ sighting.images.count }}
+							{% endif %}
+							{% if sighting.num_likes > 0 %}
 								<i class="material-icons">thumb_up</i>{{ sighting.num_likes }}
 							{% endif %}
-							{% if sighting.num_comments  == 0 %}
-							{% else %}
+							{% if sighting.num_comments > 0 %}
 								<i class="material-icons">comment</i>{{ sighting.num_comments }}
 							{% endif %}
 						</div>
