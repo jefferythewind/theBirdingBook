@@ -10,7 +10,7 @@
 				<div class="hover-card mdl-cell mdl-cell--6-col-desktop mdl-cell--8-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
 					<a class="no-decoration" href="{% url 'birds:view_sighting' sighting.id %}">
 						{% if sighting.images.count == 0 %}
-							<div style="height:100px;" class="image image-block-m">
+							<div style="height:100px;" class="image image-block-m mdl-color--blue-grey-900">
 								<h4 style="top:0px;" >
 									<span>{{ sighting.caption }}</span>
 								</h4>
