@@ -12,7 +12,18 @@
 
 <div class="mdl-grid" id="view-sighting-main-grid">
 	{% if sighting.images.count == 0 %}
-	
+		<div class="hover-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
+			<div style="height:100px;" class="image image-block-m mdl-color--blue-grey-900">
+				<h4 style="top:0px;" >
+					<span>{{ sighting.caption }}</span>
+				</h4>
+				<div class="mdl-card__actions index-species-tag">
+					<span>
+						<i class="material-icons">local_offer</i><span> {{sighting.species_tag}}</span>
+					</span>
+				</div>
+			</div>
+		</div>
 	{% else %}
 		{% for image in sighting.images %}
 			{% if forloop.counter == 1 %}
