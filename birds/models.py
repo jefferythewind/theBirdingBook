@@ -47,12 +47,12 @@ class Subspecies(models.Model):
         return self.species.species_english+" "+self.species.genus.genus+" "+self.species.species+" "+self.subspecies
 
 class Sighting(models.Model):
-    caption = models.CharField(max_length=100, default=None)
+    caption = models.CharField(max_length=100, default=None, null=True)
     post_text = models.CharField(max_length=1000, default=None, blank=True, null=True)
     species_tag = models.ForeignKey(Subspecies, default=None, blank=True, null=True)
-    lat = models.FloatField(default=None)
-    lng = models.FloatField(default= None)
-    sighting_date = models.DateField()
+    lat = models.FloatField(default=None, null=True)
+    lng = models.FloatField(default= None, null=True)
+    sighting_date = models.DateField(null=True)
     #image = models.ImageField(default=None, blank=True, null=True)
     user_id = models.IntegerField(default=None)
     location = models.CharField(max_length=200, default=None, null=True, blank=True)
@@ -90,6 +90,9 @@ class BirdPhoto(models.Model):
     sighting = models.ForeignKey(Sighting)
     photo = models.ImageField()
     order = models.IntegerField()
+    
+    def __str__(self):
+        return self.photo.name
     
 class Like(models.Model):
     sighting = models.ForeignKey(Sighting)

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.views import generic
 from django.utils import timezone
-from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions
+from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions, BirdPhoto
 from django.http import HttpResponse
 import json
 from django.db.models import Q, IntegerField
@@ -30,8 +30,9 @@ def new_sighting(request):
 			s.save()
 			return redirect('/view_sighting/'+str(s.pk), pk=s.pk)
 	else:
+		new_sighting = Sighting.objects.create(user_id = request.user.id)
 		form = SightingsForm()
-	return render(request, 'birds/new_sighting.html', {'form': form})
+	return render(request, 'birds/new_sighting.html', {'form': form, 'this_sighting': new_sighting})
 
 @login_required
 def edit_sighting(request, pk):
@@ -44,7 +45,7 @@ def edit_sighting(request, pk):
 			form.save()
 			return redirect('/view_sighting/'+str(pk), pk=pk)
 		
-	return render(request, 'birds/new_sighting.html', { 'form': form })
+	return render(request, 'birds/new_sighting.html', { 'form': form, 'this_sighting': this_sighting })
 
 def view_sighting(request, pk):
 	this_sighting = get_object_or_404(Sighting, pk=pk)
@@ -143,6 +144,11 @@ def get_species_suggestions(request):
 			suggestion.is_voted = SpeciesVote.objects.filter( sighting_id = request.POST.get('sighting_id'), species = suggestion.species, user = request.user ).count()
 		return render_to_response('birds/species_suggestions.html', {'species_suggestions': species_suggestions,'user': request.user})
 	
+@login_required
+def add_photo(request):
+	if request.is_ajax():
+		new_photo = BirdPhoto.objects.create( sighting_id = request.POST.get('sighting_id'), photo = request.FILES.get('bird_photo'), order = 0 )
+		return HttpResponse(json.dumps({'msg':'success', 'url': str(new_photo.photo.url)}), content_type='application/json')
 #import urllib2
 #import json
 # def weather(req):

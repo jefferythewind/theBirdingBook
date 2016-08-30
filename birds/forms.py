@@ -15,3 +15,4 @@ class SightingsForm(forms.ModelForm):
             'lng': forms.HiddenInput(),
             'post_text': forms.Textarea(attrs={'class':"mdl-textfield__input", 'id':"post_text_textarea"})
         }
+
