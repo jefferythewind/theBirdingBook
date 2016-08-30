@@ -33,12 +33,12 @@
 								</div>
                                 <input id="add_photo" type="file" style="display:none">
                                 <div class="mdl-grid" id="photo_container">
-<<<<<<< Updated upstream
-=======
-                                
-
-                                 
->>>>>>> Stashed changes
+								{% for image in this_sighting.images %}
+									<div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
+										<div class="image image-block-m sighting-page sub-image" style="background: url({{ image.photo.url }}) no-repeat center;background-size:cover;">
+										</div>
+									</div>
+								{% endfor %}
                                 </div>
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="post_text_wrapper">
                                     <label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
@@ -99,7 +99,7 @@
 					contentType: false,
 					success: function(data) {
 						if (data.msg == "success"){
-							$('#photo_container').append('<div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp"><div class="image image-block-m sighting-page sub-image" style="background: url('+data.url+') no-repeat center;background-size:cover;"></div>')
+							$('#photo_container').append('<div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp"><div class="image image-block-m sighting-page sub-image" style="background: url('+data.url+') no-repeat center;background-size:cover;"></div></div>')
 						}
 					},
 					error: function(jqXHR, textStatus, errorThrown){
