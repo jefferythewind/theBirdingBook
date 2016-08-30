@@ -42,7 +42,18 @@
 							
 							<div style="float:left">{{ sighting.time_diff }}</div>
 
-							<div style="float:right">{{ sighting.num_likes }} likes {{ sighting.num_comments }} comments</div>
+							<div style="float:right">
+							{% if sighting.num_likes  == 0 %}
+								<i class="material-icons">thumb_up</i>
+								{% else %}
+								<i class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{ sighting.num_likes }}">thumb_up</i>
+							{% endif %}
+							{% if sighting.num_comments  == 0 %}
+								<i class="material-icons">comment</i>
+								{% else %}
+								<i class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{ sighting.num_comments }}">comment</i>
+							{% endif %}
+							</div>	
 						</div>	
 					{% else %}
 					<div style="padding-top: 13px; padding-bottom: 13px;" class="mdl-card__supporting-text">
@@ -50,7 +61,18 @@
 						<div style="float:left">{{ sighting.time_diff }}</div>
 
 						<div style="float:right">
-						<i class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{ sighting.images.count }}">photo_album</i>{{ sighting.num_likes }} likes {{ sighting.num_comments }} comments</div>
+							<i class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{ sighting.images.count }}">photo_album</i>
+							{% if sighting.num_likes  == 0 %}
+								<i class="material-icons">thumb_up</i>
+								{% else %}
+								<i class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{ sighting.num_likes }}">thumb_up</i>
+							{% endif %}
+							{% if sighting.num_comments  == 0 %}
+								<i class="material-icons">comment</i>
+								{% else %}
+								<i class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{ sighting.num_comments }}">comment</i>
+							{% endif %}
+						</div>
 					</div>	
 					{% endif %}
 					<!--<div class="mdl-card__menu">
