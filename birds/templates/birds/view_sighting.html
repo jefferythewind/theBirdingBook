@@ -11,31 +11,29 @@
 {% endif %}
 
 <div class="mdl-grid" id="view-sighting-main-grid">
-    <div class="hover-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
-        <a href="#">
-        	<div class="image image-block-m sighting-page" style="background: url({{ sighting.image.url }}) no-repeat center;background-size:cover;">
-            <h4>
-                <span>{{ sighting.caption }}</span>
-            </h4>
-        	</div>
-        </a>
-    </div>
-    <div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
-    	 <a href="#"><div class="image image-block-m sighting-page sub-image" style="background: url({{ sighting.image.url }}) no-repeat center;background-size:cover;">
-        </div></a>
-    </div>
-    <div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
-    	 <a href="#"><div class="image image-block-m sighting-page sub-image" style="background: url({{ sighting.image.url }}) no-repeat center;background-size:cover;">
-        </div></a>
-    </div>
-    <div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
-    	 <a href="#"><div class="image image-block-m sighting-page sub-image" style="background: url({{ sighting.image.url }}) no-repeat center;background-size:cover;">
-        </div></a>
-    </div>
-    <div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
-    	 <a href="#"><div class="image image-block-m sighting-page sub-image" style="background: url({{ sighting.image.url }}) no-repeat center;background-size:cover;">
-        </div></a>
-    </div>
+	{% if sighting.images.count == 0 %}
+	
+	{% else %}
+		{% for image in sighting.images %}
+			{% if forloop.counter == 1 %}
+				<div class="hover-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
+					<a href="#">
+						<div class="image image-block-m sighting-page" style="background: url({{ image.photo.url }}) no-repeat center;background-size:cover;">
+						<h4>
+							<span>{{ sighting.caption }}</span>
+						</h4>
+						</div>
+					</a>
+				</div>
+			{% else %}
+				<div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
+					<a href="#">
+						<div class="image image-block-m sighting-page sub-image" style="background: url({{ image.photo.url }}) no-repeat center;background-size:cover;"></div>
+					</a>
+				</div>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
 	
     <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
         <div class="mdl-card__title">
