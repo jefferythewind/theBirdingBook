@@ -35,12 +35,21 @@
 							{% endwith %}
 						{% endif %}
 					</a>
+					{% if sighting.images.count == 0 %}
+						<div class="mdl-card__supporting-text">
+							
+							<div style="float:left">{{ sighting.time_diff }}</div>
+
+							<div style="float:right">{{ sighting.num_likes }} likes {{ sighting.num_comments }} comments</div>
+						</div>	
+					{% else %}
 					<div class="mdl-card__supporting-text">
 						
 						<div style="float:left">{{ sighting.time_diff }}</div>
 
 						<div style="float:right"><div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{ sighting.images.count }}">photo_album</div>{{ sighting.num_likes }} likes {{ sighting.num_comments }} comments</div>
 					</div>	
+					{% endif %}
 					<!--<div class="mdl-card__menu">
 						<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons">
 						  <i class="material-icons md-light">star_border</i>
