@@ -10,7 +10,7 @@
 				<div class="hover-card mdl-cell mdl-cell--6-col-desktop mdl-cell--8-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
 					<a class="no-decoration" href="{% url 'birds:view_sighting' sighting.id %}">
 						{% if sighting.images.count == 0 %}
-							<div style="height:100px;" class="image image-block-m mdl-color--blue-grey-900">
+							<div style="height:100px;" class="image image-block-m mdl-color--blue-grey-800">
 								<h4 style="top:0px;" >
 									<span>{{ sighting.caption }}</span>
 								</h4>
@@ -45,11 +45,12 @@
 							<div style="float:right">{{ sighting.num_likes }} likes {{ sighting.num_comments }} comments</div>
 						</div>	
 					{% else %}
-					<div class="mdl-card__supporting-text">
+					<div style="padding-top: 13px; padding-bottom: 13px;" class="mdl-card__supporting-text">
 						
 						<div style="float:left">{{ sighting.time_diff }}</div>
 
-						<div style="float:right"><div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{ sighting.images.count }}">photo_album</div>{{ sighting.num_likes }} likes {{ sighting.num_comments }} comments</div>
+						<div style="float:right">
+						<i class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{ sighting.images.count }}">photo_album</i>{{ sighting.num_likes }} likes {{ sighting.num_comments }} comments</div>
 					</div>	
 					{% endif %}
 					<!--<div class="mdl-card__menu">
