@@ -28,7 +28,7 @@
 		{% for image in sighting.images %}
 			{% if forloop.counter == 1 %}
 				<div class="hover-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
-					<a href="#">
+					<a href="#" class="image-expand-on-click">
 						<div class="image image-block-m sighting-page" style="background: url({{ image.photo.url }}) no-repeat center;background-size:cover;">
 						<h4>
 							<span>{{ sighting.caption }}</span>
@@ -38,7 +38,7 @@
 				</div>
 			{% else %}
 				<div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
-					<a href="#">
+					<a href="#" class="image-expand-on-click">
 						<div class="image image-block-m sighting-page sub-image" style="background: url({{ image.photo.url }}) no-repeat center;background-size:cover;"></div>
 					</a>
 				</div>
@@ -178,12 +178,30 @@
 		</div>
 		{% endif %}
 	</div>
-	 </div>
-	
-</div>       
+</div>
+
+<div id="image_inspect">
+</div>
 
 <script type="text/javascript">
     jQuery(function($){
+	
+		$('.image-expand-on-click').click(function(){
+			var window_width = $(window).width();
+			var window_height = $(window).height();
+			$('#image_inspect').dialog({
+				modal: true,
+				resizable: false,
+				draggable: false,
+				width: window_width * .99,
+				height: window_height * .99,
+				hide: { effect: "blind", duration: 1000 },
+				show: { effect: "blind", duration: 800 },
+				dialogClass: 'image_inspect_dialog'
+			});
+		})
+		
+	
         $('#edit_button').click(function(){
 			window.location = "{% url 'birds:edit_sighting' sighting.id %}";
 		})

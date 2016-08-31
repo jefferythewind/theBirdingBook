@@ -184,6 +184,10 @@ color:#f44336;
 	min-height: auto;
 }
 
+.image_inspect_dialog .ui-dialog-titlebar {
+	display: none;
+}
+
 /* END ADDED BY TIM */
 
 
