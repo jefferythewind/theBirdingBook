@@ -4,6 +4,10 @@ from django.db import models
 import datetime
 from pytz import utc
 
+class Avatar(models.Model):
+    user = models.OneToOneField(User)
+    avatar = models.ImageField()
+
 class SpeciesFile(models.Model):
     species_list = models.FileField()
 

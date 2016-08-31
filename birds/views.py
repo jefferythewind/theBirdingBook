@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.views import generic
 from django.utils import timezone
-from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions, BirdPhoto
+from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions, BirdPhoto, Avatar
 from django.http import HttpResponse
 import json
 from django.db.models import Q, IntegerField
@@ -150,6 +150,19 @@ def add_photo(request):
 	if request.is_ajax():
 		new_photo = BirdPhoto.objects.create( sighting_id = request.POST.get('sighting_id'), photo = request.FILES.get('bird_photo'), order = 0 )
 		return HttpResponse(json.dumps({'msg':'success', 'url': str(new_photo.photo.url)}), content_type='application/json')
+	
+@login_required
+def add_avatar(request):
+	if request.is_ajax():
+		try:
+			new_avatar = request.user.avatar
+		except Avatar.DoesNotExist:
+			new_avatar = Avatar.objects.create( avatar = request.FILES.get('avatar_photo'), user = request.user )
+		else:
+			new_avatar.avatar = request.FILES.get('avatar_photo')
+			new_avatar.save()
+			
+		return HttpResponse(json.dumps({'msg':'success', 'url': str(new_avatar.avatar.url)}), content_type='application/json')
 #import urllib2
 #import json
 # def weather(req):

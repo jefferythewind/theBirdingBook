@@ -95,7 +95,7 @@
           <!-- <img src="{% static "birds/images/user.jpg" class="demo-avatar" %}"> -->
           <div class="demo-avatar-dropdown">
                 {% if user.is_authenticated %}
-                    <i class="material-icons">account_circle</i><span style="margin-left:2px"> {{ user.username }}</span>
+                    <a href="{% url 'birds:user' user.id %}"><i class="material-icons">account_circle</i><span style="margin-left:2px"> {{ user.username }}</span></a>
                 {% else %}
                     <span><a class="mdl-button mdl-js-button mdl-button--accent" href="{% url 'login' %}">Login</a></span>
                 {% endif %}
