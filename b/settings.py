@@ -29,6 +29,7 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = (
+    'django_cleanup',
     'birds.apps.BirdsConfig',
     'polls.apps.PollsConfig',
     'django.contrib.admin',
