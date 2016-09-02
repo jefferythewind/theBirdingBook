@@ -181,6 +181,11 @@
 </div>
 
 <div id="image_inspect">
+	<div style="position:absolute">
+		<a id="close_image_inspect" href="" onclick="return false;"><i class="material-icons">close</i></a>
+	</div>
+	<div id="image_inspect_content">
+	</div>
 </div>
 
 <script type="text/javascript">
@@ -189,7 +194,7 @@
 		$('.image-expand-on-click').click(function(){
 			var window_width = $(window).width();
 			var window_height = $(window).height();
-			$('#image_inspect').load(
+			$('#image_inspect_content').load(
 				"{% url 'birds:image_inspect' %}",
 				{'this_sighting': {{ sighting.id }}, 'csrfmiddlewaretoken': '{{ csrf_token }}'}
 			);
@@ -203,7 +208,11 @@
 				show: { effect: "blind", duration: 800 },
 				dialogClass: 'image_inspect_dialog'
 			});
-		})
+		});
+		
+		$('#close_image_inspect').click(function(){
+			$('#image_inspect').dialog('close');
+		});
 		
 	
         $('#edit_button').click(function(){
