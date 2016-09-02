@@ -23,4 +23,5 @@ urlpatterns = [
 	url(r'^suggest_new_species/', views.suggest_new_species, name='suggest_new_species'),
 	url(r'^get_species_suggestions/', views.get_species_suggestions, name='get_species_suggestions'),
 	url(r'^add_photo/', views.add_photo, name='add_photo'),
+	url(r'^image_inspect/', views.image_inspect, name='image_inspect'),
 ]

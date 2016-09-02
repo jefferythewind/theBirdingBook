@@ -189,6 +189,10 @@
 		$('.image-expand-on-click').click(function(){
 			var window_width = $(window).width();
 			var window_height = $(window).height();
+			$('#image_inspect').load(
+				"{% url 'birds:image_inspect' %}",
+				{'this_sighting': {{ sighting.id }}, 'csrfmiddlewaretoken': '{{ csrf_token }}'}
+			);
 			$('#image_inspect').dialog({
 				modal: true,
 				resizable: false,

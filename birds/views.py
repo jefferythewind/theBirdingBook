@@ -163,6 +163,12 @@ def add_avatar(request):
 			new_avatar.save()
 			
 		return HttpResponse(json.dumps({'msg':'success', 'url': str(new_avatar.avatar.url)}), content_type='application/json')
+	
+@login_required
+def image_inspect(request):
+	if request.is_ajax():
+		sighting = Sighting.objects.get(pk = request.POST.get('this_sighting'))
+		return render_to_response('birds/image_inspect.html', {'sighting': sighting})
 #import urllib2
 #import json
 # def weather(req):
