@@ -1,17 +1,24 @@
 {% extends 'birds/base.html' %}
 
-{% block content %}
-<div id="avatar_container">
-{% if user.avatar %}
-	<img src="{{ user.avatar.avatar.url }}">
-{% endif %}
-</div>
+	{% block content %}
+		<div class="page-content">
+	<section class="mdl-grid">
+		<div class="mdl-cell mdl-cell--12-col">
+		<div id="avatar_container">
+	{% if user.avatar %}
+			<img class="mdl-shadow--2dp" src="{{ user.avatar.avatar.url }}">
+		{% endif %}
+		</div>
 <div id="add_avatar_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
 	<i class="material-icons">add_a_photo</i>
 </div>
 <input id="avatar_photo" type="file" style="display:none">
+		</div>
+	</section>
 
+</div>
 <script type="text/javascript">
+
 
 jQuery(function($){
 
