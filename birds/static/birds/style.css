@@ -5,8 +5,20 @@
 }
 
 /*==========*/
-
-
+/*USER IDENTIY ADJUSTMENTS*/
+.user-ident{
+display: -webkit-flex;
+    display: -ms-flexbox;
+    /* display: flex; */
+    /* -webkit-flex-flow: row wrap; */
+    -ms-flex-flow: row wrap;
+    /* flex-flow: row wrap; */
+    margin: 0 auto;
+    -webkit-align-items: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+}
+/*==========*/
 /*HOVER CARD INSTRUCTIONS*/
 
 .hover-card:hover {
