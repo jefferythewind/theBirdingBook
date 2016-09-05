@@ -152,6 +152,12 @@ def add_photo(request):
 		return HttpResponse(json.dumps({'msg':'success', 'url': str(new_photo.photo.url)}), content_type='application/json')
 	
 @login_required
+def remove_photo(request):
+	if request.is_ajax():
+		BirdPhoto.objects.get( pk = request.POST.get('image_id') ).delete()
+		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
+	
+@login_required
 def add_avatar(request):
 	if request.is_ajax():
 		try:
