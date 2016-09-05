@@ -3,8 +3,13 @@
 .sub-image{
   max-height: 100px;
 }
-
 /*==========*/
+/*IMAGE INSPECT*/
+.image-inspection{
+  background-color: black;
+}
+/*=======*/
+
 /*USER IDENTIY ADJUSTMENTS*/
 .user-ident{
 display: -webkit-flex;

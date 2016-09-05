@@ -98,7 +98,7 @@
               
                     <a class="user-ident" href="{% url 'birds:user' user.id %}">
 						{% if user.avatar %}
-							<div style="height:50px;width:50px;"><img style="height:100%;width:100%;" src="{{ user.avatar.avatar.url }}"></div>
+							<div class="mdl-shadow--8dp" style="height:50px;width:50px;"><img style="height:100%;width:100%;" src="{{ user.avatar.avatar.url }}"></div>
 						{% else %}
 							<i class="material-icons">account_circle</i>
 						{% endif %}
