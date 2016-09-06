@@ -1,9 +1,40 @@
+/*Image_Inspect*/
+.image-inspect-image{
+  max-width: 100%;
+  min-width: 300px;
+  height: auto;
+  position: relative;
+  background-color: blue;
+  padding: 0px;
+  margin: 0px;
+  vertical-align: bottom;
+  line-height: 1;
+}
+
+.image-inspect-card{
+  margin-top: 32px;
+  width:100%;
+  background-color: black;
+  height:auto;
+}
+
+.image-aspect{
+     width: 100%;
+    height: auto;
+}
+/*==========*/
+
+
 /*SUB IMAGE */
 
 .sub-image{
   max-height: 100px;
 }
 /*==========*/
+
+
+
+
 /*IMAGE INSPECT*/
 .image-inspection{
   background-color: black;

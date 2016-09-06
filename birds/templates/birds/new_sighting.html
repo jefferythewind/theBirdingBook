@@ -28,6 +28,7 @@
 					<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
                         {% for field in form.visible_fields %}
 							{% if field.field.widget.attrs.id == "post_text_textarea" %}
+							<br>
 								<div id="add_photo_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
 									<i class="material-icons">add_a_photo</i>
 								</div>
