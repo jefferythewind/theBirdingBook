@@ -188,11 +188,35 @@
 	</div>
 </div>
 
+<div id="image_inspect_test">
+	
+</div>
+
+<style type="text/css">
+
+#image_inspect_test {
+    max-width: 100%;
+    max-height: 100%;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    overflow: auto;
+    position: fixed;
+    right: 0;
+    top: 0;
+	background-color: black;
+	display: none;
+	z-index: 1;
+}
+
+</style>
+
 <script type="text/javascript">
     jQuery(function($){
 	
 		$('.image-expand-on-click').click(function(){
-			var window_width = $(window).width();
+			$('#image_inspect_test').toggle();
+			/*var window_width = $(window).width();
 			var window_height = $(window).height();
 			$('#image_inspect_content').load(
 				"{% url 'birds:image_inspect' %}",
@@ -208,7 +232,7 @@
 				show: { effect: "blind", duration: 800 },
 				dialogClass: 'image_inspect_dialog',
 				responsive: true
-			});
+			});*/
 		});
 		
 		$('#close_image_inspect').click(function(){
