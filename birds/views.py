@@ -148,13 +148,18 @@ def get_species_suggestions(request):
 @login_required
 def add_photo(request):
 	if request.is_ajax():
-		new_photo = BirdPhoto.objects.create( sighting_id = request.POST.get('sighting_id'), photo = request.FILES.get('bird_photo'), order = 0 )
-		return HttpResponse(json.dumps({'msg':'success', 'url': str(new_photo.photo.url)}), content_type='application/json')
+		new_urls = []
+		new_ids = []
+		for ifile in request.FILES.getlist('bird_photo'):
+			new_photo = BirdPhoto.objects.create( sighting_id = request.POST.get('sighting_id'), photo = ifile, order = 0 )
+			new_urls.append(new_photo.photo.url)
+			new_ids.append(new_photo.id)
+		return HttpResponse(json.dumps({'msg':'success', 'urls': new_urls, 'ids': new_ids}), content_type='application/json')
 	
 @login_required
 def remove_photo(request):
 	if request.is_ajax():
-		BirdPhoto.objects.get( pk = request.POST.get('image_id') ).delete()
+		get_object_or_404(BirdPhoto, pk=request.POST.get('image_id')).delete()
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
 	
 @login_required
@@ -173,7 +178,7 @@ def add_avatar(request):
 @login_required
 def image_inspect(request):
 	if request.is_ajax():
-		sighting = Sighting.objects.get(pk = request.POST.get('this_sighting'))
+		sighting = get_object_or_404(Sighting, pk = request.POST.get('this_sighting'))
 		return render_to_response('birds/image_inspect.html', {'sighting': sighting})
 #import urllib2
 #import json

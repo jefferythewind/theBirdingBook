@@ -31,7 +31,7 @@
 								<div id="add_photo_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
 									<i class="material-icons">add_a_photo</i>
 								</div>
-                                <input id="add_photo" type="file" style="display:none">
+                                <input id="add_photo" type="file" style="display:none" multiple>
                                 <div class="mdl-grid" id="photo_container">
 								{% for image in this_sighting.images %}
 									<div id="image_container_{{ image.id }}" class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
@@ -82,8 +82,7 @@
 
 <script type="text/javascript">
     jQuery(function($){
-		$('.close-image').click(function(){
-		
+		var remove_image_click = function(){
 			var image_id = $(this).attr('data-image_id');
 			var the_image_div = $("#image_container_"+image_id);
 		
@@ -104,8 +103,9 @@
 					alert(textStatus);
 				}
 			});
-			
-		});
+		}
+		
+		$('.close-image').click(remove_image_click);
 	
 		$('#add_photo_button').click(function(){
 			$('#add_photo').trigger('click');
@@ -113,9 +113,10 @@
 		
 		$('#add_photo').change(function(){
 			formdata = new FormData();
-			var file = this.files[0];
 			if (formdata) {
-				formdata.append("bird_photo", file);
+				for ( var i = 0; i < this.files.length; i ++ ){
+					formdata.append("bird_photo", this.files[i]);
+				}
 				formdata.append("sighting_id", {{ this_sighting.id }});
 				formdata.append("csrfmiddlewaretoken", "{{ csrf_token }}");
 				$.ajax({
@@ -127,7 +128,10 @@
 					contentType: false,
 					success: function(data) {
 						if (data.msg == "success"){
-							$('#photo_container').append('<div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp"><div class="image image-block-m sighting-page sub-image" style="background: url('+data.url+') no-repeat center;background-size:cover;"></div></div>')
+							for ( var i = 0; i < data.urls.length; i++ ) {
+								$('#photo_container').append('<div id="image_container_'+data.ids[i]+'" class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp"><div style="position:absolute;z-index:1;"><a href="" onclick="return false;"><i data-image_id="'+data.ids[i]+'" class="close-image material-icons" id="image_close_'+data.ids[i]+'">close</i></a></div><div class="image image-block-m sighting-page sub-image" style="background: url('+data.urls[i]+') no-repeat center;background-size:cover;"></div></div>');
+								$('#image_close_'+data.ids[i]).click(remove_image_click);
+							}
 						}
 					},
 					error: function(jqXHR, textStatus, errorThrown){
