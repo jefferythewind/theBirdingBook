@@ -1,4 +1,21 @@
 /*Image_Inspect*/
+
+/*outer most top-level overlay div*/
+#image_inspect_test {
+    max-width: 100%;
+    max-height: 100%;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    overflow: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+	background-color: black;
+	display: none;
+	z-index: 5 !important;
+}
+
 .image-inspect-image{
   max-width: 100%;
   min-width: 300px;
@@ -16,11 +33,13 @@
   width:100%;
   background-color: black;
   height:auto;
+  max-height:100%;
 }
 
 .image-aspect{
-     width: 100%;
-    height: auto;
+	position: relative;
+	max-width: 100%;
+	max-height: 100%;
 }
 /*==========*/
 

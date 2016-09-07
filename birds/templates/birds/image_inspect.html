@@ -1,10 +1,18 @@
+<!--{% for image in sighting.images %}
+	{% if forloop.counter == 1 %}
+		<img class="image-aspect" src="{{ image.photo.url }}"/>
+	{% else %}
+	{% endif %}
+{% endfor %}-->
+
+
 
 <div class="mdl-grid">
 {% for image in sighting.images %}
 	{% if forloop.counter == 1 %}
 		<div class="mdl-cell mdl-cell--12-col image-inspect-card">
 			<div class="image image-inspect-image">
-				<img class="image-aspect" width="460" height="345" src="{{ image.photo.url }}"/>
+				<img class="image-aspect" src="{{ image.photo.url }}"/>
 			</div>
 		</div>
 		
