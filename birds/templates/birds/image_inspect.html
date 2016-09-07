@@ -12,7 +12,7 @@
 	{% if forloop.counter == 1 %}
 		<div class="mdl-cell mdl-cell--12-col image-inspect-card">
 			<div class="image image-inspect-image">
-				<img class="image-aspect" src="{{ image.photo.url }}"/>
+				<img class="image-cva" src="{{ image.photo.url }}"/>
 			</div>
 		</div>
 	{% else %}
@@ -24,6 +24,6 @@
 		</div>
 			
 	{% endif %}
-		</div>
+		
 {% endfor %}
 </div>

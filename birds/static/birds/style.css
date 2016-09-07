@@ -3,10 +3,10 @@
 /*outer most top-level overlay div*/
 #image_inspect_test {
     max-width: 100%;
-    max-height: 100%;
+    max-height: 100%; /*changed to 85 from 100- CVA test 9/7/2016*/
     bottom: 0;
     left: 0;
-    margin: auto;
+    margin:auto;  /*removed CVA test 9/7/2016*/
     overflow: auto;
     position: absolute;
     right: 0;
@@ -15,7 +15,19 @@
 	display: none;
 	z-index: 5 !important;
 }
-
+#image_inspect_test_bottom {
+    max-width: 100%;
+    max-height: 15%; 
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+  background-color: blue;
+  display: block;
+  z-index: 5 !important;
+}
 .image-inspect-image{
   height: 100%;
     left: 0;
@@ -56,7 +68,17 @@
 .image-inspect-main{
   height: 93%;
 }
-
+.image-cva {
+    max-width: 100%;
+    max-height: 100%;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    overflow: auto;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
 /*==========*/
 
 
