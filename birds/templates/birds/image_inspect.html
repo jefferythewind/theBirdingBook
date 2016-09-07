@@ -2,13 +2,16 @@
 <div class="mdl-grid">
 {% for image in sighting.images %}
 	{% if forloop.counter == 1 %}
-		<div class="mdl-cell mdl-cell--12-col image-inspect-card">
-			<div class="image image-inspect-image">
-				<img class="image-aspect" width="460" height="345" src="{{ image.photo.url }}"/>
-			</div>
-		</div>
+	
+			<div class="image-inspect-main">
 		
+				<img class=" image-slider" src="{{ image.photo.url }}"/>
+				
+			</div>
+
+			<div class="image-inspect-sub">
 	{% else %}
+		
 		<div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
 			<a href="#" class="image-expand-on-click">
 				<div class="image image-block-m sighting-page sub-image" style="background: url({{ image.photo.url }}) no-repeat center;background-size:cover;"></div>
@@ -16,6 +19,6 @@
 		</div>
 			
 	{% endif %}
-	
+		</div>
 {% endfor %}
 </div>
