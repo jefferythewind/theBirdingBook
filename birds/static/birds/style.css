@@ -1,3 +1,82 @@
+/*TABEL OF CONTENTS*/
+//Table of Contents 
+nav ul a:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
+nav ul a {
+  color: #005b97;
+    transition: background-color .3s;
+    font-size: 1rem;
+    display: inline-block;
+    padding: 0 15px;
+}
+
+.docs-toc li {
+    font-size: 16px;
+    list-style: none;
+}
+nav ul li {
+    transition: background-color .3s;
+    float: none;
+    padding: 0;
+}
+
+
+.docs-toc ul {
+    border-left: solid 3px #005b97;
+    padding-left: 20px;
+    line-height: 28px;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+section .table-of-contents{
+    padding: 20px 0;
+}
+.section-content {
+    height: 100%;
+}
+
+.section-content {
+    color: #005b97;
+    display: block;
+    box-shadow: none;
+}
+
+.docs-toc .all-funds {
+    margin-bottom: 0em;
+    padding-top: 0em;
+    padding-bottom: 0em;
+}
+.docs-toc {
+    margin-bottom: 2em;
+    height: 100%;
+    h3{
+      font-size: 15px;
+      padding-right: 60px;
+      line-height: 25px;
+      text-transform: none;
+      color: rgba(0,0,0,.54);
+      font-weight: 500;
+      margin: 24px 0;
+    }
+}
+
+
+
+.all-funds .RT-card__title-text {
+    font-weight: 500;
+    color: #adafb2;
+
+}
+.docs-toc li h3 {
+    margin: 24px 0;
+    font-size: 15px;
+}
+
 /*Image_Inspect*/
 
 /*outer most top-level overlay div*/
