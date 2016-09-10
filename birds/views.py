@@ -17,6 +17,12 @@ from django.http.response import HttpResponseForbidden
 def about(request):
 	return render(request, 'birds/about.html')
 
+def privacy_policy(request):
+	return render(request, 'birds/privacy_policy.html')
+
+def terms_of_service(request):
+	return render(request, 'birds/terms_of_service.html')
+
 def user(request, pk):
 	return render(request, 'birds/user.html')
 
