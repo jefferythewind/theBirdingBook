@@ -186,6 +186,16 @@ def image_inspect(request):
 	if request.is_ajax():
 		sighting = get_object_or_404(Sighting, pk = request.POST.get('this_sighting'))
 		return render_to_response('birds/image_inspect.html', {'sighting': sighting})
+	
+@login_required
+def star_photo(request):
+	if request.is_ajax():
+		photo = get_object_or_404(BirdPhoto, pk = request.POST.get('image_id'))
+		photo.order = 1
+		photo.save()
+		BirdPhoto.objects.filter(sighting = photo.sighting).exclude(pk = photo.id).update(order = 0)
+		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
+		
 #import urllib2
 #import json
 # def weather(req):

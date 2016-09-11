@@ -89,7 +89,7 @@ class Sighting(models.Model):
     
     @property
     def images(self):
-        return BirdPhoto.objects.filter( sighting = self.id )
+        return BirdPhoto.objects.filter( sighting = self.id ).order_by("-order")
 
     def __str__(self):
         return str(self.id)

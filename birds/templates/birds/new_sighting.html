@@ -38,6 +38,12 @@
 									<div id="image_container_{{ image.id }}" class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
 										<div style="position:absolute;z-index:1;">
 											<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="close-image material-icons">close</i></a>
+											{% if image.order == 1 %}
+												<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="star-image material-icons">star</i></a>
+											{% else %}
+												<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="star-image material-icons">star_border</i></a>
+											{% endif %}
+											
 										</div>
 										<div class="image image-block-m sighting-page sub-image" style="background: url({{ image.photo.url }}) no-repeat center;background-size:cover;">
 										</div>
@@ -83,6 +89,32 @@
 
 <script type="text/javascript">
     jQuery(function($){
+	
+		var star_image_click = function(){
+			var star_element = $(this);
+			var image_id = $(this).attr('data-image_id');
+		
+			$.ajax({
+				url: "{% url 'birds:star_photo' %}",
+				data: {
+					image_id: image_id,
+					csrfmiddlewaretoken: "{{ csrf_token }}"
+				},
+				type: "POST",
+				dataType: "json",
+				success: function(data) {
+					if (data.msg == "success"){
+						$('.star-image').text("star_border");
+						star_element.text("star");
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					alert(textStatus);
+				}
+			});
+		}
+		$('.star-image').click( star_image_click );
+	
 		var remove_image_click = function(){
 			var image_id = $(this).attr('data-image_id');
 			var the_image_div = $("#image_container_"+image_id);
@@ -130,9 +162,10 @@
 					success: function(data) {
 						if (data.msg == "success"){
 							for ( var i = 0; i < data.urls.length; i++ ) {
-								$('#photo_container').append('<div id="image_container_'+data.ids[i]+'" class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp"><div style="position:absolute;z-index:1;"><a href="" onclick="return false;"><i data-image_id="'+data.ids[i]+'" class="close-image material-icons" id="image_close_'+data.ids[i]+'">close</i></a></div><div class="image image-block-m sighting-page sub-image" style="background: url('+data.urls[i]+') no-repeat center;background-size:cover;"></div></div>');
-								$('#image_close_'+data.ids[i]).click(remove_image_click);
+								$('#photo_container').append('<div id="image_container_'+data.ids[i]+'" class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp"><div style="position:absolute;z-index:1;"><a href="" onclick="return false;"><i data-image_id="'+data.ids[i]+'" class="close-image material-icons">close</i></a><a href="" onclick="return false;"><i data-image_id="'+data.ids[i]+'" class="star-image material-icons">star_border</i></a></div><div class="image image-block-m sighting-page sub-image" style="background: url('+data.urls[i]+') no-repeat center;background-size:cover;"></div></div>');
 							}
+							$('.star-image').unbind('click').click( star_image_click );
+							$('.close-image').unbind('click').click(remove_image_click);
 						}
 					},
 					error: function(jqXHR, textStatus, errorThrown){
