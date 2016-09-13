@@ -69,7 +69,7 @@
       <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
         <div class="mdl-layout__header-row">
           {% if user.is_authenticated %}<!--PLEASE REVIEW TIM-->
-          <span class="mdl-layout-title">{{ user.username }}'s Birding Book</span>
+          <span class="mdl-layout-title"><a href="{% url 'birds:index' %}">{{ user.username }}</a>'s Birding Book</span>
           {% else %}
           <span class="mdl-layout-title">
             My Birding Book
