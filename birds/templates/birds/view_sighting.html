@@ -28,7 +28,7 @@
 		{% for image in sighting.images %}
 			{% if forloop.counter == 1 %}
 				<div class="hover-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
-					<a href="#" class="image-expand-on-click">
+					<a href="#" class="image-expand-on-click" data-image_id="{{ image.id }}">
 						<div class="image image-block-m sighting-page" style="background: url({{ image.photo.url }}) no-repeat center;background-size:cover;">
 						<h4>
 							<span>{{ sighting.caption }}</span>
@@ -38,7 +38,7 @@
 				</div>
 			{% else %}
 				<div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
-					<a href="#" class="image-expand-on-click">
+					<a href="#" class="image-expand-on-click" data-image_id="{{ image.id }}">
 						<div class="image image-block-m sighting-page sub-image" style="background: url({{ image.photo.url }}) no-repeat center;background-size:cover;"></div>
 					</a>
 				</div>
@@ -185,9 +185,10 @@
 		$('body').append('<div id="image_inspect_test"><div style="position:absolute"><a id="close_image_inspect" href="" onclick="return false;"><i class="material-icons">close</i></a></div><div id="image_inspect_content"></div></div>');
 	
 		$('.image-expand-on-click').click(function(){
+			var image_id = $(this).attr('data-image_id');
 			$('#image_inspect_content').load(
 				"{% url 'birds:image_inspect' %}",
-				{'this_sighting': {{ sighting.id }}, 'csrfmiddlewaretoken': '{{ csrf_token }}'}
+				{'image_id': image_id, 'csrfmiddlewaretoken': '{{ csrf_token }}'}
 			);
 			$('#image_inspect_test').toggle();
 		});

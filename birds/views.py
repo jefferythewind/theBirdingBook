@@ -184,8 +184,8 @@ def add_avatar(request):
 @login_required
 def image_inspect(request):
 	if request.is_ajax():
-		sighting = get_object_or_404(Sighting, pk = request.POST.get('this_sighting'))
-		return render_to_response('birds/image_inspect.html', {'sighting': sighting})
+		image = get_object_or_404(BirdPhoto, pk = request.POST.get('image_id'))
+		return render_to_response('birds/image_inspect.html', {'image': image})
 	
 @login_required
 def star_photo(request):
