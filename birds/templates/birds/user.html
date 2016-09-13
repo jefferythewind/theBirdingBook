@@ -2,21 +2,35 @@
 
 	{% block content %}
 		<div class="page-content">
-	<section class="mdl-grid">
-		<div class="mdl-cell mdl-cell--12-col">
-		<div id="avatar_container">
-	{% if user.avatar %}
-			<img class="mdl-shadow--2dp" src="{{ user.avatar.avatar.url }}">
-		{% endif %}
+			<section class="mdl-grid">
+				<div class="mdl-cell mdl-cell--12-col">	
+				<div class="mdl-cell mdl-cell--10-col-desktop mdl-cell--1-offset-desktop mdl-card mdl-shadow--3dp">
+					<div class="mdl-card__title" id="faq">
+						<h2 class="mdl-card__title-text">User Profile</h2>
+					</div>
+					<div class="mdl-card__supporting-text">
+					<b>User Name: </b><a class="capitalize">{{ user.username }}</a>
+					</div>
+					<div class="mdl-card__supporting-text">
+					<b>Avatar: </b>
+					<div id="avatar_container">
+					{% if user.avatar %}
+						<img class="mdl-shadow--2dp" src="{{ user.avatar.avatar.url }}">
+					{% endif %}
+					</div>
+					<div id="add_avatar_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
+						<div id="photo" class="mdl-tooltip--right material-icons">add_a_photo</div>
+						<div class="mdl-tooltip mdl-tooltip--right" for="photo">
+							Add/Replace Avatar
+						</div>
+					</div>
+					
+					<input id="avatar_photo" type="file" style="display:none">
+					</div>
+				</div>
+				</div>
+			</section>
 		</div>
-<div id="add_avatar_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
-	<i class="material-icons">add_a_photo</i>
-</div>
-<input id="avatar_photo" type="file" style="display:none">
-		</div>
-	</section>
-
-</div>
 <script type="text/javascript">
 
 

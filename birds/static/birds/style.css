@@ -1,4 +1,5 @@
-/*TABEL OF CONTENTS*/
+/*TABEL OF CONTENTS
+===================*/
 
 nav ul a:hover {
     background-color: rgba(0,0,0,0.1);
@@ -76,11 +77,24 @@ section .table-of-contents{
     margin: 24px 0;
     font-size: 15px;
 }
-/*TABEL OF CONTENTS END*/
-/*MDL CARD CHANGES*/
+/*===================
+TABEL OF CONTENTS END*/
+
+
+/*Font attributes
+=================*/
 .mdl-card__title-text{
   font-weight: 700;
 }
+.uppercase{
+    text-transform: uppercase;
+}
+.capitalize{
+  text-transform: capitalize;
+}
+/*Font attributes END*/
+
+
 /*Image_Inspect*/
 
 /*outer most top-level overlay div*/
