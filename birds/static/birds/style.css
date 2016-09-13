@@ -1,5 +1,5 @@
 /*TABEL OF CONTENTS*/
-//Table of Contents 
+
 nav ul a:hover {
     background-color: rgba(0,0,0,0.1);
 }
@@ -76,7 +76,11 @@ section .table-of-contents{
     margin: 24px 0;
     font-size: 15px;
 }
-
+/*TABEL OF CONTENTS END*/
+/*MDL CARD CHANGES*/
+.mdl-card__title-text{
+  font-weight: 700;
+}
 /*Image_Inspect*/
 
 /*outer most top-level overlay div*/
