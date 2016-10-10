@@ -1,4 +1,4 @@
-html, body{
+html, body, h1, h2, mdl-layout-title {
   font-family: 'Noto Sans', sans-serif;
 }
 
@@ -296,7 +296,7 @@ color:#f44336;
 }
 .image-block-m h4 span {
   color: white;
-  font: bold 24px/45px Roboto, Helvetica, Sans-Serif;
+  font: bold 24px/45px "Noto Sans", Helvetica, Sans-Serif;
   letter-spacing: -1px;
   /*background: rgba(0, 0, 0, 0.3);*/
   text-shadow: 2px 2px 4px #000000;
