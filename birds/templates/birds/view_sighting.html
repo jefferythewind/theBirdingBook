@@ -88,19 +88,20 @@
 				</div>
 				<form id="new_species_form" style="display:none">
 					<div class="mdl-textfield mdl-js-textfield">
-						<input style="width:100%" class="mdl-textfield__input" name="new_species" id="new_species_input"></input>
+						<input style="width:100%" class="mdl-textfield__input" name="new_species" id="new_species_input">
 						<label class="mdl-textfield__label" for="new_species">new species</label>
 						<input id="id_species_tag" name="species_id" type="hidden">
 					</div>
 					{% csrf_token %}
-					<input name="sighting_id" value="{{ sighting.id }}" type="hidden"></input>
+					<input name="sighting_id" value="{{ sighting.id }}" type="hidden">
 					<button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="new_species_save_button">Submit</button>
 					<button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" id="new_species_cancel_button">Cancel</button>
 				</form>
-			{% endif %}<br><br><a target="_blank" href="http://www.wikipedia.com"><b>Bird</b></a>
-			 <div class="mdl-card__supporting-text" id="species_suggestion_info">
-
-			 </div>
+			{% endif %}
+				<br>
+				<br>
+				<a target="_blank" href="http://www.wikipedia.com"><b>Bird</b></a>
+			 	<div class="mdl-card__supporting-text" id="species_suggestion_info"></div>
         </div>
         <div class="mdl-card__supporting-text">
             {{ sighting.post_text }}

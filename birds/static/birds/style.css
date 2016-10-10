@@ -1,4 +1,4 @@
-html, body, h1, h2, mdl-layout-title {
+html, body, h1, h2{
   font-family: 'Noto Sans', sans-serif;
 }
 
@@ -97,8 +97,10 @@ TABEL OF CONTENTS END*/
   text-transform: capitalize;
 }
 /*Font attributes END*/
-
-
+/*TOOL TIP*/
+.mdl-tooltip{
+    will-change: inherit;
+}
 /*Image_Inspect*/
 
 /*outer most top-level overlay div*/
@@ -412,7 +414,6 @@ color:#f44336;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 .demo-avatar {
   width: 48px;
