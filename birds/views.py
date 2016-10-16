@@ -195,6 +195,17 @@ def star_photo(request):
 		photo.save()
 		BirdPhoto.objects.filter(sighting = photo.sighting).exclude(pk = photo.id).update(order = 0)
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
+	
+@login_required
+def accept_species_suggestion(request):
+	if request.is_ajax():
+		this_sighting = get_object_or_404(Sighting, pk = request.POST.get('sighting_id') )
+		this_suggestion = get_object_or_404(SpeciesSuggestions, pk = request.POST.get('suggestion_id') )
+		this_sighting.species_tag = this_suggestion.species
+		this_sighting.save()
+		this_suggestion.delete()
+		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
+		
 		
 #import urllib2
 #import json

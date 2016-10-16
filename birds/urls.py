@@ -28,4 +28,5 @@ urlpatterns = [
 	url(r'^remove_photo/', views.remove_photo, name='remove_photo'),
 	url(r'^image_inspect/', views.image_inspect, name='image_inspect'),
 	url(r'^star_photo/', views.star_photo, name='star_photo'),
+	url(r'^accept_species_suggestion/', views.accept_species_suggestion, name="accept_species_suggestion")
 ]

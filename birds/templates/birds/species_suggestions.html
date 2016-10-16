@@ -20,6 +20,9 @@
 					<i class="material-icons md-light">expand_more</i>
 				</button>
 			{% endif %}
+			{% if suggestion.sighting.user_id == user.id %}
+				<a data-suggestion-id="{{ suggestion.id }}" class="accept-species-suggestion">accept</a>
+			{% endif %}
 			<div class="mdl-tooltip" for="up_vote_species">
 				agree
 			</div>
