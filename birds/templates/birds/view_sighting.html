@@ -53,7 +53,7 @@
         </div>
         <div class="mdl-card__supporting-text">
             <i class="material-icons">local_offer</i><b> {{ sighting.species_tag }}</b>
-			<span id="num_votes">
+			<span id="{{ sighting.species_tag.id }}_num_votes">
 				{{ species_votes }}
 
 			</span>
@@ -98,10 +98,9 @@
 					<button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" id="new_species_cancel_button">Cancel</button>
 				</form>
 			{% endif %}
-				<br>
-				<br>
+				<div class="mdl-card__supporting-text" id="species_suggestion_info"></div>
 				<a target="_blank" href="http://www.wikipedia.com"><b>Bird</b></a>
-			 	<div class="mdl-card__supporting-text" id="species_suggestion_info"></div>
+				
         </div>
         <div class="mdl-card__supporting-text">
             {{ sighting.post_text }}
