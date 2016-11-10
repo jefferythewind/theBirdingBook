@@ -4,8 +4,7 @@ from django.utils import timezone
 from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions, BirdPhoto, Avatar
 from django.http import HttpResponse
 import json
-from django.db.models import Q, IntegerField
-from django.db.models.functions import Value
+from django.db.models import Q, IntegerField, Value
 
 
 
