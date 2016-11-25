@@ -58,19 +58,24 @@
 					{% else %}
 					<div style="padding-top: 13px; padding-bottom: 13px; font-weight:600;" class="mdl-card__supporting-text">
 						
-						<div style="float:left">{{ sighting.time_diff }}</div>
-
-						<div style="float:right">
-							{% if sighting.images.count > 0 %}
-								<i class="material-icons">photo_album</i>{{ sighting.images.count }}
-							{% endif %}
-							{% if sighting.num_likes > 0 %}
-								<i class="material-icons">thumb_up</i>{{ sighting.num_likes }}
-							{% endif %}
-							{% if sighting.num_comments > 0 %}
-								<i class="material-icons">comment</i>{{ sighting.num_comments }}
-							{% endif %}
+						<div>
+							{{ sighting.user }}
+							<div style="float:right">
+								{% if sighting.images.count > 0 %}
+									<i class="material-icons">photo_album</i>{{ sighting.images.count }}
+								{% endif %}
+								{% if sighting.num_likes > 0 %}
+									<i class="material-icons">thumb_up</i>{{ sighting.num_likes }}
+								{% endif %}
+								{% if sighting.num_comments > 0 %}
+									<i class="material-icons">comment</i>{{ sighting.num_comments }}
+								{% endif %}
+							</div>
 						</div>
+						<div>{{ sighting.location }}</div>
+						<div>{{ sighting.time_diff }}</div>
+
+
 					</div>	
 					{% endif %}
 					<!--<div class="mdl-card__menu">
