@@ -60,6 +60,7 @@ def authenticate_user(request):
 			user.username = firebase_user['sub']
 			user.save()
 			uid = Uid.objects.create( uid = firebase_user['sub'], user = user )
+			user.backend = 'django.contrib.auth.backends.ModelBackend'
 			uid.save()
 			login(request, user)
 			return HttpResponse(json.dumps({'msg':'new_user'}), content_type='application/json')
