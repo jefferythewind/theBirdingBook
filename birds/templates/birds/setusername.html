@@ -1,0 +1,27 @@
+{% extends 'birds/base.html' %}
+
+{% block content %}
+<div class="page-content">
+	<section class="mdl-grid">
+		<div class="mdl-cell mdl-cell--12-col">	
+		<div class="mdl-cell mdl-cell--10-col-desktop mdl-cell--1-offset-desktop mdl-card mdl-shadow--3dp">
+			<div class="mdl-card__title" id="faq">
+				<h2 class="mdl-card__title-text">Set Username</h2>
+			</div>
+			<form method="post">{% csrf_token %}
+				<div class="mdl-card__supporting-text">
+					{{ error }}
+					<input name="username">
+					<button>OK</button>
+				</div>
+			</form>
+			
+			
+			</div>
+		</div>
+		</div>
+	</section>
+</div>
+
+
+{% endblock %}

@@ -8,3 +8,4 @@ django-storages
 boto
 pytz
 django-cleanup
+python-jose

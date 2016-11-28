@@ -53,6 +53,14 @@
     <script type="text/javascript" src="https://maps.google.com/maps/api/js?libraries=places&key=AIzaSyDcWjuyosd0o5iQ2am9FFN2IC568p6-VCU&language=en"></script>
     <script src="{% static 'birds/jquery-ui-1.11.4.custom/external/jquery/jquery.js' %}"></script>
     <script src="{% static 'birds/jquery-ui-1.11.4.custom/jquery-ui.js' %}"></script>
+	
+	<!-- Firebase -->
+	<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-auth.js"></script>
+	
+	<!-- Firebase UI -->
+	<script src="https://cdn.firebase.com/libs/firebaseui/1.0.0/firebaseui.js"></script>
+	<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/1.0.0/firebaseui.css" />
 
     <style>
     #view-source {
@@ -155,9 +163,23 @@
       </main>
     </div>
       <!--<a href="https://github.com/google/material-design-lite/blob/master/templates/dashboard/" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white">View Source</a>-->
-      <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
 	  
-	  <script type="text/javascript">
+		<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+		<script>
+		  // Initialize Firebase
+		  var config = {
+			apiKey: "AIzaSyAyEUXCLWQDXNZ9XAoRb073AJtYDQAPUvk",
+			authDomain: "the-birding-book.firebaseapp.com",
+			databaseURL: "https://the-birding-book.firebaseio.com",
+			storageBucket: "the-birding-book.appspot.com",
+			messagingSenderId: "413864129915"
+		  };
+		  firebase.initializeApp(config);
+		</script>
+		
+		<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+	  
+		<script type="text/javascript">
 		jQuery(function($){
 			{% if user.is_authenticated %}
 				$.ajax({
@@ -187,7 +209,7 @@
 		});
 		function r(f){/in/.test(document.readyState)?setTimeout('r('+f+')',9):f()}
 		{% endif %}
-	  </script>
-      
+		</script>
+		
   </body>
 </html>

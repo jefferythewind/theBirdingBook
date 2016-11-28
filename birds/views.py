@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.views import generic
 from django.utils import timezone
-from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions, BirdPhoto, Avatar
+from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions, BirdPhoto, Avatar, Uid
 from django.http import HttpResponse
 import json
 from django.db.models import Q, IntegerField, Value
+from django.contrib.auth.models import User
 
 
 
@@ -25,6 +26,44 @@ def terms_of_service(request):
 def user(request, pk):
 	return render(request, 'birds/user.html')
 
+@login_required
+def setusername(request):
+	if request.method == "POST":
+		new_username = request.POST.get("username")
+		if User.objects.exclude(pk=request.user.pk).filter(username=new_username).exists():
+			return render(request, 'birds/setusername.html', { 'error': 'username already exists, please choose another'})
+		else:
+			request.user.username = new_username
+			request.user.save()
+			return redirect('/user/'+str(request.user.pk), pk=request.user.pk)
+	elif request.method == "GET":
+		return render(request, 'birds/setusername.html')
+
+def authenticate_user(request):
+	if request.is_ajax():
+		import urllib
+		from jose import jwt
+		from django.contrib.auth import login
+		idtoken = request.POST.get('idtoken')
+		target_audience = "the-birding-book"
+		certificate_url = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com'
+		response = urllib.urlopen(certificate_url)
+		certs = response.read()
+		certs = json.loads(certs)
+		firebase_user = jwt.decode(idtoken, certs, algorithms='RS256', audience=target_audience)
+		if User.objects.filter(uid__uid=firebase_user['sub']).exists():
+			user = User.objects.get(uid__uid=firebase_user['sub'])
+			login(request, user)
+			return HttpResponse(json.dumps({'msg':'old_user'}), content_type='application/json')
+		else:
+			user = User()
+			user.username = firebase_user['sub']
+			user.save()
+			uid = Uid.objects.create( uid = firebase_user['sub'], user = user )
+			uid.save()
+			login(request, user)
+			return HttpResponse(json.dumps({'msg':'new_user'}), content_type='application/json')
+		
 @login_required
 def new_sighting(request):
 	if request.method == "POST":

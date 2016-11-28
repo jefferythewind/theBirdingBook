@@ -4,11 +4,10 @@
 
 
 <div class="page-content">
-    
-
     <section class="mdl-grid">
         <div class="mdl-cell mdl-cell--4-col mdl-cell--1-offset-desktop">
-            <div class="card-bird mdl-card mdl-shadow--3dp">
+			<div id="firebaseui-auth-container"></div>
+            <!--<div class="card-bird mdl-card mdl-shadow--3dp">
                 <div class="mdl-card__title">
                     <h2 class="mdl-card__title-text">Log into your Birding Book</h2>
                 </div>
@@ -38,9 +37,9 @@
                         {# Assumes you setup the password_reset view in your URLconf #}
                         <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" href="{% url 'password_reset' %}">Lost password?</a>
                 </div>
-            </div>
+            </div>-->
         </div>
-        <div class="mdl-cell mdl-cell--8-col mdl-cell--1-offset-desktop">
+        <!--<div class="mdl-cell mdl-cell--8-col mdl-cell--1-offset-desktop">
             <div class="card-bird mdl-card mdl-shadow--3dp">
                 <div class="mdl-card__title">
                     <h2 class="mdl-card__title-text">Sign Up</h2>
@@ -76,7 +75,72 @@
                         <p>Already have an account? <a href="/accounts/login">Log In</a></p>
                 </div>
             </div>
-        </div>
+        </div>-->
     </section>
 </div>
+
+<script type="text/javascript">
+	// Initialize Firebase
+	var config = {
+		apiKey: "AIzaSyAyEUXCLWQDXNZ9XAoRb073AJtYDQAPUvk",
+		authDomain: "the-birding-book.firebaseapp.com",
+		databaseURL: "https://the-birding-book.firebaseio.com",
+		storageBucket: "the-birding-book.appspot.com",
+		messagingSenderId: "413864129915"
+	};
+	firebase.initializeApp(config);
+	// FirebaseUI config.
+	var uiConfig = {
+		'callbacks': {
+			'signInSuccess': function(currentUser, credential, redirectUrl) {
+				console.log(currentUser.ld, credential);
+				jQuery.ajax({
+					url: "{% url 'birds:authuser' %}",
+					data: {
+						'idtoken': currentUser.ld,
+						'csrfmiddlewaretoken': "{{ csrf_token }}"
+					},
+					type: "POST",
+					dataType: "json",
+					success: function(data) {
+						if ( data.msg == "new_user" ){
+							window.location = "{% url 'birds:setusername' %}";
+						}else{
+							window.location = "{% url 'birds:index' %}";
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown){
+						alert(textStatus);
+					}
+				});
+				return false;
+			}
+        },
+		'credentialHelper': firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM,
+		// Query parameter name for mode.
+        'queryParameterForWidgetMode': 'mode',
+        // Query parameter name for sign in success url.
+        'queryParameterForSignInSuccessUrl': 'signInSuccessUrl',
+        // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+        'signInFlow': 'redirect',
+		'signInSuccessUrl': "{% url 'birds:index' %}",
+		'signInOptions': [
+			// Leave the lines as is for the providers you want to offer your users.
+			firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+			firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+			firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+			firebase.auth.GithubAuthProvider.PROVIDER_ID,
+			firebase.auth.EmailAuthProvider.PROVIDER_ID
+		],
+		// Terms of service url.
+		'tosUrl': "{% url 'birds:about' %}#tos"
+	};
+
+	// Initialize the FirebaseUI Widget using Firebase.
+	var ui = new firebaseui.auth.AuthUI(firebase.auth());
+	// The start method will wait until the DOM is loaded.
+	ui.start('#firebaseui-auth-container', uiConfig);
+
+
+</script>
 {% endblock %}

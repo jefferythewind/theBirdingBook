@@ -11,4 +11,5 @@ admin.site.register(Subspecies)
 admin.site.register(Sighting)
 admin.site.register(Comment)
 admin.site.register(BirdPhoto)
+admin.site.register(Uid)
 # Register your models here.

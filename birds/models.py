@@ -4,6 +4,10 @@ from django.db import models
 import datetime
 from pytz import utc
 
+class Uid(models.Model):
+    user = models.OneToOneField(User)
+    uid = models.CharField(max_length=100)
+
 class Avatar(models.Model):
     user = models.OneToOneField(User)
     avatar = models.ImageField()
