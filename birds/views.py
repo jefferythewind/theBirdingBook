@@ -53,6 +53,7 @@ def authenticate_user(request):
 		firebase_user = jwt.decode(idtoken, certs, algorithms='RS256', audience=target_audience)
 		if User.objects.filter(uid__uid=firebase_user['sub']).exists():
 			user = User.objects.get(uid__uid=firebase_user['sub'])
+			user.backend = 'django.contrib.auth.backends.ModelBackend'
 			login(request, user)
 			return HttpResponse(json.dumps({'msg':'old_user'}), content_type='application/json')
 		else:
