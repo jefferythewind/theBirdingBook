@@ -6,6 +6,8 @@ from django.http import HttpResponse
 import json
 from django.db.models import Q, IntegerField, Value
 from django.contrib.auth.models import User
+import os
+import boto3
 
 
 
@@ -25,6 +27,28 @@ def terms_of_service(request):
 
 def user(request, pk):
 	return render(request, 'birds/user.html')
+
+def signs3(request):
+	if request.is_ajax():
+		S3_BUCKET = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+	
+		file_name = request.POST.get('file_name')
+		file_type = request.POST.get('file_type')
+		print file_name, file_type
+	
+		s3 = boto3.client('s3')
+	
+		presigned_post = s3.generate_presigned_post(
+			Bucket = S3_BUCKET,
+			Key = file_name,
+			Fields = {"acl": "public-read", "Content-Type": file_type},
+			Conditions = [
+			 	{"acl": "public-read"},
+			 	{"Content-Type": file_type}
+			],
+			ExpiresIn = 3600
+		)
+		return HttpResponse(json.dumps({'data': presigned_post,'filename': file_name, 'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)}), content_type='application/json')
 
 @login_required
 def setusername(request):
@@ -188,13 +212,8 @@ def get_species_suggestions(request):
 @login_required
 def add_photo(request):
 	if request.is_ajax():
-		new_urls = []
-		new_ids = []
-		for ifile in request.FILES.getlist('bird_photo'):
-			new_photo = BirdPhoto.objects.create( sighting_id = request.POST.get('sighting_id'), photo = ifile, order = 0 )
-			new_urls.append(new_photo.photo.url)
-			new_ids.append(new_photo.id)
-		return HttpResponse(json.dumps({'msg':'success', 'urls': new_urls, 'ids': new_ids}), content_type='application/json')
+		new_photo = BirdPhoto.objects.create( sighting_id = request.POST.get('sighting_id'), photo = request.POST.get('filename'), order = 0 )
+		return HttpResponse(json.dumps({'msg':'success', 'urls': [new_photo.photo.url], 'ids': [new_photo.id]}), content_type='application/json')
 	
 @login_required
 def remove_photo(request):
@@ -240,19 +259,3 @@ def accept_species_suggestion(request):
 		this_suggestion.delete()
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
 		
-		
-#import urllib2
-#import json
-# def weather(req):
-# 	if 'ids' in req.GET and 'appid' in req.GET:
-# 		cities = req.GET.get('ids').split(',')
-# 		json_output = "["
-# 		for city in cities:
-# 			result = urllib2.urlopen('http://api.openweathermap.org/data/2.5/forecast/city?id='+city+'&APPID='+req.GET.get("appid"))
-# 			content = result.read()
-# 			content_dict = json.loads(content)
-# 			json_output += '{"city":"'+content_dict['city']['name']+'","desc":"'+content_dict['list'][0]['weather'][0]['description']+'","icon":"'+content_dict['list'][0]['weather'][0]['icon']+'"},'
-# 
-# 		return HttpResponse(json_output[:-1]+"]", content_type='application/json')
-# 	else:
-# 		return HttpResponse('{"error":"need to supply city and appid."}', content_type='application/json')

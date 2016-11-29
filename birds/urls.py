@@ -7,6 +7,7 @@ urlpatterns = [
 	url(r'^$', views.index_view, name='index'),
 	url(r'^authuser/', views.authenticate_user, name='authuser'),
 	url(r'^setusername/', views.setusername, name='setusername'),
+	url(r'^signs3/', views.signs3, name='signs3'),
 	url(r'^user/(?P<pk>[-\w]+)/$', views.user, name='user'),
 	url(r'^add_avatar/', views.add_avatar, name='add_avatar'),
 	url(r'^about/', views.about, name='about'),

@@ -6,6 +6,7 @@ whitenoise==2.0.6
 pillow
 django-storages
 boto
+boto3
 pytz
 django-cleanup
 python-jose
