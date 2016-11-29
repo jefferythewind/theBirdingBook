@@ -68,16 +68,8 @@ def authenticate_user(request):
 		
 @login_required
 def new_sighting(request):
-	if request.method == "POST":
-		form = SightingsForm(request.POST, request.FILES)
-		if form.is_valid():
-			s = form.save(commit=False)
-			s.user_id = request.user.id
-			s.save()
-			return redirect('/view_sighting/'+str(s.pk), pk=s.pk)
-	else:
-		new_sighting = Sighting.objects.create(user_id = request.user.id)
-		return redirect('/edit_sighting/'+str(new_sighting.id), pk=new_sighting.id)
+	new_sighting = Sighting.objects.create(user_id = request.user.id)
+	return redirect('/edit_sighting/'+str(new_sighting.id), pk=new_sighting.id)
 # 	return render(request, 'birds/new_sighting.html', {'form': form, 'this_sighting': new_sighting})
 	
 
@@ -91,6 +83,8 @@ def edit_sighting(request, pk):
 		if form.is_valid():
 			form.save()
 			return redirect('/view_sighting/'+str(pk), pk=pk)
+		else:
+			return render(request, 'birds/new_sighting.html', { 'form': form, 'this_sighting': this_sighting })
 	elif request.method == "GET":
 		return render(request, 'birds/new_sighting.html', { 'form': form, 'this_sighting': this_sighting })
 

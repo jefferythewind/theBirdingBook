@@ -25,7 +25,7 @@
 					<h2 class="mdl-card__title-text">New Sighting</h2>
 				</div>
 				<div class="mdl-card__supporting-text news-text">
-					<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+					<form method="POST" enctype="multipart/form-data">{% csrf_token %}
                         {% for field in form.visible_fields %}
 							{% if field.field.widget.attrs.id == "post_text_textarea" %}
 							<br>
@@ -57,8 +57,13 @@
 							{% elif field.html_name == "species_tag" %}
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                     <label class="mdl-textfield__label" for="species_tag_helper">{{ field.label }}</label>
-									<input class="mdl-textfield__input" id="id_species_tag_helper" name="species_tag_helper" type="text" value="{{ form.instance.species_tag }}">
-                                    <input id="id_species_tag" name="species_tag" type="hidden" value="{{ field.value }}">
+									{% if form.instance.species_tag %}
+										<input class="mdl-textfield__input" id="id_species_tag_helper" name="species_tag_helper" type="text" value="{{ form.instance.species_tag }}">
+										<input id="id_species_tag" name="species_tag" type="hidden" value="{{ field.value }}">
+									{% else %}
+										<input class="mdl-textfield__input" id="id_species_tag_helper" name="species_tag_helper" type="text">
+										<input id="id_species_tag" name="species_tag" type="hidden">
+									{% endif %}
                                 </div>
                             {% elif field.field.widget.attrs.class == "mdl-textfield__input" %}
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
