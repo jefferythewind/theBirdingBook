@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
+from django.http.response import HttpResponseBadRequest
 from django.views import generic
 from django.utils import timezone
 from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions, BirdPhoto, Avatar, Uid
@@ -35,12 +36,21 @@ def signs3(request):
 		file_name = request.POST.get('file_name')
 		file_type = request.POST.get('file_type')
 		print file_name, file_type
-	
+		if "image" not in file_type:
+			return HttpResponseBadRequest("Upload must be an image file type.")
+		
+		extension = file_name.split('.')[1]
+		
+		new_photo = BirdPhoto.objects.create( sighting_id = request.POST.get('sighting_id'), order = 0 )
+		filename = "%s.%s" % ( new_photo.id, extension )
+		new_photo.photo = filename
+		new_photo.save()
+
 		s3 = boto3.client('s3')
 	
 		presigned_post = s3.generate_presigned_post(
 			Bucket = S3_BUCKET,
-			Key = file_name,
+			Key = filename,
 			Fields = {"acl": "public-read", "Content-Type": file_type},
 			Conditions = [
 			 	{"acl": "public-read"},
@@ -48,7 +58,7 @@ def signs3(request):
 			],
 			ExpiresIn = 3600
 		)
-		return HttpResponse(json.dumps({'data': presigned_post,'filename': file_name, 'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)}), content_type='application/json')
+		return HttpResponse(json.dumps({'data': presigned_post,'filename': filename, 'url': new_photo.photo.url, 'id': new_photo.id}), content_type='application/json')
 
 @login_required
 def setusername(request):
@@ -210,10 +220,10 @@ def get_species_suggestions(request):
 		return render_to_response('birds/species_suggestions.html', {'species_suggestions': species_suggestions,'user': request.user})
 	
 @login_required
-def add_photo(request):
-	if request.is_ajax():
-		new_photo = BirdPhoto.objects.create( sighting_id = request.POST.get('sighting_id'), photo = request.POST.get('filename'), order = 0 )
-		return HttpResponse(json.dumps({'msg':'success', 'urls': [new_photo.photo.url], 'ids': [new_photo.id]}), content_type='application/json')
+# def add_photo(request):
+# 	if request.is_ajax():
+# 		new_photo = BirdPhoto.objects.create( sighting_id = request.POST.get('sighting_id'), photo = request.POST.get('filename'), order = 0 )
+# 		return HttpResponse(json.dumps({'msg':'success', 'urls': [new_photo.photo.url], 'ids': [new_photo.id]}), content_type='application/json')
 	
 @login_required
 def remove_photo(request):

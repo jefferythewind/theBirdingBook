@@ -157,6 +157,7 @@
 			$.ajax({
 				url: "{% url 'birds:signs3' %}",
 				data: {
+					'sighting_id':{{ this_sighting.id }},
 					'file_name':file.name,
 					'file_type':file.type,
 					'csrfmiddlewaretoken': "{{ csrf_token }}"
@@ -164,7 +165,7 @@
 				type: "POST",
 				dataType: "json",
 				success: function(response){
-					uploadFile(file, response.data, response.url, response.filename);
+					uploadFile(file, response.data, response.url, response.filename, response.id);
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					alert("Could not get signed URL.");
@@ -172,7 +173,7 @@
 			});
 		}
 		
-		function uploadFile(file, s3Data, url, filename){
+		function uploadFile(file, s3Data, url, filename, id){
 			var xhr = new XMLHttpRequest();
 			xhr.open("POST", s3Data.url);
 
@@ -185,37 +186,21 @@
 			xhr.onreadystatechange = function() {
 				if(xhr.readyState === 4){
 					if(xhr.status === 200 || xhr.status === 204){
-						$.ajax({
-							url: "{% url 'birds:add_photo' %}",
-							data: {
-								'sighting_id': {{ this_sighting.id }},
-								'filename': filename,
-								'csrfmiddlewaretoken': "{{ csrf_token }}"
-							},
-							type: "POST",
-							dataType: "json",
-							success: function(data) {
-								if (data.msg == "success"){
-									for ( var i = 0; i < data.urls.length; i++ ) {
-										$('#photo_container').append('<div id="image_container_'+data.ids[i]+'" class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp"><div style="position:absolute;z-index:1;"><a href="" onclick="return false;"><i data-image_id="'+data.ids[i]+'" class="close-image material-icons">close</i></a><a href="" onclick="return false;"><i data-image_id="'+data.ids[i]+'" class="star-image material-icons">star_border</i></a></div><div class="image image-block-m sighting-page sub-image" style="background: url('+data.urls[i]+') no-repeat center;background-size:cover;"></div></div>');
-									}
-									$('.star-image').unbind('click').click( star_image_click );
-									$('.close-image').unbind('click').click(remove_image_click);
-									loading_files -= 1;
-									if ( loading_files == 0 ) {
-										$('#photo_load_spinner').removeClass('is-active');
-										$('#photo_load_text').text("");
-									}else{
-										$('#photo_load_text').text(loading_files+" files loading.  Please wait.");
-									}
-								}
-							},
-							error: function(jqXHR, textStatus, errorThrown){
-								alert(textStatus);
-							}
-						});
+		   
+						$('#photo_container').append('<div id="image_container_'+id+'" class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp"><div style="position:absolute;z-index:1;"><a href="" onclick="return false;"><i data-image_id="'+id+'" class="close-image material-icons">close</i></a><a href="" onclick="return false;"><i data-image_id="'+id+'" class="star-image material-icons">star_border</i></a></div><div class="image image-block-m sighting-page sub-image" style="background: url('+url+') no-repeat center;background-size:cover;"></div></div>');
+
+						$('.star-image').unbind('click').click( star_image_click );
+						$('.close-image').unbind('click').click(remove_image_click);
+						loading_files -= 1;
+						if ( loading_files == 0 ) {
+							$('#photo_load_spinner').removeClass('is-active');
+							$('#photo_load_text').text("");
+						}else{
+							$('#photo_load_text').text(loading_files+" files loading.  Please wait.");
+						}
+				
 					}else{
-						alert("Could not upload file.");
+						alert("Could not upload file. "+xhr.responseText);
 					}
 				}
 			};
