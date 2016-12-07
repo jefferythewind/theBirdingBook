@@ -33,16 +33,10 @@ def signs3(request):
 	if request.is_ajax():
 		S3_BUCKET = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 	
-		file_name = request.POST.get('file_name')
-		file_type = request.POST.get('file_type')
-		print file_name, file_type
-		if "image" not in file_type:
-			return HttpResponseBadRequest("Upload must be an image file type.")
-		
-		extension = file_name.split('.')[1]
+		file_type = "image/png"
 		
 		new_photo = BirdPhoto.objects.create( sighting_id = request.POST.get('sighting_id'), order = 0 )
-		filename = "%s.%s" % ( new_photo.id, extension )
+		filename = "%s.%s" % ( new_photo.id, "png" )
 		new_photo.photo = filename
 		new_photo.save()
 
