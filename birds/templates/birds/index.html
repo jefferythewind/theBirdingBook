@@ -23,7 +23,7 @@
 						{% else %}
 							{% for image in sighting.images %}
 								{% if forloop.counter == 1 %}
-									<div class="image image-block-m" style="background: url({{ image.photo.url }}) no-repeat center;background-size:cover;">
+									<div class="image image-block-m" style="background: url({{ image.thumbnail_url }}) no-repeat center;background-size:cover;">
 										<h4>
 											<span>{{ sighting.caption }}</span>
 										</h4>

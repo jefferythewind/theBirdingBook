@@ -38,6 +38,7 @@ def signs3(request):
 		new_photo = BirdPhoto.objects.create( sighting_id = request.POST.get('sighting_id'), order = 0 )
 		filename = "%s.%s" % ( new_photo.id, "png" )
 		new_photo.photo = filename
+		new_photo.thumbnail_url = "https://s3.amazonaws.com/birdingappsmall/%s.%s" % ( new_photo.id, "png" )
 		new_photo.save()
 
 		s3 = boto3.client('s3')
@@ -52,7 +53,7 @@ def signs3(request):
 			],
 			ExpiresIn = 3600
 		)
-		return HttpResponse(json.dumps({'data': presigned_post,'filename': filename, 'url': new_photo.photo.url, 'id': new_photo.id}), content_type='application/json')
+		return HttpResponse(json.dumps({'data': presigned_post,'filename': filename, 'url': new_photo.photo.url, 'id': new_photo.id, 'thumbnail_url': new_photo.thumbnail_url}), content_type='application/json')
 
 @login_required
 def setusername(request):
