@@ -13,6 +13,7 @@ class SightingsForm(forms.ModelForm):
             'location': forms.TextInput(attrs={'class':"mdl-textfield__input"}),
             'lat': forms.HiddenInput(),
             'lng': forms.HiddenInput(),
+            'location': forms.HiddenInput(),
             'post_text': forms.Textarea(attrs={'class':"mdl-textfield__input", 'id':"post_text_textarea"})
         }
 

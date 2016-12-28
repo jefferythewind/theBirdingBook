@@ -50,8 +50,10 @@
     <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
         <div class="mdl-card__title">
             <h2 class="mdl-card__title-text">{{ sighting.sighting_date }}</h2>
+			
         </div>
         <div class="mdl-card__supporting-text">
+			<p>{{ sighting.location }}</p>
             <i class="material-icons">local_offer</i><b> {{ sighting.species_tag }}</b>
 			<span id="{{ sighting.species_tag.id }}_num_votes">
 				{{ species_votes }}
@@ -202,11 +204,21 @@
 		})
 		
 		var pos = { lat: {{ sighting.lat|default:0 }}, lng: {{ sighting.lng|default:0 }} }
-        var map = new google.maps.Map(document.getElementById('map'), { zoom: 10, center: pos })
+        var map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 7,
+			center: pos,
+			scrollwheel: false,
+			draggable: false
+			
+		})
 		var marker = new google.maps.Marker({
             position: pos, icon: {
                 path: google.maps.SymbolPath.CIRCLE,
-                scale: 5
+				fillColor: 'red',
+				fillOpacity: .2,
+				scale: 20,
+				strokeColor: 'white',
+				strokeWeight: .5
             },
             draggable: false,
             map: map

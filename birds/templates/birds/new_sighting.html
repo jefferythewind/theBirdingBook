@@ -28,34 +28,11 @@
 					<form method="POST" enctype="multipart/form-data">{% csrf_token %}
                         {% for field in form.visible_fields %}
 							{% if field.field.widget.attrs.id == "post_text_textarea" %}
-							<br>
-								<div id="add_photo_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
-									<i class="material-icons">add_a_photo</i>
-								</div>
-								<div id="photo_load_spinner" class="mdl-spinner mdl-js-spinner"></div>
-								<span id="photo_load_text"></span>
-                                <input id="add_photo" type="file" style="display:none" multiple>
-                                <div class="mdl-grid" id="photo_container">
-								{% for image in this_sighting.images %}
-									<div id="image_container_{{ image.id }}" class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
-										<div style="position:absolute;z-index:1;">
-											<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="close-image material-icons">close</i></a>
-											{% if image.order == 1 %}
-												<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="star-image material-icons">star</i></a>
-											{% else %}
-												<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="star-image material-icons">star_border</i></a>
-											{% endif %}
-											
-										</div>
-										<div class="image image-block-m sighting-page sub-image" style="background: url({{ image.thumbnail_url }}) no-repeat center;background-size:cover;">
-										</div>
-									</div>
-								{% endfor %}
-                                </div>
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="post_text_wrapper">
                                     <label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
-                                    {{ field }}
+                                    <textarea class="mdl-textfield__input" cols="40" id="post_text_textarea" maxlength="1000" name="post_text">{{ field.value }}</textarea>
                                 </div>
+								
 							{% elif field.html_name == "species_tag" %}
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                     <label class="mdl-textfield__label" for="species_tag_helper">{{ field.label }}</label>
@@ -82,12 +59,40 @@
                         {% for field in form.hidden_fields %}
                             {{ field }}
                         {% endfor %}
+						
+						<div id="msg"><p>CENTER of maps marks sighting location.</p></div>
+						<input id="pac-input" class="controls" type="text" placeholder="Search Box" value="{{ form.location.value }}">
+						<div id="map"></div>
+						
+						<div id="add_photo_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
+							<i class="material-icons">add_a_photo</i>
+						</div>
+						<div id="photo_load_spinner" class="mdl-spinner mdl-js-spinner"></div>
+						<span id="photo_load_text"></span>
+						<input id="add_photo" type="file" style="display:none" multiple>
+						<div class="mdl-grid" id="photo_container">
+						{% for image in this_sighting.images %}
+							<div id="image_container_{{ image.id }}" class="hover-card mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
+								<div style="position:absolute;z-index:1;">
+									<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="close-image material-icons">close</i></a>
+									{% if image.order == 1 %}
+										<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="star-image material-icons">star</i></a>
+									{% else %}
+										<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="star-image material-icons">star_border</i></a>
+									{% endif %}
+									
+								</div>
+								<div class="image image-block-m sighting-page sub-image" style="background: url({{ image.thumbnail_url }}) no-repeat center;background-size:cover;">
+								</div>
+							</div>
+						{% endfor %}
+						</div>
+						
                         <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="save_button" type="submit" value="Save" />
 						<a class="mdl-button mdl-js-button mdl-button--accent" href="{% url 'birds:index' %}">Cancel</a>
 						
 					</form>
-					<div id="msg"><p>Indicate sighting location by re-positioning the map.</p></div>
-					<div id="map"></div>
+					
 				</div>
 			</div>
 		</div>
@@ -189,7 +194,7 @@
 					if(xhr.status === 200 || xhr.status === 204){
 						setTimeout(function(){
 						
-							$('#photo_container').append('<div id="image_container_'+id+'" class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp"><div style="position:absolute;z-index:1;"><a href="" onclick="return false;"><i data-image_id="'+id+'" class="close-image material-icons">close</i></a><a href="" onclick="return false;"><i data-image_id="'+id+'" class="star-image material-icons">star_border</i></a></div><div class="image image-block-m sighting-page sub-image" style="background: url('+thumbnail_url+') no-repeat center;background-size:cover;"></div></div>');
+							$('#photo_container').append('<div id="image_container_'+id+'" class="hover-card mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp"><div style="position:absolute;z-index:1;"><a href="" onclick="return false;"><i data-image_id="'+id+'" class="close-image material-icons">close</i></a><a href="" onclick="return false;"><i data-image_id="'+id+'" class="star-image material-icons">star_border</i></a></div><div class="image image-block-m sighting-page sub-image" style="background: url('+thumbnail_url+') no-repeat center;background-size:cover;"></div></div>');
 
 							$('.star-image').unbind('click').click( star_image_click );
 							$('.close-image').unbind('click').click(remove_image_click);
@@ -299,15 +304,91 @@
 				$('#id_species_tag').val(ui.item.id);
 			}
 		});
+		
+		
+		
+		
+		
+		
+		
+		/*
+		MAP STUFF
+		*/
 
         var pos = { lat: {{ form.lat.value|default:0 }}, lng: {{ form.lng.value|default:0 }} }
         var map = new google.maps.Map(document.getElementById('map'), { zoom: 14, center: pos })
         var geocoder = new google.maps.Geocoder;
+	
+		/*
+		map Search Box
+		*/
+		// Create the search box and link it to the UI element.
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+		// Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+		var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            }));
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+        });
+		
+
 
         var marker = new google.maps.Marker({
             position: pos, icon: {
                 path: google.maps.SymbolPath.CIRCLE,
-                scale: 5
+				fillColor: 'red',
+				fillOpacity: .2,
+				scale: 20,
+				strokeColor: 'white',
+				strokeWeight: .5
             },
             draggable: true,
             map: map
@@ -354,6 +435,7 @@
                 if (status === google.maps.GeocoderStatus.OK) {
                     if (results[0]) {
                         $('#id_location').val(results[1].formatted_address);
+						$('#pac-input').val(results[1].formatted_address);
 						$('#id_location').parent().addClass('is-dirty');
                     } else {
                         window.alert('No results found');
@@ -363,6 +445,11 @@
                 }
             });
         }
+		
+		/* 
+		END MAP STUFF
+		*/
+		
     })
 </script>
 {% endblock %}
