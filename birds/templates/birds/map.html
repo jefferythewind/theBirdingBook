@@ -1,0 +1,82 @@
+{% extends 'birds/base.html' %}
+
+
+
+{% block content %}
+
+<div style="height:100%;width:100%;position:absolute">
+<div id="map" style="width:100%;height:100%;"></div>
+</div>
+
+<script type="text/javascript">
+
+jQuery(function($){
+
+	var pos = { lat: {{ form.lat.value|default:0 }}, lng: {{ form.lng.value|default:0 }} }
+
+	var map = new google.maps.Map(document.getElementById('map'), {
+		zoom: 2,
+		center: pos
+	});
+	
+	features = [];
+	
+	{% for sighting in sightings %}
+		features.push({
+			"type": "Feature",
+			"properties": {},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [
+					{{ sighting.lng }},
+					{{ sighting.lat }}
+				]
+			}
+		});
+	{% endfor %}
+	
+	var j = {
+		"type": "FeatureCollection",
+		"features": features
+	};
+	
+	map.data.addGeoJson(j);
+	
+	var featureStyle = {
+		icon: {
+			path: google.maps.SymbolPath.CIRCLE,
+			fillColor: 'red',
+			fillOpacity: .2,
+			scale: 10,
+			strokeColor: 'white',
+			strokeWeight: .5
+		}
+	}
+
+	map.data.setStyle(featureStyle);
+	
+	/*if (navigator.geolocation) {
+		if (pos.lat == 0 && pos.lng == 0) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				pos = {
+					lat: position.coords.latitude,
+					lng: position.coords.longitude
+				}
+				map.setCenter(pos);
+			}, function(err) {
+				$('#msg').html("<p>ERROR(" + err.code + "): " + err.message + "</p>")
+			})
+		}
+	} else {
+		// Browser doesn't support Geolocation
+		$('#msg').html("<p>Browser didn't allow geolocation.</p>")
+		$('#warning-msg').slideToggle('slow');
+	}*/
+
+});
+
+</script>
+
+
+
+{% endblock %}

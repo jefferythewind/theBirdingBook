@@ -263,4 +263,11 @@ def accept_species_suggestion(request):
 		this_sighting.save()
 		this_suggestion.delete()
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
+
+def feedback(request):
+	return render(request, 'birds/feedback.html')
+
+def map_view(request):
+	sighting_data = Sighting.objects.filter(lat__isnull=False).only('lat','lng')
+	return render(request, 'birds/map.html', {'sightings': sighting_data})
 		
