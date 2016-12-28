@@ -164,11 +164,7 @@ TABEL OF CONTENTS END*/
 
 
 
-/*IMAGE INSPECT*/
-.image-inspection{
-  background-color: black;
-}
-/*=======*/
+
 
 /*USER IDENTIY ADJUSTMENTS*/
 .user-ident{
@@ -389,6 +385,18 @@ color:#f44336;
 
 .mdl-textfield {
   width: 100%;
+}
+
+.mdl-chip {
+	background: rgba(0,0,0,0);
+}
+
+.mdl-chip__text {
+	font-family: 'Noto Sans', sans-serif;
+	color: rgba(0,0,0,.54);
+    font-size: 1rem;
+    line-height: 18px;
+	font-weight: 500;
 }
 
 .demo-layout .demo-header .mdl-textfield .mdl-textfield__expandable-holder {
