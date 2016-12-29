@@ -4,7 +4,7 @@
 		<div class="page-content">
 			<section class="mdl-grid">
 				<div class="mdl-cell mdl-cell--12-col">	
-				<div class="mdl-cell mdl-cell--10-col-desktop mdl-cell--1-offset-desktop mdl-card mdl-shadow--3dp">
+				<div class="mdl-cell mdl-cell--10-col-desktop mdl-cell--1-offset-desktop mdl-card">
 					<div class="mdl-card__title" id="faq">
 						<h2 class="mdl-card__title-text">User Profile</h2>
 					</div>
@@ -15,7 +15,7 @@
 						<b>Avatar: </b>
 						<div id="avatar_container">
 						{% if this_user.avatar %}
-							<img class="mdl-shadow--2dp" src="{{ this_user.avatar.avatar.url }}">
+							<img crossorigin="anonymous" src="{{ this_user.avatar.avatar.url }}">
 						{% endif %}
 						</div>
 						{% if user == this_user %}
@@ -100,7 +100,7 @@ jQuery(function($){
 		xhr.onreadystatechange = function() {
 			if(xhr.readyState === 4){
 				if(xhr.status === 200 || xhr.status === 204){
-					$('#avatar_container').html('<img src="' + url + '">');
+					$('#avatar_container').html('<img crossorigin="anonymous" src="' + url + '">');
 
 					loading_files -= 1;
 					if ( loading_files == 0 ) {
