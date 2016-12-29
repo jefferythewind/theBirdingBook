@@ -9,32 +9,39 @@
 						<h2 class="mdl-card__title-text">User Profile</h2>
 					</div>
 					<div class="mdl-card__supporting-text">
-					<b>User Name: </b><a class="capitalize">{{ user.username }}</a>
+						<b>User Name: </b><a class="capitalize">{{ this_user.username }}</a>
 					</div>
 					<div class="mdl-card__supporting-text">
-					<b>Avatar: </b>
-					<div id="avatar_container">
-					{% if user.avatar %}
-						<img class="mdl-shadow--2dp" src="{{ user.avatar.avatar.url }}">
-					{% endif %}
-					</div>
-					<div id="add_avatar_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
-						<div id="photo" class="mdl-tooltip--right material-icons">add_a_photo</div>
-						<div class="mdl-tooltip mdl-tooltip--right" for="photo">
-							Add/Replace Avatar
+						<b>Avatar: </b>
+						<div id="avatar_container">
+						{% if this_user.avatar %}
+							<img class="mdl-shadow--2dp" src="{{ this_user.avatar.avatar.url }}">
+						{% endif %}
 						</div>
-					</div>
+						{% if user == this_user %}
+						<div id="add_avatar_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
+							<div id="photo" class="mdl-tooltip--right material-icons">add_a_photo</div>
+							<div class="mdl-tooltip mdl-tooltip--right" for="photo">
+								Add/Replace Avatar
+							</div>
+						</div>
+						<div id="photo_load_spinner" class="mdl-spinner mdl-js-spinner"></div>
+						<span id="photo_load_text"></span>
 					
-					<input id="avatar_photo" type="file" style="display:none">
+						<input id="avatar_photo" type="file" style="display:none">
+						{% endif %}
 					</div>
 				</div>
 				</div>
 			</section>
 		</div>
 <script type="text/javascript">
-
+var loading_files = 0;
 
 jQuery(function($){
+
+	{% if user == this_user %}
+
 
 	$('#add_avatar_button').click(function(){
 		$('#avatar_photo').trigger('click');
@@ -44,26 +51,122 @@ jQuery(function($){
 		formdata = new FormData();
 		var file = this.files[0];
 		if (formdata) {
-			formdata.append("avatar_photo", file);
-			formdata.append("csrfmiddlewaretoken", "{{ csrf_token }}");
-			$.ajax({
-				url: "{% url 'birds:add_avatar' %}",
-				data: formdata,
-				type: "POST",
-				dataType: "json",
-				processData: false,
-				contentType: false,
-				success: function(data) {
-					if (data.msg == "success"){
-						$('#avatar_container').html('<img src="' + data.url + '">');
-					}
-				},
-				error: function(jqXHR, textStatus, errorThrown){
-					alert(textStatus);
-				}
-			});
+			
+			if (!file.type.includes("image")) {
+				alert("this is not an image file.  Please upload only images.");
+				return;
+			}
+			ResizeFile(file);
+			loading_files += 1;
+			$('#photo_load_spinner').addClass('is-active');
+			$('#photo_load_text').text(loading_files+" files loading.  Please wait.");
+			
 		}
 	})
+	
+	/*
+	Avatar Upload with Resize
+	*/
+	function getSignedRequest(data_url){
+		$.ajax({
+			url: "{% url 'birds:add_avatar' %}",
+			data: {
+				'csrfmiddlewaretoken': "{{ csrf_token }}"
+			},
+			type: "POST",
+			dataType: "json",
+			success: function(response){
+				uploadFile(data_url, response.data, response.url, response.filename);
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				alert("Could not get signed URL.");
+			}
+		});
+	}
+	
+	function uploadFile(data_url, s3Data, url, filename){
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", s3Data.url);
+
+		var postData = new FormData();
+		for(key in s3Data.fields){
+			postData.append(key, s3Data.fields[key]);
+		}
+		
+		var blobData = dataURItoBlob(data_url);
+		
+		postData.append('file', new File([blobData], filename));
+
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState === 4){
+				if(xhr.status === 200 || xhr.status === 204){
+					$('#avatar_container').html('<img src="' + url + '">');
+
+					loading_files -= 1;
+					if ( loading_files == 0 ) {
+						$('#photo_load_spinner').removeClass('is-active');
+						$('#photo_load_text').text("");
+					}else{
+						$('#photo_load_text').text(loading_files+" files loading.  Please wait.");
+					}
+				}else{
+					alert("Could not upload file. "+xhr.responseText);
+				}
+			}
+		};
+		xhr.send(postData);
+	}
+	   
+	function ResizeFile(raw_file) {
+		
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			var img = document.createElement("img");
+			img.src = e.target.result;
+			
+			var canvas = document.createElement('canvas');
+
+			var ctx = canvas.getContext("2d");
+			ctx.drawImage(img, 0, 0);
+
+			var MAX = 200;
+			var width = img.width;
+			var height = img.height;
+
+			if (width > height) {
+			  if (width > MAX) {
+				height *= MAX / width;
+				width = MAX;
+			  }
+			} else {
+			  if (height > MAX) {
+				width *= MAX / height;
+				height = MAX;
+			  }
+			}
+			canvas.width = width;
+			canvas.height = height;
+			var ctx = canvas.getContext("2d");
+			ctx.drawImage(img, 0, 0, width, height);
+
+			var dataurl = canvas.toDataURL("image/png");
+			
+			getSignedRequest(dataurl);
+		}
+		reader.readAsDataURL(raw_file);
+
+	}
+	
+	function dataURItoBlob(dataURI) {
+		var binary = atob(dataURI.split(',')[1]);
+		var array = [];
+		for(var i = 0; i < binary.length; i++) {
+			array.push(binary.charCodeAt(i));
+		}
+		return new Blob([new Uint8Array(array)], {type: 'image/png'});
+	}
+	
+	{% endif %}
 
 });
 

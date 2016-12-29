@@ -1,6 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
-from django.http.response import HttpResponseBadRequest
-from django.views import generic
 from django.utils import timezone
 from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions, BirdPhoto, Avatar, Uid
 from django.http import HttpResponse
@@ -27,7 +25,8 @@ def terms_of_service(request):
 	return render(request, 'birds/terms_of_service.html')
 
 def user(request, pk):
-	return render(request, 'birds/user.html')
+	this_user = get_object_or_404(User, pk=pk)
+	return render(request, 'birds/user.html', {"this_user": this_user})
 
 def signs3(request):
 	if request.is_ajax():
@@ -99,7 +98,7 @@ def authenticate_user(request):
 def new_sighting(request):
 	new_sighting = Sighting.objects.create(user_id = request.user.id)
 	return redirect('/edit_sighting/'+str(new_sighting.id), pk=new_sighting.id)
-# 	return render(request, 'birds/new_sighting.html', {'form': form, 'this_sighting': new_sighting})
+# 	return render(request, 'birds/edit_sighting.html', {'form': form, 'this_sighting': edit_sighting})
 	
 
 @login_required
@@ -113,9 +112,9 @@ def edit_sighting(request, pk):
 			form.save()
 			return redirect('/view_sighting/'+str(pk), pk=pk)
 		else:
-			return render(request, 'birds/new_sighting.html', { 'form': form, 'this_sighting': this_sighting })
+			return render(request, 'birds/edit_sighting.html', { 'form': form, 'this_sighting': this_sighting })
 	elif request.method == "GET":
-		return render(request, 'birds/new_sighting.html', { 'form': form, 'this_sighting': this_sighting })
+		return render(request, 'birds/edit_sighting.html', { 'form': form, 'this_sighting': this_sighting })
 
 def view_sighting(request, pk):
 	this_sighting = get_object_or_404(Sighting, pk=pk)
@@ -214,7 +213,7 @@ def get_species_suggestions(request):
 			suggestion.is_voted = SpeciesVote.objects.filter( sighting_id = request.POST.get('sighting_id'), species = suggestion.species, user = request.user ).count()
 		return render_to_response('birds/species_suggestions.html', {'species_suggestions': species_suggestions,'user': request.user})
 	
-@login_required
+#@login_required
 # def add_photo(request):
 # 	if request.is_ajax():
 # 		new_photo = BirdPhoto.objects.create( sighting_id = request.POST.get('sighting_id'), photo = request.POST.get('filename'), order = 0 )
@@ -227,19 +226,36 @@ def remove_photo(request):
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
 	
 @login_required
-def add_avatar(request):
+def add_avatar(request):	
 	if request.is_ajax():
 		try:
 			new_avatar = request.user.avatar
 		except Avatar.DoesNotExist:
-			new_avatar = Avatar.objects.create( avatar = request.FILES.get('avatar_photo'), user = request.user )
-		else:
-			new_avatar.avatar = request.FILES.get('avatar_photo')
-			new_avatar.save()
+			new_avatar = Avatar.objects.create( user = request.user )
 			
-		return HttpResponse(json.dumps({'msg':'success', 'url': str(new_avatar.avatar.url)}), content_type='application/json')
+		S3_BUCKET = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 	
-@login_required
+		file_type = "image/png"
+		
+		from time import time
+		filename = "%s%s.%s" % ( request.user.username, str(int(time())), "png" )
+		new_avatar.avatar = filename
+		new_avatar.save()
+
+		s3 = boto3.client('s3')
+	
+		presigned_post = s3.generate_presigned_post(
+			Bucket = S3_BUCKET,
+			Key = filename,
+			Fields = {"acl": "public-read", "Content-Type": file_type},
+			Conditions = [
+			 	{"acl": "public-read"},
+			 	{"Content-Type": file_type}
+			],
+			ExpiresIn = 3600
+		)
+		return HttpResponse(json.dumps({'data': presigned_post,'filename': filename, 'url': new_avatar.avatar.url}), content_type='application/json')
+	
 def image_inspect(request):
 	if request.is_ajax():
 		image = get_object_or_404(BirdPhoto, pk = request.POST.get('image_id'))
