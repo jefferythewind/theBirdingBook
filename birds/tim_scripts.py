@@ -34,8 +34,6 @@ with open("birds/media/"+csv_file, 'rU') as c:
             ini_rows -= 1
             continue
         i = i + 1
-        if i > 5000:
-            break
         if row[0]:
             new_order = Order(order=row[0])
             new_order.save()

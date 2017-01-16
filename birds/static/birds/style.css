@@ -383,12 +383,17 @@ color:#f44336;
  * limitations under the License.
  */
 
-.mdl-textfield {
+/*.mdl-textfield {
   width: 100%;
+}*/
+
+.user-chip {
+	background: rgba(0,0,0,0);
+	margin:5px;
 }
 
-.mdl-chip {
-	background: rgba(0,0,0,0);
+.badge-chips {
+	background: rgba(0,0,0,0.10);
 }
 
 .mdl-chip__text {
@@ -399,18 +404,13 @@ color:#f44336;
 	font-weight: 500;
 }
 
-.demo-layout .demo-header .mdl-textfield .mdl-textfield__expandable-holder {
-  bottom: 19px;
-}
-.demo-layout .mdl-layout__header .mdl-layout__drawer-button {
-  color: rgba(0, 0, 0, 0.54);
-}
 .mdl-layout__drawer .avatar {
   margin-bottom: 16px;
 }
-.demo-drawer {
-  border: none;
+.mdl-layout__header .mdl-layout__drawer-button {
+	color: rgba(0,0,0,0.70);
 }
+
 /* iOS Safari specific workaround */
 .demo-drawer .mdl-menu__container {
   z-index: -1;

@@ -128,6 +128,7 @@ class SpeciesSuggestions(models.Model):
     user = models.ForeignKey(User)
     species = models.ForeignKey(Subspecies)
     sighting = models.ForeignKey(Sighting)
+    accepted = models.BooleanField(default=False)
     
     @property
     def num_votes(self):

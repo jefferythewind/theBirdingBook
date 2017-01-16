@@ -1,0 +1,91 @@
+{% extends 'birds/'|add:the_template %}
+
+{% block sighting_grid %}
+	{% if sighting_list %}
+		<div class="mdl-grid">
+		{% for sighting in sighting_list %}
+			<div class="hover-card mdl-cell mdl-cell--6-col-desktop mdl-cell--8-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
+				<a href="{% url 'birds:user' sighting.user.id %}">
+					<span class="mdl-chip mdl-card__supporting-text user-chip">
+						<img class="mdl-chip__contact" src="{{ sighting.user.avatar.avatar.url }}">
+						<span class="mdl-chip__text">{{ sighting.user }}</span>
+					</span>
+				</a>
+				<a class="no-decoration" href="{% url 'birds:view_sighting' sighting.id %}">
+					{% if sighting.images.count == 0 %}
+						<div style="height:100px;" class="image image-block-m mdl-color--blue-grey-800">
+							<h4 style="top:0px;" >
+								<span>{{ sighting.caption }}</span>
+							</h4>
+							<div class="mdl-card__actions index-species-tag">
+								<span>
+									<i class="material-icons">local_offer</i><span> {{sighting.species_tag}}</span>
+								</span>
+							</div>
+						</div>
+					{% else %}
+						{% for image in sighting.images %}
+							{% if forloop.counter == 1 %}
+								<div class="image image-block-m" style="background: url({{ image.thumbnail_url }}) no-repeat center;background-size:cover;">
+									<h4>
+										<span>{{ sighting.caption }}</span>
+									</h4>
+									<div class="mdl-card__actions index-species-tag">
+										<span>
+											<i class="material-icons">local_offer</i><span> {{sighting.species_tag}}</span>
+										</span>
+									</div>
+								</div>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+				</a>
+				{% if sighting.images.count == 0 %}
+					<div style="font-weight:600;" class="mdl-card__supporting-text">
+						
+						<div style="float:left">{{ sighting.time_diff }}</div>
+
+						<div style="float:right">
+						{% if sighting.num_likes  == 0 %}
+							
+						{% else %}
+							<i class="material-icons">thumb_up</i>{{ sighting.num_likes }}
+						{% endif %}
+						{% if sighting.num_comments  == 0 %}
+							
+						{% else %}
+							<i class="material-icons">comment</i> {{ sighting.num_comments }}
+						{% endif %}
+						</div>	
+					</div>	
+				{% else %}
+				<div style="padding-top: 13px; padding-bottom: 13px; font-weight:600;" class="mdl-card__supporting-text">
+					
+					<div>
+						<div style="float:right">
+							{% if sighting.images.count > 0 %}
+								<i class="material-icons">photo_album</i>{{ sighting.images.count }}
+							{% endif %}
+							{% if sighting.num_likes > 0 %}
+								<i class="material-icons">thumb_up</i>{{ sighting.num_likes }}
+							{% endif %}
+							{% if sighting.num_comments > 0 %}
+								<i class="material-icons">comment</i>{{ sighting.num_comments }}
+							{% endif %}
+						</div>
+					</div>
+					<div>{{ sighting.location }}</div>
+					<div>{{ sighting.time_diff }}</div>
+
+
+				</div>	
+				{% endif %}
+			</div>
+		{% endfor %}
+		</div>
+	{% else %}
+		<div class="mdl-components__warning">
+			<b>Note:</b> No sightings are available.
+		</div>
+	{% endif %}
+{% endblock %}

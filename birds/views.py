@@ -7,6 +7,7 @@ from django.db.models import Q, IntegerField, Value
 from django.contrib.auth.models import User
 import os
 import boto3
+import datetime
 
 
 
@@ -26,7 +27,19 @@ def terms_of_service(request):
 
 def user(request, pk):
 	this_user = get_object_or_404(User, pk=pk)
-	return render(request, 'birds/user.html', {"this_user": this_user})
+	user_sighting_list = Sighting.objects.filter(user = this_user, sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
+	sighting_count = Sighting.objects.filter(user = this_user).count()
+	species_count = Sighting.objects.exclude(species_tag__isnull=True).count()
+	species_count_ytd = Sighting.objects.filter(sighting_date__year=datetime.datetime.now().year).exclude(species_tag__isnull=True).count()
+	helper_species_count = SpeciesSuggestions.objects.filter( user=this_user, accepted=True).count()
+	user_stats = {
+		"sighting_count":sighting_count,
+		"species_count":species_count,
+		"species_count_ytd":species_count_ytd,
+		"helper_species_count":helper_species_count
+	}
+	
+	return render(request, 'birds/sighting_grid.html', {"this_user": this_user, "sighting_list": user_sighting_list, "user_stats": user_stats, 'the_template': 'user.html'})
 
 def signs3(request):
 	if request.is_ajax():
@@ -128,8 +141,9 @@ def view_sighting(request, pk):
 		return render(request, 'birds/view_sighting.html', { 'sighting': this_sighting, 'species_votes': species_votes})
 
 def index_view(request):
-	latest_sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
-	return render(request, 'birds/index.html', { 'latest_sighting_list': latest_sighting_list})
+	if request.method == 'GET':
+		latest_sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
+		return render(request, 'birds/sighting_grid.html', { 'sighting_list': latest_sighting_list, 'the_template': 'index.html'})
 		
 def species_query(request):
 	if request.method == "GET":
@@ -176,6 +190,10 @@ def unlike(request):
 			Like.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id') ).delete()
 			new_likes = Sighting.objects.get( pk = request.POST.get('sighting_id') ).num_likes
 			return HttpResponse(json.dumps({'msg':'success', 'new_likes': new_likes}), content_type='application/json')
+
+#
+#Species Suggestions
+#
 		
 @login_required 
 def up_vote_species(request):
@@ -208,16 +226,25 @@ def suggest_new_species(request):
 
 def get_species_suggestions(request):
 	if request.is_ajax():
-		species_suggestions = SpeciesSuggestions.objects.filter( sighting_id = request.POST.get('sighting_id') ).annotate(is_voted=Value(0, output_field=IntegerField()))
+		species_suggestions = SpeciesSuggestions.objects.filter( sighting_id = request.POST.get('sighting_id') ).exclude( accepted=True ).annotate(is_voted=Value(0, output_field=IntegerField()))
 		for suggestion in species_suggestions:
 			suggestion.is_voted = SpeciesVote.objects.filter( sighting_id = request.POST.get('sighting_id'), species = suggestion.species, user = request.user ).count()
 		return render_to_response('birds/species_suggestions.html', {'species_suggestions': species_suggestions,'user': request.user})
-	
-#@login_required
-# def add_photo(request):
-# 	if request.is_ajax():
-# 		new_photo = BirdPhoto.objects.create( sighting_id = request.POST.get('sighting_id'), photo = request.POST.get('filename'), order = 0 )
-# 		return HttpResponse(json.dumps({'msg':'success', 'urls': [new_photo.photo.url], 'ids': [new_photo.id]}), content_type='application/json')
+
+@login_required
+def accept_species_suggestion(request):
+	if request.is_ajax():
+		this_sighting = get_object_or_404(Sighting, pk = request.POST.get('sighting_id') )
+		this_suggestion = get_object_or_404(SpeciesSuggestions, pk = request.POST.get('suggestion_id') )
+		this_sighting.species_tag = this_suggestion.species
+		this_sighting.save()
+		this_suggestion.accepted = True
+		this_suggestion.save()
+		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
+
+#
+#
+#
 	
 @login_required
 def remove_photo(request):
@@ -268,16 +295,6 @@ def star_photo(request):
 		photo.order = 1
 		photo.save()
 		BirdPhoto.objects.filter(sighting = photo.sighting).exclude(pk = photo.id).update(order = 0)
-		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
-	
-@login_required
-def accept_species_suggestion(request):
-	if request.is_ajax():
-		this_sighting = get_object_or_404(Sighting, pk = request.POST.get('sighting_id') )
-		this_suggestion = get_object_or_404(SpeciesSuggestions, pk = request.POST.get('suggestion_id') )
-		this_sighting.species_tag = this_suggestion.species
-		this_sighting.save()
-		this_suggestion.delete()
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
 
 def feedback(request):
