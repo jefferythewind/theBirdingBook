@@ -76,13 +76,14 @@
         <div class="mdl-layout__header-row">
 			
           <!--<div id="top-layout-spacer" class="mdl-layout-spacer"></div>-->
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+
+			<div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
             <label class="mdl-button mdl-js-button mdl-button--icon" for="search_species" id="species_search_icon">
               <i class="material-icons">search</i>
             </label>
             <div class="mdl-textfield__expandable-holder">
               <input class="mdl-textfield__input" type="text" id="search_species" name="search_species">
-              <label class="mdl-textfield__label" for="search_species">Enter your query...</label>
+              <label class="mdl-textfield__label" for="search_species">Enter your query...<i class="material-icons">search</i></label>
             </div>
 			<div class="mdl-tooltip mdl-tooltip--bottom" for="species_search_icon">
 				Species Lookup
@@ -100,6 +101,14 @@
 				Search by Location
 			</div>
           </div>
+		  <div>
+			<label class="mdl-button mdl-js-button mdl-button--icon" id="clear_search_button">
+              <i class="material-icons">clear</i>
+            </label>
+			<div class="mdl-tooltip mdl-tooltip--bottom" for="clear_search_button">
+				Clear Search
+			</div>
+		  </div>
 		  <!--
           <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
             <i class="material-icons">more_vert</i>
@@ -161,7 +170,7 @@
         </nav>
       </div>
       <main class="mdl-layout__content mdl-color--grey-100">
-          {% block content %}{% endblock %}
+		{% block content %}{% endblock %}
 		<div id="snackbar_login_alert" class="mdl-js-snackbar mdl-snackbar">
 			<div class="mdl-snackbar__text"></div>
 			<button class="mdl-snackbar__action" type="button"></button>
@@ -201,6 +210,46 @@
 					}
 				});
 			{% endif %}
+			
+			$('#search_species').autocomplete({
+				source: "{% url 'birds:species_query' %}",
+				minLength: 2,
+				response: function( event, ui ) {
+			
+					//alert('got response');
+			
+				},
+				select: function( event, ui ){
+				
+					//$('#id_species_tag').val(ui.item.id);
+					search_species( ui.item.id );
+					
+				}
+			});
+			
+			function search_species( species_id ) {
+				$.ajax({
+					url: "{% url 'birds:sightings_search_species' %}",
+					data: { 'csrfmiddlewaretoken': '{{ csrf_token }}', species_id: species_id },
+					type: "POST",
+					dataType: "html",
+					success: function(data) {
+						$('.page-content').html(data);
+					},
+					error: function(jqXHR, textStatus, errorThrown){
+						alert(textStatus);
+					}
+				});
+			}
+			
+			$('#clear_search_button').click(function(){
+			
+				search_species( false )
+				$('#search_species').val('').parent().parent().removeClass('is-dirty');
+			
+			})
+			
+			
 		});
 		{% if not user.is_authenticated %}
 		r(function(){

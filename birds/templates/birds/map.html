@@ -65,18 +65,18 @@ jQuery(function($){
 			type: "POST",
 			dataType: "html",
 			success: function(data) {
-				$('#map_details').html(data).fadeIn(100);
+				$('#map_details').html(data).fadeIn(50);
 			}
 		});
 	})
 	
 	map.data.addListener('mouseout', function(event) {
 		if( !$('#map_details').is(':hover') ) {
-			$('#map_details').fadeOut(200);
+			$('#map_details').fadeOut(100);
 		
 		}else{
 			$('#map_details').mouseleave(function(){
-				$('#map_details').fadeOut(200);
+				$('#map_details').fadeOut(100);
 			});
 		}
 	});

@@ -367,6 +367,15 @@ color:#f44336;
 	display: none;
 }
 
+.mdl-textfield--expandable.is-focused, .mdl-textfield--expandable.is-dirty {
+	width: 90%;
+	max-width: 627px;
+}
+
+.mdl-textfield__expandable-holder {
+	width: 100%;
+}
+
 /* END ADDED BY TIM */
 
 

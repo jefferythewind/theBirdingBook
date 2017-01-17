@@ -318,3 +318,12 @@ def get_map_points(request):
 		west_lng = request.POST.get('west_lng')
 		sighting_list = Sighting.objects.filter(lat__range=(south_lat, north_lat), lng__range=(east_lng, west_lng)).only('lat','lng')
 		return HttpResponse(serializers.serialize("json", sighting_list), content_type='application/json')
+
+def sightings_search_species(request):
+	if request.is_ajax():
+		species_id = request.POST.get("species_id")
+		if species_id == "false":
+			sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
+		else:
+			sighting_list = Sighting.objects.filter(species_tag=species_id).order_by('-post_ts')[:10]
+		return render_to_response('birds/sighting_grid.html', {'sighting_list': sighting_list, 'the_template': 'empty_wrapper.html'})
