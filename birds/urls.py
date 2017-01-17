@@ -32,5 +32,7 @@ urlpatterns = [
 	url(r'^star_photo/', views.star_photo, name='star_photo'),
 	url(r'^accept_species_suggestion/', views.accept_species_suggestion, name="accept_species_suggestion"),
 	url(r'^feedback/', views.feedback, name="feedback"),
-	url(r'^map/', views.map_view, name="map")
+	url(r'^map/', views.map_view, name="map"),
+	url(r'^info_window/', views.info_window, name="info_window"),
+	url(r'^get_map_points/', views.get_map_points, name="get_map_points"),
 ]

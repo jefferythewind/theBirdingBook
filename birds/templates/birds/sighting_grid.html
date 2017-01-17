@@ -4,7 +4,7 @@
 	{% if sighting_list %}
 		<div class="mdl-grid">
 		{% for sighting in sighting_list %}
-			<div class="hover-card mdl-cell mdl-cell--6-col-desktop mdl-cell--8-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
+			<div class="hover-card mdl-cell {% if info_window %}mdl-cell--12-col{% else %}mdl-cell--6-col-desktop mdl-cell--8-col-tablet{% endif %} mdl-card">
 				<a href="{% url 'birds:user' sighting.user.id %}">
 					<span class="mdl-chip mdl-card__supporting-text user-chip">
 						<img class="mdl-chip__contact" src="{{ sighting.user.avatar.avatar.url }}">

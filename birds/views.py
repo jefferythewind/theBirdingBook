@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 import os
 import boto3
 import datetime
+from django.core import serializers
 
 
 
@@ -303,4 +304,17 @@ def feedback(request):
 def map_view(request):
 	sighting_data = Sighting.objects.filter(lat__isnull=False).only('lat','lng')
 	return render(request, 'birds/map.html', {'sightings': sighting_data})
+
+def info_window(request):
+	if request.is_ajax():
+		this_sighting = get_object_or_404(Sighting, pk=request.POST.get('sighting_id'))
+		return render_to_response('birds/sighting_grid.html', {'sighting_list': [this_sighting], 'the_template': 'empty_wrapper.html', 'info_window': 'true'})
 		
+def get_map_points(request):
+	if request.is_ajax():
+		south_lat = request.POST.get('south_lat')
+		north_lat = request.POST.get('north_lat')
+		east_lng = request.POST.get('east_lng')
+		west_lng = request.POST.get('west_lng')
+		sighting_list = Sighting.objects.filter(lat__range=(south_lat, north_lat), lng__range=(east_lng, west_lng)).only('lat','lng')
+		return HttpResponse(serializers.serialize("json", sighting_list), content_type='application/json')

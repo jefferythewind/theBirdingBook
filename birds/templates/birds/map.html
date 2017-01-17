@@ -1,22 +1,38 @@
 {% extends 'birds/base.html' %}
 
 
-
 {% block content %}
 
-<div style="height:100%;width:100%;position:absolute">
-<div id="map" style="width:100%;height:100%;"></div>
+<div id="view" style="height:100%;width:100%;">
+	<div id="map"></div>
+	<div id="map_details"></div>
 </div>
+<style type="text/css">
 
+#map {
+	height:100%;
+	width:100%;
+	position:absolute;
+}
+
+#map_details {
+	
+	width:350px;
+	position:absolute;
+	z-index:2;
+	bottom:10px;
+	left:10px;
+	display: none;
+}
+
+</style>
 <script type="text/javascript">
 
 jQuery(function($){
-
-	var pos = { lat: {{ form.lat.value|default:0 }}, lng: {{ form.lng.value|default:0 }} }
-
+	
 	var map = new google.maps.Map(document.getElementById('map'), {
 		zoom: 2,
-		center: pos
+		center: { lat: 0, lng: 0 }
 	});
 	
 	features = [];
@@ -24,7 +40,7 @@ jQuery(function($){
 	{% for sighting in sightings %}
 		features.push({
 			"type": "Feature",
-			"properties": {},
+			"properties": { 'sighting_id': {{sighting.id}} },
 			"geometry": {
 				"type": "Point",
 				"coordinates": [
@@ -42,18 +58,74 @@ jQuery(function($){
 	
 	map.data.addGeoJson(j);
 	
-	var featureStyle = {
-		icon: {
-			path: google.maps.SymbolPath.CIRCLE,
-			fillColor: 'red',
-			fillOpacity: .2,
-			scale: 10,
-			strokeColor: 'white',
-			strokeWeight: .5
+	map.data.addListener('mouseover', function(event){
+		$.ajax({
+			url: "{% url 'birds:info_window' %}",
+			data: {'sighting_id': event.feature.getProperty("sighting_id"), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+			type: "POST",
+			dataType: "html",
+			success: function(data) {
+				$('#map_details').html(data).fadeIn(100);
+			}
+		});
+	})
+	
+	map.data.addListener('mouseout', function(event) {
+		if( !$('#map_details').is(':hover') ) {
+			$('#map_details').fadeOut(200);
+		
+		}else{
+			$('#map_details').mouseleave(function(){
+				$('#map_details').fadeOut(200);
+			});
 		}
-	}
+	});
+	
+	var bound_reset_activated = true;
+	
+	map.addListener('bounds_changed',function(){
+		//load points inside these bounds
+		if ( bound_reset_activated ) {
+			var m = map.getBounds();
+			var postData = {
+				'north_lat': m.getNorthEast().lat(),
+				'south_lat': m.getSouthWest().lat(),
+				'east_lng': m.getNorthEast().lng(),
+				'west_lng': m.getSouthWest().lng(),
+				'csrfmiddlewaretoken': '{{ csrf_token }}'
+			}
+			
+			$.ajax({
+				url: "{% url 'birds:get_map_points' %}",
+				data: postData,
+				type: "POST",
+				dataType: "json",
+				success: function(data) {
+					var featureStyle = {
+						icon: {
+							path: google.maps.SymbolPath.CIRCLE,
+							fillColor: 'red',
+							fillOpacity: .2,
+							scale: 10,
+							strokeColor: 'white',
+							strokeWeight: .5
+						}
+					}
 
-	map.data.setStyle(featureStyle);
+					map.data.setStyle(featureStyle);
+				}
+			});
+			
+			bound_reset_activated = false;
+			setTimeout(function(){
+				bound_reset_activated = true;
+			}, 2000);
+		}
+	
+	})
+	
+	
+
 	
 	/*if (navigator.geolocation) {
 		if (pos.lat == 0 && pos.lng == 0) {

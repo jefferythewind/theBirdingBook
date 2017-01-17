@@ -10,9 +10,13 @@
 			</div>
 			<form method="post">{% csrf_token %}
 				<div class="mdl-card__supporting-text">
-					{{ error }}
-					<input name="username">
-					<button>OK</button>
+					
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label {% if error %}is-invalid{% endif %}">
+						<input class="mdl-textfield__input" type="text" name="username" id="username_input">
+						<label class="mdl-textfield__label" for="username_input">New Username...</label>
+						<span class="mdl-textfield__error">{{ error }}</span>
+					</div>
+					<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">OK</button>
 				</div>
 			</form>
 			
