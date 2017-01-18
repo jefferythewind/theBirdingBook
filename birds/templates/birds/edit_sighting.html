@@ -104,6 +104,15 @@
 
     jQuery(function($){
 	
+		function supportsToDataURL() {
+			var c = document.createElement("canvas");
+			var data = c.toDataURL("image/png");
+			return (data.indexOf("data:image/png") == 0);
+		}
+		
+		alert(supportsToDataURL());
+		
+	
 		var star_image_click = function(){
 			var star_element = $(this);
 			var image_id = $(this).attr('data-image_id');
