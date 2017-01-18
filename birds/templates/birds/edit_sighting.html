@@ -201,7 +201,7 @@
 							loading_files -= 1;
 							if ( loading_files == 0 ) {
 								$('#photo_load_spinner').removeClass('is-active');
-								$('#photo_load_text').text("");
+								$('#photo_load_text').text(xhr.status+" "+xhr.responseText);
 							}else{
 								$('#photo_load_text').text(loading_files+" files loading.  Please wait.");
 							}
@@ -322,6 +322,8 @@
 		/*
 		map Search Box
 		*/
+		
+		
 		// Create the search box and link it to the UI element.
         var input = document.getElementById('pac-input');
         var searchBox = new google.maps.places.SearchBox(input);
