@@ -17,7 +17,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+    <meta name="description" content="The Birding Book, bird science.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>The Birding Book</title>
     <link rel="shortcut icon" href="https://www.iconexperience.com/_img/o_collection_png/green_dark_grey/256x256/plain/bird.png">
@@ -82,8 +82,8 @@
               <i class="material-icons">search</i>
             </label>
             <div class="mdl-textfield__expandable-holder">
-              <input class="mdl-textfield__input" type="text" id="search_species" name="search_species">
-              <label class="mdl-textfield__label" for="search_species">Enter your query...<i class="material-icons">search</i></label>
+              <input class="mdl-textfield__input" type="text" id="search_species" placeholder="Species">
+              <label class="mdl-textfield__label" for="search_species">Enter your query...</label>
             </div>
 			<div class="mdl-tooltip mdl-tooltip--bottom" for="species_search_icon">
 				Species Lookup
@@ -94,8 +94,7 @@
               <i class="material-icons">place</i>
             </label>
             <div class="mdl-textfield__expandable-holder">
-              <input class="mdl-textfield__input" type="text" id="search_location">
-              <label class="mdl-textfield__label" for="search_location">Enter your query...</label>
+              <input class="mdl-textfield__input" type="text" id="search_location" placeholder="Location">
             </div>
 			<div class="mdl-tooltip mdl-tooltip--bottom" for="location_search_icon">
 				Search by Location
@@ -249,6 +248,66 @@
 			
 			})
 			
+			/*
+			map Search Box
+			*/
+			// Create the search box and link it to the UI element.
+			var input = document.getElementById('search_location');
+			var searchBox = new google.maps.places.SearchBox(input);
+			// Bias the SearchBox results towards current map's viewport.
+			map.addListener('bounds_changed', function() {
+			  searchBox.setBounds(map.getBounds());
+			});
+			var markers = [];
+			// Listen for the event fired when the user selects a prediction and retrieve
+			// more details for that place.
+			searchBox.addListener('places_changed', function() {
+				var places = searchBox.getPlaces();
+
+				if (places.length == 0) {
+					return;
+				}
+
+				// Clear out the old markers.
+				markers.forEach(function(marker) {
+					marker.setMap(null);
+				});
+				markers = [];
+
+				// For each place, get the icon, name and location.
+				var bounds = new google.maps.LatLngBounds();
+				places.forEach(function(place) {
+				if (!place.geometry) {
+				  console.log("Returned place contains no geometry");
+				  return;
+				}
+				var icon = {
+				  url: place.icon,
+				  size: new google.maps.Size(71, 71),
+				  origin: new google.maps.Point(0, 0),
+				  anchor: new google.maps.Point(17, 34),
+				  scaledSize: new google.maps.Size(25, 25)
+				};
+
+				// Create a marker for each place.
+				markers.push(new google.maps.Marker({
+				  map: map,
+				  icon: icon,
+				  title: place.name,
+				  position: place.geometry.location
+				}));
+
+				if (place.geometry.viewport) {
+				  // Only geocodes have viewport.
+				  bounds.union(place.geometry.viewport);
+				} else {
+				  bounds.extend(place.geometry.location);
+				}
+				});
+				map.fitBounds(bounds);
+			});
+			
+						
 			
 		});
 		{% if not user.is_authenticated %}

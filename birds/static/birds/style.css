@@ -368,12 +368,12 @@ color:#f44336;
 }
 
 .mdl-textfield--expandable.is-focused, .mdl-textfield--expandable.is-dirty {
-	width: 90%;
+	width: 80%;
 	max-width: 627px;
 }
 
 .mdl-textfield__expandable-holder {
-	width: 100%;
+	width: 90%;
 }
 
 /* END ADDED BY TIM */
