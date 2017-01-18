@@ -187,7 +187,7 @@
 			
 			var blobData = dataURItoBlob(data_url);
 			
-			alert(blobData.size);
+			alert(JSON.stringify(s3Data)+" "+data_url);
 			
 			postData.append('file', new File([blobData], filename));
 
