@@ -316,7 +316,7 @@ def get_map_points(request):
 		north_lat = request.POST.get('north_lat')
 		east_lng = request.POST.get('east_lng')
 		west_lng = request.POST.get('west_lng')
-		sighting_list = Sighting.objects.filter(lat__range=(south_lat, north_lat), lng__range=(east_lng, west_lng)).only('lat','lng')
+		sighting_list = Sighting.objects.filter(lat__range=(south_lat, north_lat), lng__range=(west_lng, east_lng)).only('lat','lng')
 		return HttpResponse(serializers.serialize("json", sighting_list), content_type='application/json')
 
 def sightings_search_species(request):

@@ -35,31 +35,20 @@ var map = new google.maps.Map(document.getElementById('map'), {
 });
 
 jQuery(function($){
-	
-	
-	
 	features = [];
 	
-	{% for sighting in sightings %}
-		features.push({
-			"type": "Feature",
-			"properties": { 'sighting_id': {{sighting.id}} },
-			"geometry": {
-				"type": "Point",
-				"coordinates": [
-					{{ sighting.lng }},
-					{{ sighting.lat }}
-				]
-			}
-		});
-	{% endfor %}
+	var featureStyle = {
+		icon: {
+			path: google.maps.SymbolPath.CIRCLE,
+			fillColor: 'red',
+			fillOpacity: .5,
+			scale: 10,
+			strokeColor: 'white',
+			strokeWeight: .5
+		}
+	}
 	
-	var j = {
-		"type": "FeatureCollection",
-		"features": features
-	};
-	
-	map.data.addGeoJson(j);
+	map.data.setStyle(featureStyle);
 	
 	function fadeInSighting(sighting_id) {
 		$.ajax({
@@ -93,6 +82,12 @@ jQuery(function($){
 			fadeInSighting(event.feature.getProperty("sighting_id"));
 		}
 	});
+	
+	map.addListener('click', function(){
+		if( !$('#map_details').is(':hover') ) {
+			$('#map_details').fadeOut(100);
+		}
+	})
 		
 	
 	var bound_reset_activated = true;
@@ -115,18 +110,35 @@ jQuery(function($){
 				type: "POST",
 				dataType: "json",
 				success: function(data) {
-					var featureStyle = {
-						icon: {
-							path: google.maps.SymbolPath.CIRCLE,
-							fillColor: 'red',
-							fillOpacity: .2,
-							scale: 10,
-							strokeColor: 'white',
-							strokeWeight: .5
-						}
+					map.data.forEach(function(feature){map.data.remove(feature)});
+					
+					features = [];
+				
+					for (var sighting in data) {
+						features.push({
+							"type": "Feature",
+							"properties": { 'sighting_id': data[sighting].pk },
+							"geometry": {
+								"type": "Point",
+								"coordinates": [
+									data[sighting].fields.lng,
+									data[sighting].fields.lat
+								]
+							}
+						});
 					}
-
-					map.data.setStyle(featureStyle);
+					
+					var j = {
+						"type": "FeatureCollection",
+						"features": features
+					};
+					
+					map.data.addGeoJson(j);
+					
+					
+				},
+				error: function(data){
+					alert(data);
 				}
 			});
 			
