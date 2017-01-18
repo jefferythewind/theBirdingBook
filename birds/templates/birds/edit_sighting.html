@@ -187,7 +187,7 @@
 			
 			var blobData = dataURItoBlob(data_url);
 			
-			alert(JSON.stringify(s3Data)+" "+data_url);
+			//alert(JSON.stringify(s3Data)+" "+data_url);
 			
 			postData.append('file', new File([blobData], filename));
 
@@ -225,7 +225,7 @@
 			reader.onload = function(e) {
 				var img = document.createElement("img");
 				img.src = e.target.result;
-				
+				alert(e.target.result)
 				var canvas = document.createElement('canvas');
 
 				var ctx = canvas.getContext("2d");
