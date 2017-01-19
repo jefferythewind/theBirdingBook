@@ -69,7 +69,7 @@
 						</div>
 						<div id="photo_load_spinner" class="mdl-spinner mdl-js-spinner"></div>
 						<span id="photo_load_text"></span>
-						<input id="add_photo" type="file" style="display:none" multiple>
+						
 						<div class="mdl-grid" id="photo_container">
 						{% for image in this_sighting.images %}
 							<div id="image_container_{{ image.id }}" class="hover-card mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
@@ -155,10 +155,19 @@
 		$('.close-image').click(remove_image_click);
 	
 		$('#add_photo_button').click(function(){
-			$('#add_photo').trigger('click');
+			$('<input name="file" id="add_photo" type="file" style="display:none">').change(function(){
+				if (!this.files[0].type.includes("image")) {
+					alert("this is not an image file.  Please upload only images.");
+					return;
+				}
+				getSignedRequest(this);
+				loading_files += 1;
+				$('#photo_load_spinner').addClass('is-active');
+				$('#photo_load_text').text(loading_files+" files loading.  Please wait.");
+			}).trigger('click');
 		});
 		
-		function getSignedRequest(data_url){
+		function getSignedRequest(file_element){
 			$.ajax({
 				url: "{% url 'birds:signs3' %}",
 				data: {
@@ -168,7 +177,7 @@
 				type: "POST",
 				dataType: "json",
 				success: function(response){
-					uploadFile(data_url, response.data, response.url, response.filename, response.id, response.thumbnail_url);
+					uploadFile(file_element, response.data, response.url, response.filename, response.id, response.thumbnail_url);
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					alert("Could not get signed URL.");
@@ -176,18 +185,23 @@
 			});
 		}
 		
-		function uploadFile(data_url, s3Data, url, filename, id, thumbnail_url){
-			var xhr = new XMLHttpRequest();
-			xhr.open("POST", s3Data.url);
-
-			var postData = new FormData();
+		function uploadFile(file_input, s3Data, url, filename, id, thumbnail_url){
+			//
+			//try creating FormData object without using append
+			var myForm = document.createElement('form');
 			for(key in s3Data.fields){
-				postData.append(key, s3Data.fields[key]);
+				var this_input = document.createElement('input');
+				this_input.setAttribute('name',key);
+				this_input.setAttribute('value',s3Data.fields[key]);
+				myForm.appendChild(this_input);
 			}
 			
-			var blobData = dataURItoBlob(data_url);
+			myForm.appendChild(file_input);
 			
-			postData.append('file', new File([blobData], filename));
+			postData = new FormData(myForm);
+			
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", s3Data.url);
 
 			xhr.onreadystatechange = function() {
 				if(xhr.readyState === 4){
@@ -215,78 +229,8 @@
 				}
 			};
 			xhr.send(postData);
+			file_input.value = null;
 		}
-		   
-		function ResizeFile(raw_file) {
-			
-			var reader = new FileReader();
-			reader.onload = function(e) {
-				var img = document.createElement("img");
-				
-				img.onload = function() {
-				
-					var canvas = document.createElement('canvas');
-
-					var ctx = canvas.getContext("2d");
-					//ctx.drawImage(img, 0, 0);
-
-					var MAX = 1200;
-					var width = img.width;
-					var height = img.height;
-
-					if (width > height) {
-					  if (width > MAX) {
-						height *= MAX / width;
-						width = MAX;
-					  }
-					} else {
-					  if (height > MAX) {
-						width *= MAX / height;
-						height = MAX;
-					  }
-					}
-					canvas.width = width;
-					canvas.height = height;
-					ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
-
-					var dataurl = canvas.toDataURL("image/png");
-		   
-					getSignedRequest(dataurl);
-				
-				}
-				
-				img.src = e.target.result;
-				
-			}
-			reader.readAsDataURL(raw_file);
-
-			
-		}
-		
-		function dataURItoBlob(dataURI) {
-			var binary = atob(dataURI.split(',')[1]);
-			var array = [];
-			for(var i = 0; i < binary.length; i++) {
-				array.push(binary.charCodeAt(i));
-			}
-			return new Blob([new Uint8Array(array)], {type: 'image/png'});
-		}
-		
-		$('#add_photo').change(function(){
-			formdata = new FormData();
-			if (formdata) {
-				for ( var i = 0; i < this.files.length; i ++ ){
-					if (!this.files[i].type.includes("image")) {
-						alert("this is not an image file.  Please upload only images.");
-						return;
-					}
-					ResizeFile(this.files[i]);
-					loading_files += 1;
-					$('#photo_load_spinner').addClass('is-active');
-					$('#photo_load_text').text(loading_files+" files loading.  Please wait.");
-				}
-			}
-		})
 	
         $('#id_sighting_date').datepicker({
 			onClose: function(dateText){
