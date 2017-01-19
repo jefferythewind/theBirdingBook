@@ -224,37 +224,43 @@
 			var reader = new FileReader();
 			reader.onload = function(e) {
 				var img = document.createElement("img");
+				
+				img.onload = function() {
+				
+					var canvas = document.createElement('canvas');
+
+					var ctx = canvas.getContext("2d");
+					//ctx.drawImage(img, 0, 0);
+
+					var MAX = 1200;
+					var width = img.width;
+					var height = img.height;
+
+					if (width > height) {
+					  if (width > MAX) {
+						height *= MAX / width;
+						width = MAX;
+					  }
+					} else {
+					  if (height > MAX) {
+						width *= MAX / height;
+						height = MAX;
+					  }
+					}
+					canvas.width = width;
+					canvas.height = height;
+					ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
+
+					var dataurl = canvas.toDataURL("image/png");
+					
+					alert(dataurl)
+					
+					getSignedRequest(dataurl);
+				
+				}
+				
 				img.src = e.target.result;
 				
-				var canvas = document.createElement('canvas');
-
-				var ctx = canvas.getContext("2d");
-				//ctx.drawImage(img, 0, 0);
-
-				var MAX = 1200;
-				var width = img.width;
-				var height = img.height;
-
-				if (width > height) {
-				  if (width > MAX) {
-					height *= MAX / width;
-					width = MAX;
-				  }
-				} else {
-				  if (height > MAX) {
-					width *= MAX / height;
-					height = MAX;
-				  }
-				}
-				canvas.width = width;
-				canvas.height = height;
-				ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
-
-				var dataurl = canvas.toDataURL("image/png");
-				
-				alert(dataurl)
-				
-				getSignedRequest(dataurl);
 			}
 			reader.readAsDataURL(raw_file);
 
