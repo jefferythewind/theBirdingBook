@@ -187,8 +187,6 @@
 			
 			var blobData = dataURItoBlob(data_url);
 			
-			alert(blobData.size);
-			
 			postData.append('file', new File([blobData], filename));
 
 			xhr.onreadystatechange = function() {
@@ -203,7 +201,7 @@
 							loading_files -= 1;
 							if ( loading_files == 0 ) {
 								$('#photo_load_spinner').removeClass('is-active');
-								$('#photo_load_text').text(xhr.status+" "+xhr.responseText);
+								$('#photo_load_text').text("");
 							}else{
 								$('#photo_load_text').text(loading_files+" files loading.  Please wait.");
 							}
