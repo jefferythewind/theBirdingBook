@@ -20,12 +20,12 @@
 		</div>
 		<div class="mdl-cell mdl-cell--8-col mdl-cell--1-offset-desktop">
             
-			<div class="card-bird mdl-card mdl-shadow--3dp"> 
+			<div class="card-bird mdl-card">
 				<div class="mdl-card__title news-title">
-					<h2 class="mdl-card__title-text">New Sighting</h2>
+					<h2 class="mdl-card__title-text">Edit Sighting</h2>
 				</div>
-				<div class="mdl-card__supporting-text news-text">
-					<form method="POST" enctype="multipart/form-data">{% csrf_token %}
+				<div class="mdl-card__supporting-text">
+					<form class="edit-sighting-form" method="POST" enctype="multipart/form-data">{% csrf_token %}
                         {% for field in form.visible_fields %}
 							{% if field.field.widget.attrs.id == "post_text_textarea" %}
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="post_text_wrapper">
@@ -252,6 +252,12 @@
 			select: function( event, ui ){
 				$('#id_species_tag').val(ui.item.id);
 			}
+		}).change(function(){
+		
+			if ( $(this).val().trim() == "" ) {
+				$('#id_species_tag').val("");
+			}
+		
 		});
 		
 		
@@ -265,7 +271,11 @@
 		*/
 
         var pos = { lat: {{ form.lat.value|default:0 }}, lng: {{ form.lng.value|default:0 }} }
-        var map = new google.maps.Map(document.getElementById('map'), { zoom: 14, center: pos })
+        var map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 14,
+			center: pos,
+			mapTypeControl: false,
+		})
         var geocoder = new google.maps.Geocoder;
 	
 		/*

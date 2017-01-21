@@ -30,10 +30,17 @@
 				<div class="hover-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
 					<a href="#" class="image-expand-on-click" data-image_id="{{ image.id }}">
 						<div class="image image-block-m sighting-page" style="background: url({{ image.photo.url }}) no-repeat center;background-size:cover;">
-						<h4>
-							<span>{{ sighting.caption }}</span>
-						</h4>
+							<div class="sighting-grid-image-description">
+								<div class="sighting-grid-caption">{{ sighting.caption }}
+								
+								</div>
+								<hr>
+								<div class="sighting-grid-species-tag">
+									<i class="material-icons">local_offer</i> <span style="color:inherit">{{sighting.species_tag}}</span>
+								</div>
+							</div>
 						</div>
+						
 					</a>
 				</div>
 			{% else %}
@@ -54,40 +61,38 @@
         </div>
         <div class="mdl-card__supporting-text">
 			<p>{{ sighting.location }}</p>
-            <i class="material-icons">local_offer</i><b> {{ sighting.species_tag }}</b>
-			<span id="{{ sighting.species_tag.id }}_num_votes">
-				{{ species_votes }}
-
-			</span>
-
-			{% if user.is_authenticated %}
-				{% if is_voted > 0 %}
-					<button data-species_tag-id="{{ sighting.species_tag.id }}" class="up_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" style="display:none">
-						<i class="material-icons md-light">expand_less</i>
-					</button>
-					<button data-species_tag-id="{{ sighting.species_tag.id }}" class="down_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species">
-						<i class="material-icons md-light">expand_more</i>
-					</button>
-				{% else %}
-					<button data-species_tag-id="{{ sighting.species_tag.id }}" class="up_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="up_vote_species">
-						<i class="material-icons md-light">expand_less</i>
-					</button>
-					<button data-species_tag-id="{{ sighting.species_tag.id }}" class="down_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species" style="display:none">
-						<i class="material-icons md-light">expand_more</i>
-					</button>
+			<div>
+				<a href="https://en.wikipedia.org/wiki/Special:Search?search={{ sighting.species_tag }}" target="_blank"><i class="material-icons">local_offer</i><b> {{ sighting.species_tag }}</b></a>
+				<i class="material-icons">import_export</i>
+				<span id="{{ sighting.species_tag.id }}_num_votes">{{ species_votes }}</span>
+				{% if user.is_authenticated %}
+						{% if is_voted > 0 %}
+						<button data-species_tag-id="{{ sighting.species_tag.id }}" class="up_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="up_vote_species" style="display:none">
+							<i class="material-icons md-light">expand_less</i>
+						</button>
+						<button data-species_tag-id="{{ sighting.species_tag.id }}" class="down_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species">
+							<i class="material-icons md-light">expand_more</i>
+						</button>
+						{% else %}
+						<button data-species_tag-id="{{ sighting.species_tag.id }}" class="up_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="up_vote_species">
+							<i class="material-icons md-light">expand_less</i>
+						</button>
+						<button data-species_tag-id="{{ sighting.species_tag.id }}" class="down_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species" style="display:none">
+							<i class="material-icons md-light">expand_more</i>
+						</button>
+						{% endif %}
+					<!--<div class="mdl-tooltip" for="up_vote_species">
+						agree
+					</div>
+					<div class="mdl-tooltip" for="down_vote_species">
+						undo agree
+					</div>-->
 				{% endif %}
-				<div class="mdl-tooltip" for="up_vote_species">
-					agree
-				</div>
-				<div class="mdl-tooltip" for="down_vote_species">
-					undo agree
-				</div>
-				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="suggest_species">
-					<i class="material-icons md-light">add</i>
+			</div>
+			{% if user.is_authenticated %}
+				<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="suggest_species">
+					Suggest Different Species
 				</button>
-				<div class="mdl-tooltip" for="suggest_species">
-					suggest species
-				</div>
 				<form id="new_species_form" style="display:none">
 					<div class="mdl-textfield mdl-js-textfield">
 						<input style="width:100%" class="mdl-textfield__input" name="new_species" id="new_species_input">
@@ -100,8 +105,7 @@
 					<button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" id="new_species_cancel_button">Cancel</button>
 				</form>
 			{% endif %}
-				<div class="mdl-card__supporting-text" id="species_suggestion_info"></div>
-				<a target="_blank" href="http://www.wikipedia.com"><b>Bird</b></a>
+			<div class="mdl-card__supporting-text" id="species_suggestion_info"></div>
 				
         </div>
         <div class="mdl-card__supporting-text">
@@ -118,17 +122,17 @@
 				</span>
 				{% if is_liked > 0 %}
 				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="unlike_button">
-				  <i class="material-icons md-light">star</i>
+				  <i class="material-icons md-light">thumb_down</i>
 				</button>
 				<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="like_button">
-				  <i class="material-icons md-light">star_border</i>
+				  <i class="material-icons md-light">thumb_up</i>
 				</button>
 				{% else %}
 				<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="unlike_button">
-				  <i class="material-icons md-light">star</i>
+				  <i class="material-icons md-light">thumb_down</i>
 				</button>
 				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="like_button">
-				  <i class="material-icons md-light">star_border</i>
+				  <i class="material-icons md-light">thumb_up</i>
 				</button>
 				{% endif %}
 				<div class="mdl-tooltip" for="like_button">

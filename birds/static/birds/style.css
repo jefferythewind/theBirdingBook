@@ -124,6 +124,9 @@ TABEL OF CONTENTS END*/
 		margin: 0px;
 		width: 100%;
 	}
+	.mdl-cell--4-col-phone.mdl-cell--4-col-phone {
+		width: 100%;
+	}
 }
 
 @media (min-width: 840px) {
@@ -211,18 +214,6 @@ display: -webkit-flex;
 }
 
 
-.card-bird-full {
-  height:300px;
- 
-} 
-
-.card-bird-full img {
-  height: 250px;
-}
-.card-bird-full .mdl-card__title{
-  padding: 0px 0px 8px 16px;
-  margin: 0px 0px 0px 0px;
-}
 .mdl-card__title-text{
    /*padding-bottom: 25px;*/
    color: black;
@@ -305,6 +296,14 @@ color:#f44336;
 }
 
 /* ADDED BY TIM */
+.no-decoration {
+	text-decoration:none;
+}
+
+.no-decoration:visited {
+	color
+}
+
 .mdl-card__actions i {
 	vertical-align: middle;
 }
@@ -313,15 +312,48 @@ color:#f44336;
 	vertical-align: middle;
 	}
 
-.index-species-tag {
+/* SIGHTING GRID */
+.sighting-grid-image-description {
+	color: rgba(255,255,255,0.8);
+	/*background: rgba(255,255,255,0.0);*/
 	position: absolute;
 	bottom: 0;
+	width: 100%;
+	background: rgba(0,0,0,0.5); /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.7)); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.7)); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.7)); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.87)); /* Standard syntax (must be last) */
+	padding-top:10px;
+}
+
+.sighting-grid-image-description hr {
+	border-color: inherit;
+	margin: 0px 5px;
+}
+
+.sighting-grid-image-description div {
+	padding: 5px;
+}
+
+.sighting-grid-species-tag {
+	font-size: 14px;
+	line-height: 26px;
 	text-align:right;
 }
 
-.index-species-tag span {
-	text-shadow: 2px 2px 4px #000000;
+.sighting-grid-caption {
+	font-weight:bold;
 }
+
+.edit-sighting-form > .mdl-textfield {
+	width:100%;
+}
+
+/*
+END SIGHTING GRID
+*/
+
 
 .mdl-button {
 	overflow: visible;
@@ -576,3 +608,8 @@ _:-ms-input-placeholder, :root .demo-graph {
   padding: 8px 16px 8px 16px;
 }
 /*END*/
+
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
