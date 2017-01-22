@@ -14,14 +14,62 @@
 	{% if sighting.images.count == 0 %}
 		<div class="hover-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
 			<div style="height:100px;" class="image image-block-m mdl-color--blue-grey-800">
-				<h4 style="top:0px;" >
-					<span>{{ sighting.caption }}</span>
-				</h4>
-				<div class="mdl-card__actions index-species-tag">
-					<span>
-						<i class="material-icons">local_offer</i><span> {{sighting.species_tag}}</span>
-					</span>
+				<div class="sighting-grid-image-description">
+					<div class="sighting-grid-caption">
+						{{ sighting.caption }}
+					</div>
+					<hr>
+					<div class="sighting-grid-species-tag">
+						<i class="material-icons">local_offer</i> <span style="color:inherit">{{sighting.species_tag}}</span>
+					</div>
 				</div>
+			</div>
+			<div class="sighting-control-menu mdl-card__menu md-light">
+				{% if user.is_authenticated %}
+					<span id="num_likes">
+						{% if sighting.num_likes == 1 %}
+							{{ sighting.num_likes }} like
+						{% elif sighting.num_likes > 1 %}
+							{{ sighting.num_likes }} likes
+						{% endif %}
+					</span>
+					{% if is_liked > 0 %}
+					<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="unlike_button">
+					  <i class="material-icons md-light">thumb_down</i>
+					</button>
+					<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="like_button">
+					  <i class="material-icons md-light">thumb_up</i>
+					</button>
+					{% else %}
+					<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="unlike_button">
+					  <i class="material-icons md-light">thumb_down</i>
+					</button>
+					<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="like_button">
+					  <i class="material-icons md-light">thumb_up</i>
+					</button>
+					{% endif %}
+					<div class="mdl-tooltip" for="like_button">
+						like
+					</div>
+					<div class="mdl-tooltip" for="unlike_button">
+						Unlike
+					</div>
+					
+					<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons" id="flag_post">
+					  <i class="material-icons md-light">flag</i>			      
+					</button>
+					<div class="mdl-tooltip" for="flag_post">
+						flag post
+					</div>
+					{% if sighting.user_id == user.id %}
+					<button id="edit_button" class="mdl-button md-light mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons">
+						<i class="material-icons md-light">mode_edit</i>
+					</button>
+					<div class="mdl-tooltip" for="edit_button">
+						edit post
+					</div>
+					{% endif %}
+				{% endif %}
 			</div>
 		</div>
 	{% else %}
@@ -42,6 +90,53 @@
 						</div>
 						
 					</a>
+					<div class="sighting-control-menu mdl-card__menu md-light">
+						{% if user.is_authenticated %}
+							<span id="num_likes">
+								{% if sighting.num_likes == 1 %}
+									{{ sighting.num_likes }} like
+								{% elif sighting.num_likes > 1 %}
+									{{ sighting.num_likes }} likes
+								{% endif %}
+							</span>
+							{% if is_liked > 0 %}
+							<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="unlike_button">
+							  <i class="material-icons md-light">thumb_down</i>
+							</button>
+							<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="like_button">
+							  <i class="material-icons md-light">thumb_up</i>
+							</button>
+							{% else %}
+							<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="unlike_button">
+							  <i class="material-icons md-light">thumb_down</i>
+							</button>
+							<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="like_button">
+							  <i class="material-icons md-light">thumb_up</i>
+							</button>
+							{% endif %}
+							<div class="mdl-tooltip" for="like_button">
+								like
+							</div>
+							<div class="mdl-tooltip" for="unlike_button">
+								Unlike
+							</div>
+							
+							<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons" id="flag_post">
+							  <i class="material-icons md-light">flag</i>			      
+							</button>
+							<div class="mdl-tooltip" for="flag_post">
+								flag post
+							</div>
+							{% if sighting.user_id == user.id %}
+							<button id="edit_button" class="mdl-button md-light mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons">
+								<i class="material-icons md-light">mode_edit</i>
+							</button>
+							<div class="mdl-tooltip" for="edit_button">
+								edit post
+							</div>
+							{% endif %}
+						{% endif %}
+					</div>
 				</div>
 			{% else %}
 				<div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
@@ -52,15 +147,33 @@
 			{% endif %}
 		{% endfor %}
 	{% endif %}
+	
 	</div>
 	<div class=mdl-grid>
-    <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
-        <div class="mdl-card__title">
-            <h2 class="mdl-card__title-text">{{ sighting.sighting_date }}</h2>
-			
+    <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-card">
+        <div class="mdl-card__supporting-text">
+			<a href="{% url 'birds:user' sighting.user.id %}">
+				<table>
+					<tr>
+						<td>
+						{% if sighting.user.avatar %}
+							<div class="mdl-shadow--8dp" style="height:50px;width:50px;"><img style="height:100%;width:100%;" src="{{ user.avatar.avatar.url }}"></div>
+						{% else %}
+							<i class="material-icons">account_circle</i>
+						{% endif %}
+						</td>
+						<td>
+							{{ sighting.user.username }}
+						</td>
+					</tr>
+				</table>
+			</a>
+            <span style="position:absolute;top:10px;right:10px">{{ sighting.sighting_date }}</span>
+        </div>
+		<div class="mdl-card__supporting-text">
+            <i class="material-icons md-36">format_quote</i>{{ sighting.post_text }}<i class="material-icons md-36">format_quote</i>
         </div>
         <div class="mdl-card__supporting-text">
-			<p>{{ sighting.location }}</p>
 			<div>
 				<a href="https://en.wikipedia.org/wiki/Special:Search?search={{ sighting.species_tag }}" target="_blank"><i class="material-icons">local_offer</i><b> {{ sighting.species_tag }}</b></a>
 				<i class="material-icons">import_export</i>
@@ -108,59 +221,12 @@
 			<div class="mdl-card__supporting-text" id="species_suggestion_info"></div>
 				
         </div>
-        <div class="mdl-card__supporting-text">
-            {{ sighting.post_text }}
-        </div>
-		<div class="mdl-card__menu md-light">
-			{% if user.is_authenticated %}
-				<span id="num_likes">
-					{% if sighting.num_likes == 1 %}
-						{{ sighting.num_likes }} like
-					{% elif sighting.num_likes > 1 %}
-						{{ sighting.num_likes }} likes
-					{% endif %}
-				</span>
-				{% if is_liked > 0 %}
-				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="unlike_button">
-				  <i class="material-icons md-light">thumb_down</i>
-				</button>
-				<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="like_button">
-				  <i class="material-icons md-light">thumb_up</i>
-				</button>
-				{% else %}
-				<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="unlike_button">
-				  <i class="material-icons md-light">thumb_down</i>
-				</button>
-				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="like_button">
-				  <i class="material-icons md-light">thumb_up</i>
-				</button>
-				{% endif %}
-				<div class="mdl-tooltip" for="like_button">
-					like
-				</div>
-				<div class="mdl-tooltip" for="unlike_button">
-					Unlike
-				</div>
-				
-				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons" id="flag_post">
-				  <i class="material-icons md-light">flag</i>			      
-				</button>
-				<div class="mdl-tooltip" for="flag_post">
-					flag post
-				</div>
-				{% if sighting.user_id == user.id %}
-				<button id="edit_button" class="mdl-button md-light mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons">
-					<i class="material-icons md-light">mode_edit</i>
-				</button>
-				<div class="mdl-tooltip" for="edit_button">
-					edit post
-				</div>
-				{% endif %}
-			{% endif %}
-        </div>
     </div>
-	<div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
-        <div id="map"></div>
+	<div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card">
+		<div class="mdl-card__title">
+			{{ sighting.location }}
+		</div>
+        <div id="view-sighting-map"></div>
     </div>
    
 	<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
@@ -208,12 +274,13 @@
 		})
 		
 		var pos = { lat: {{ sighting.lat|default:0 }}, lng: {{ sighting.lng|default:0 }} }
-        var map = new google.maps.Map(document.getElementById('map'), {
+        var map = new google.maps.Map(document.getElementById('view-sighting-map'), {
 			zoom: 7,
 			center: pos,
 			scrollwheel: false,
-			draggable: false
-			
+			draggable: false,
+			mapTypeControl: false,
+			streetViewControl: false
 		})
 		var marker = new google.maps.Marker({
             position: pos, icon: {

@@ -14,13 +14,24 @@
 				<a class="no-decoration" href="{% url 'birds:view_sighting' sighting.id %}">
 					{% if sighting.images.count == 0 %}
 						<div style="height:100px;" class="image image-block-m mdl-color--blue-grey-800">
-							<h4 style="top:0px;" >
-								<span>{{ sighting.caption }}</span>
-							</h4>
-							<div class="mdl-card__actions index-species-tag">
-								<span>
-									<i class="material-icons">local_offer</i><span> {{sighting.species_tag}}</span>
+							<div class="sighting-grid-image-description">
+								<div class="sighting-grid-caption">{{ sighting.caption }}
+								
+								<span style="position:absolute;right:0;top:5px;align-text:center; padding:5px;">
+								{% if sighting.num_likes > 0 %}
+									<i class="material-icons" style="vertical-align:middle;font-size:18px;">thumb_up</i>{{ sighting.num_likes }}
+								{% endif %}
+								{% if sighting.num_comments > 0 %}
+									<i class="material-icons" style="margin-left:2px;vertical-align:middle;font-size:18px;">comment</i>{{ sighting.num_comments }}
+								{% endif %}
 								</span>
+								
+								</div>
+								
+								<hr>
+								<div class="sighting-grid-species-tag">
+									<i class="material-icons">local_offer</i> <span style="color:inherit">{{sighting.species_tag}}</span>
+								</div>
 							</div>
 						</div>
 					{% else %}

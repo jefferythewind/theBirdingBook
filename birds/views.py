@@ -29,7 +29,7 @@ def terms_of_service(request):
 def user(request, pk):
 	this_user = get_object_or_404(User, pk=pk)
 	user_sighting_list = Sighting.objects.filter(user = this_user, sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
-	sighting_count = Sighting.objects.filter(user = this_user).count()
+	sighting_count = Sighting.objects.exclude(sighting_date__isnull=True).filter(user = this_user).count()
 	species_count = Sighting.objects.exclude(species_tag__isnull=True).count()
 	species_count_ytd = Sighting.objects.filter(sighting_date__year=datetime.datetime.now().year).exclude(species_tag__isnull=True).count()
 	helper_species_count = SpeciesSuggestions.objects.filter( user=this_user, accepted=True).count()
