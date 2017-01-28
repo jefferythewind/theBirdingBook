@@ -3,7 +3,15 @@
 
 {% block content %}
 
+
+
 <div id="view" style="height:100%;width:100%;">
+	<div class="mdl-grid" style="position:absolute;top:0;left:0;right:0;">
+		<div class="mdl-cell mdl-cell--12-col mdl-card" id="search_holder">
+			
+		</div>
+	</div>
+
 	<div id="map"></div>
 	<div id="map_details"></div>
 </div>
@@ -31,8 +39,99 @@
 
 var map = new google.maps.Map(document.getElementById('map'), {
 	zoom: 2,
-	center: { lat: 0, lng: 0 }
+	center: { lat: 0, lng: 0 },
+	maxZoom: 14
 });
+
+function map_get_data($){
+	//load points inside these bounds
+	var m = map.getBounds();
+	var postData = {
+		'north_lat': m.getNorthEast().lat(),
+		'south_lat': m.getSouthWest().lat(),
+		'east_lng': m.getNorthEast().lng(),
+		'west_lng': m.getSouthWest().lng(),
+		'csrfmiddlewaretoken': '{{ csrf_token }}'
+	}
+	
+	$.ajax({
+		url: "{% url 'birds:get_map_points' %}",
+		data: postData,
+		type: "POST",
+		dataType: "json",
+		success: function(data) {
+			map.data.forEach(function(feature){map.data.remove(feature)});
+			
+			features = [];
+		
+			var bounds = new google.maps.LatLngBounds();
+		
+			for (var sighting in data.sighting_list) {
+				features.push({
+					"type": "Feature",
+					"properties": { 'sighting_id': data.sighting_list[sighting].pk },
+					"geometry": {
+						"type": "Point",
+						"coordinates": [
+							data.sighting_list[sighting].lng,
+							data.sighting_list[sighting].lat
+						]
+					}
+				});
+				
+				bounds.extend(new google.maps.LatLng({lat: data.sighting_list[sighting].lat, lng: data.sighting_list[sighting].lng}));
+				
+			}
+			
+			map.data.addGeoJson({
+				"type": "FeatureCollection",
+				"features": features
+			});
+			map.fitBounds(bounds);
+			var listener = google.maps.event.addListener(map, "idle", function() { 
+				if (map.getZoom() > 10) map.setZoom(10);
+				google.maps.event.removeListener(listener);
+			});
+			
+			
+			/*
+			add search stuff
+			*/
+			
+			var search_viz = $('<div class="mdl-card__supporting-text"></div>');
+			var have_search = false;
+			
+			for (var search_i in data.search){
+				var clear_button = $('<button type="button" class="mdl-chip__action" onclick="clear_search('+"'"+data.search[search_i].type+"'"+');"><i class="material-icons">cancel</i></button>');
+				clear_button.click(function(){
+					clear_search(search_i);
+				});
+				
+				var chip = $('<span class="mdl-chip mdl-chip--deletable"></span>');
+				
+				chip.append('<span class="mdl-chip__text">'+data.search[search_i].value+'</span>').append(clear_button);
+			
+				search_viz.append(chip);
+		
+				have_search = true;
+			}
+		
+			$('#search_holder').html("");
+			if (have_search) {
+				$('#search_holder').append(search_viz);
+			}
+			
+		},
+		error: function(data){
+			console.log("got error in getting features from server.");
+		}
+	});
+	
+	bound_reset_activated = false;
+	setTimeout(function(){
+		bound_reset_activated = true;
+	}, 2000);
+}
 
 jQuery(function($){
 	features = [];
@@ -66,16 +165,16 @@ jQuery(function($){
 		fadeInSighting(event.feature.getProperty("sighting_id"));
 	});
 	
-	map.data.addListener('mouseout', function(event) {
-		if( !$('#map_details').is(':hover') ) {
-			$('#map_details').fadeOut(100);
-		
-		}else{
-			$('#map_details').mouseleave(function(){
-				$('#map_details').fadeOut(100);
-			});
-		}
-	});
+	//map.data.addListener('mouseout', function(event) {
+	//	if( !$('#map_details').is(':hover') ) {
+	//		$('#map_details').fadeOut(100);
+	//
+	//	}else{
+	//		$('#map_details').mouseleave(function(){
+	//			$('#map_details').fadeOut(100);
+	//		});
+	//	}
+	//});
 	
 	map.data.addListener('click', function(event)  {
 		if (!$('#map_details').is(':visible')){
@@ -88,87 +187,15 @@ jQuery(function($){
 			$('#map_details').fadeOut(100);
 		}
 	})
-		
 	
-	var bound_reset_activated = true;
+	var init_map = true;
 	
-	map.addListener('bounds_changed',function(){
-		//load points inside these bounds
-		if ( bound_reset_activated ) {
-			var m = map.getBounds();
-			var postData = {
-				'north_lat': m.getNorthEast().lat(),
-				'south_lat': m.getSouthWest().lat(),
-				'east_lng': m.getNorthEast().lng(),
-				'west_lng': m.getSouthWest().lng(),
-				'csrfmiddlewaretoken': '{{ csrf_token }}'
-			}
-			
-			$.ajax({
-				url: "{% url 'birds:get_map_points' %}",
-				data: postData,
-				type: "POST",
-				dataType: "json",
-				success: function(data) {
-					map.data.forEach(function(feature){map.data.remove(feature)});
-					
-					features = [];
-				
-					for (var sighting in data) {
-						features.push({
-							"type": "Feature",
-							"properties": { 'sighting_id': data[sighting].pk },
-							"geometry": {
-								"type": "Point",
-								"coordinates": [
-									data[sighting].fields.lng,
-									data[sighting].fields.lat
-								]
-							}
-						});
-					}
-					
-					var j = {
-						"type": "FeatureCollection",
-						"features": features
-					};
-					
-					map.data.addGeoJson(j);
-					
-					
-				},
-				error: function(data){
-					console.log("got error in getting features from server.");
-				}
-			});
-			
-			bound_reset_activated = false;
-			setTimeout(function(){
-				bound_reset_activated = true;
-			}, 2000);
+	map.addListener('bounds_changed', function() {
+		if ( init_map ) {
+			map_get_data($);
 		}
-	
-	})
-	
-
-	
-	/*if (navigator.geolocation) {
-		if (pos.lat == 0 && pos.lng == 0) {
-			navigator.geolocation.getCurrentPosition(function(position) {
-				pos = {
-					lat: position.coords.latitude,
-					lng: position.coords.longitude
-				}
-				map.setCenter(pos);
-			}, function(err) {
-				$('#msg').html("<p>ERROR(" + err.code + "): " + err.message + "</p>")
-			})
-		}
-	} else {
-		// Browser doesn't support Geolocation
-		$('#msg').html("<p>Browser didn't allow geolocation.</p>")
-		$('#warning-msg').slideToggle('slow');
-	}*/
+		init_map = false;
+	});
 
 });
 

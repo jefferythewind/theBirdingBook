@@ -213,6 +213,12 @@ display: -webkit-flex;
 	min-height: 200px;
 }
 
+#editor_map {
+    margin: auto;
+    width: 100%;
+    height: 400px;
+}
+
 #map {
     margin: auto;
     width: 100%;
@@ -366,6 +372,14 @@ VIEW SIGHTING PAGE
 
 .sighting-control-menu > button > i{
 	text-shadow: 3px 3px 4px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes pulse { 
+  40% { background-color: #ccc }
+}
+
+.pulsate_button {
+  animation: pulse .8s ease-out 20;
 }
 
 /* 

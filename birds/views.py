@@ -143,8 +143,8 @@ def view_sighting(request, pk):
 
 def index_view(request):
 	if request.method == 'GET':
-		latest_sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
-		return render(request, 'birds/sighting_grid.html', { 'sighting_list': latest_sighting_list, 'the_template': 'index.html'})
+		#latest_sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
+		return render(request, 'birds/sighting_grid.html', { 'the_template': 'index.html'})
 		
 def species_query(request):
 	if request.method == "GET":
@@ -302,28 +302,76 @@ def feedback(request):
 	return render(request, 'birds/feedback.html')
 
 def map_view(request):
-	sighting_data = Sighting.objects.filter(lat__isnull=False).only('lat','lng')
-	return render(request, 'birds/map.html', {'sightings': sighting_data})
+	return render(request, 'birds/map.html')
 
 def info_window(request):
 	if request.is_ajax():
 		this_sighting = get_object_or_404(Sighting, pk=request.POST.get('sighting_id'))
 		return render_to_response('birds/sighting_grid.html', {'sighting_list': [this_sighting], 'the_template': 'empty_wrapper.html', 'info_window': 'true'})
+	
+def update_search_session(request):
+	if request.is_ajax():
+		if "clear" in request.POST:
+			if request.POST['clear'] in [ 'species_text', 'all']:
+				if 'species_text' in request.session:
+					del request.session['species_text']
+			
+			if request.POST['clear'] in [ 'species', 'all']:
+				if 'species_id' in request.session:
+					del request.session['species_id']
+		
+			if request.POST['clear'] in ['location', 'all']:
+				if 'south_lat' in request.session:
+					del request.session['south_lat']
+				if 'north_lat' in request.session:
+					del request.session['north_lat']
+				if 'east_lng' in request.session:
+					del request.session['east_lng']
+				if 'west_lng' in request.session:
+					del request.session['west_lng']
+				if 'location' in request.session:
+					del request.session['location']
+		
+		if "species_text" in request.POST:
+			request.session['species_text'] = request.POST.get("species_text")
+			
+		if "species_id" in request.POST:
+			request.session['species_id'] = request.POST.get("species_id")
+			
+		if 'location' in request.POST:
+			request.session['south_lat'] = request.POST.get('south_lat')
+			request.session['north_lat'] = request.POST.get('north_lat')
+			request.session['east_lng'] = request.POST.get('east_lng')
+			request.session['west_lng'] = request.POST.get('west_lng')
+			request.session['location'] = request.POST.get('location')
+			
+		return HttpResponse(json.dumps({'message': 'done'}), content_type='application/json')
+	
+def get_sightings(request):		
+	search = []
+	sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now())
+	
+	if 'species_id' in request.session:
+		sighting_list = sighting_list.filter(species_tag=request.session['species_id'])
+		search.append( { 'type': 'species', 'value': str(Subspecies.objects.get(pk=request.session['species_id'])) } )
+
+	if 'location' in request.session:
+		sighting_list = sighting_list.filter(lat__range=(request.session['south_lat'], request.session['north_lat']), lng__range=(request.session['west_lng'], request.session['east_lng']))
+		search.append( {'type':'location', 'value':  request.session['location'] } )
+
+	if 'species_text' in request.session:
+		sighting_list = sighting_list.filter(species_tag__species__species_english__icontains = request.session['species_text'] )
+		search.append( { 'type': 'species_text', 'value':  request.session['species_text'] } )
+			
+	sighting_list = sighting_list.order_by('-post_ts')
+	return [search, sighting_list]
 		
 def get_map_points(request):
 	if request.is_ajax():
-		south_lat = request.POST.get('south_lat')
-		north_lat = request.POST.get('north_lat')
-		east_lng = request.POST.get('east_lng')
-		west_lng = request.POST.get('west_lng')
-		sighting_list = Sighting.objects.filter(lat__range=(south_lat, north_lat), lng__range=(west_lng, east_lng)).only('lat','lng')
-		return HttpResponse(serializers.serialize("json", sighting_list), content_type='application/json')
+		[search, sighting_list] = get_sightings(request)
+		return HttpResponse(json.dumps({'search': search, 'sighting_list': [ {'pk':s.id, 'lat':s.lat, 'lng': s.lng} for s in sighting_list.only('id','lat','lng')]}), content_type='application/json')
 
-def sightings_search_species(request):
+def sightings_search(request):
 	if request.is_ajax():
-		species_id = request.POST.get("species_id")
-		if species_id == "false":
-			sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
-		else:
-			sighting_list = Sighting.objects.filter(species_tag=species_id).order_by('-post_ts')[:10]
-		return render_to_response('birds/sighting_grid.html', {'sighting_list': sighting_list, 'the_template': 'empty_wrapper.html'})
+		[search, sighting_list] = get_sightings(request)
+		return render_to_response('birds/sighting_grid.html', {'search': search, 'sighting_list': sighting_list, 'the_template': 'empty_wrapper.html'})

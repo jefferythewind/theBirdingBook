@@ -171,10 +171,10 @@
             <span style="position:absolute;top:10px;right:10px">{{ sighting.sighting_date }}</span>
         </div>
 		<div class="mdl-card__supporting-text">
-            <i class="material-icons md-36">format_quote</i>{{ sighting.post_text }}<i class="material-icons md-36">format_quote</i>
+            <!--<i class="material-icons md-36">format_quote</i>--><b>{{ sighting.post_text }}</b><!--<i class="material-icons md-36">format_quote</i>-->
         </div>
         <div class="mdl-card__supporting-text">
-			<div>
+			<div >
 				<a href="https://en.wikipedia.org/wiki/Special:Search?search={{ sighting.species_tag }}" target="_blank"><i class="material-icons">local_offer</i><b> {{ sighting.species_tag }}</b></a>
 				<i class="material-icons">import_export</i>
 				<span id="{{ sighting.species_tag.id }}_num_votes">{{ species_votes }}</span>
@@ -194,16 +194,17 @@
 							<i class="material-icons md-light">expand_more</i>
 						</button>
 						{% endif %}
-					<!--<div class="mdl-tooltip" for="up_vote_species">
+					<div class="mdl-tooltip" for="up_vote_species">
 						agree
 					</div>
 					<div class="mdl-tooltip" for="down_vote_species">
 						undo agree
-					</div>-->
+					</div>
 				{% endif %}
 			</div>
 			{% if user.is_authenticated %}
-				<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="suggest_species">
+			
+				<button class="mdl-button mdl-js-button mdl-js-ripple-effect {% if not sighting.species_tag %}pulsate_button{% endif %}" id="suggest_species">
 					Suggest Different Species
 				</button>
 				<form id="new_species_form" style="display:none">

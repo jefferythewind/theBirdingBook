@@ -62,7 +62,7 @@
 						
 						<div id="msg"><p>CENTER of maps marks sighting location.</p></div>
 						<input id="pac-input" class="controls" type="text" placeholder="Search Box" value="{{ form.location.value }}">
-						<div id="map"></div>
+						<div id="editor_map"></div>
 						
 						<div id="add_photo_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
 							<i class="material-icons">add_a_photo</i>
@@ -271,7 +271,7 @@
 		*/
 
         var pos = { lat: {{ form.lat.value|default:0 }}, lng: {{ form.lng.value|default:0 }} }
-        var map = new google.maps.Map(document.getElementById('map'), {
+        var editor_map = new google.maps.Map(document.getElementById('editor_map'), {
 			zoom: 14,
 			center: pos,
 			mapTypeControl: false,
@@ -286,10 +286,10 @@
 		// Create the search box and link it to the UI element.
         var input = document.getElementById('pac-input');
         var searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        editor_map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 		// Bias the SearchBox results towards current map's viewport.
-        map.addListener('bounds_changed', function() {
-          searchBox.setBounds(map.getBounds());
+        editor_map.addListener('bounds_changed', function() {
+          searchBox.setBounds(editor_map.getBounds());
         });
 		var markers = [];
         // Listen for the event fired when the user selects a prediction and retrieve
@@ -324,7 +324,7 @@
 
             // Create a marker for each place.
             markers.push(new google.maps.Marker({
-              map: map,
+              map: editor_map,
               icon: icon,
               title: place.name,
               position: place.geometry.location
@@ -337,7 +337,7 @@
               bounds.extend(place.geometry.location);
             }
           });
-          map.fitBounds(bounds);
+          editor_map.fitBounds(bounds);
         });
 		
 
@@ -352,13 +352,13 @@
 				strokeWeight: .5
             },
             draggable: true,
-            map: map
+            map: editor_map
         })
 
         var moved = 0;
            
-        map.addListener('center_changed', function() {
-            pos = map.getCenter()
+        editor_map.addListener('center_changed', function() {
+            pos = editor_map.getCenter()
             $('#id_lat').val(pos.lat())
             $('#id_lng').val(pos.lng())
             marker.setPosition(pos)
@@ -367,7 +367,7 @@
            
         setInterval(function(){
             if (moved == 1){
-                geocodeLatLng(geocoder, map, pos.lat(), pos.lng())
+                geocodeLatLng(geocoder, editor_map, pos.lat(), pos.lng())
                 moved = 0;
             }
         }, 3000);
@@ -379,7 +379,7 @@
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
                     }
-                    map.setCenter(pos);
+                    editor_map.setCenter(pos);
                 }, function(err) {
                     $('#msg').html("<p>ERROR(" + err.code + "): " + err.message + "</p>")
                 })
@@ -390,7 +390,7 @@
 			$('#warning-msg').slideToggle('slow');
         }
            
-        function geocodeLatLng(geocoder, map, lat, lng) {
+        function geocodeLatLng(geocoder, editor_map, lat, lng) {
             var latlng = {lat: lat, lng: lng};
             geocoder.geocode({'location': latlng, 'region': 'us'}, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {

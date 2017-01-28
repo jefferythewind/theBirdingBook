@@ -35,5 +35,6 @@ urlpatterns = [
 	url(r'^map/', views.map_view, name="map"),
 	url(r'^info_window/', views.info_window, name="info_window"),
 	url(r'^get_map_points/', views.get_map_points, name="get_map_points"),
-	url(r'^sightings_search_species', views.sightings_search_species, name="sightings_search_species")
+	url(r'^sightings_search', views.sightings_search, name="sightings_search"),
+	url(r'^update_search', views.update_search_session, name="update_search")
 ]

@@ -1,8 +1,25 @@
 {% extends 'birds/base.html' %}
 
 {% block content %}
-<div class="page-content">
-	{% block sighting_grid %}
-	{% endblock %}
-</div>
+
+
+<script type="text/javascript">
+
+jQuery(function($) {
+
+	jQuery.ajax({
+		url: "{% url 'birds:sightings_search' %}",
+		data: { 'csrfmiddlewaretoken': '{{ csrf_token }}' },
+		type: "POST",
+		dataType: "html",
+		success: function(data) {
+			$('.page-content').html(data);
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			alert(textStatus);
+		}
+	});
+
+});
+</script>
 {% endblock %}
