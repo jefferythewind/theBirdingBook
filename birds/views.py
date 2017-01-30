@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
+from django.template.loader import render_to_string
 from django.utils import timezone
 from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions, BirdPhoto, Avatar, Uid
 from django.http import HttpResponse
@@ -28,7 +29,6 @@ def terms_of_service(request):
 
 def user(request, pk):
 	this_user = get_object_or_404(User, pk=pk)
-	user_sighting_list = Sighting.objects.filter(user = this_user, sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
 	sighting_count = Sighting.objects.exclude(sighting_date__isnull=True).filter(user = this_user).count()
 	species_count = Sighting.objects.exclude(species_tag__isnull=True).count()
 	species_count_ytd = Sighting.objects.filter(sighting_date__year=datetime.datetime.now().year).exclude(species_tag__isnull=True).count()
@@ -40,7 +40,7 @@ def user(request, pk):
 		"helper_species_count":helper_species_count
 	}
 	
-	return render(request, 'birds/sighting_grid.html', {"this_user": this_user, "sighting_list": user_sighting_list, "user_stats": user_stats, 'the_template': 'user.html'})
+	return render(request, 'birds/user.html', {"this_user": this_user, "user_stats": user_stats})
 
 def signs3(request):
 	if request.is_ajax():
@@ -144,7 +144,7 @@ def view_sighting(request, pk):
 def index_view(request):
 	if request.method == 'GET':
 		#latest_sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
-		return render(request, 'birds/sighting_grid.html', { 'the_template': 'index.html'})
+		return render(request, 'birds/index.html')
 		
 def species_query(request):
 	if request.method == "GET":
@@ -362,6 +362,9 @@ def get_sightings(request):
 	if 'species_text' in request.session:
 		sighting_list = sighting_list.filter(species_tag__species__species_english__icontains = request.session['species_text'] )
 		search.append( { 'type': 'species_text', 'value':  request.session['species_text'] } )
+		
+	if 'user' in request.POST:
+		sighting_list = sighting_list.filter( user_id = request.POST.get('user') )
 			
 	sighting_list = sighting_list.order_by('-post_ts')
 	return [search, sighting_list]
@@ -374,4 +377,12 @@ def get_map_points(request):
 def sightings_search(request):
 	if request.is_ajax():
 		[search, sighting_list] = get_sightings(request)
-		return render_to_response('birds/sighting_grid.html', {'search': search, 'sighting_list': sighting_list, 'the_template': 'empty_wrapper.html'})
+		if 'page' in request.POST:
+			page = int( request.POST.get('page') )
+		else:
+			page = 0
+		if page < sighting_list.count() :
+			html = render_to_string('birds/sighting_grid.html', {'search': search, 'sighting_list': sighting_list[page:page+2], 'the_template': 'empty_wrapper.html'})
+			return HttpResponse(json.dumps({'html': html, 'next_page': page+2}) , content_type='application/json')
+		else:
+			return HttpResponse(json.dumps({'html': "", 'next_page': 'done'}) , content_type='application/json')

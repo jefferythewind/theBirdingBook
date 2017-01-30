@@ -2,23 +2,6 @@
 
 {% block sighting_grid %}
 
-<div class="mdl-grid">
-
-{% if search and info_window == None %}
-	<div class="mdl-cell mdl-cell--12-col mdl-card">
-		<div class="mdl-card__supporting-text">
-		{% for s in search %}
-			<span class="mdl-chip mdl-chip--deletable">
-				<span class="mdl-chip__text">{{ s.value }}</span>
-				<button type="button" class="mdl-chip__action" onclick="clear_search('{{ s.type }}');"><i class="material-icons">cancel</i></button>
-			</span>
-		{% endfor %}
-		</div>
-	</div>
-{% endif %}
-
-		
-
 {% if sighting_list %}
 		
 	{% for sighting in sighting_list %}
@@ -104,19 +87,7 @@
 			{% else %}
 			<div style="padding-top: 13px; padding-bottom: 13px; font-weight:600;" class="mdl-card__supporting-text">
 				
-<!--					<div>-->
-<!--						<div style="float:right">-->
-<!--							{% if sighting.images.count > 0 %}-->
-<!--								<i class="material-icons">photo_album</i>{{ sighting.images.count }}-->
-<!--							{% endif %}-->
-<!--							{% if sighting.num_likes > 0 %}-->
-<!--								<i class="material-icons">thumb_up</i>{{ sighting.num_likes }}-->
-<!--							{% endif %}-->
-<!--							{% if sighting.num_comments > 0 %}-->
-<!--								<i class="material-icons">comment</i>{{ sighting.num_comments }}-->
-<!--							{% endif %}-->
-<!--						</div>-->
-<!--					</div>-->
+
 				<div>{{ sighting.location }}</div>
 				<div>{{ sighting.time_diff }}</div>
 
@@ -125,11 +96,7 @@
 			{% endif %}
 		</div>
 	{% endfor %}
-		
-{% else %}
-	<div class="mdl-components__warning">
-		<b>Note:</b> No sightings are available.
-	</div>
+
 {% endif %}
-</div>
+
 {% endblock %}

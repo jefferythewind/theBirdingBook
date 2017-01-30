@@ -56,8 +56,8 @@
 		</div>
 		</div>
 	</section>
-	{% block sighting_grid %}
-	{% endblock %}
+	<div class="mdl-grid" id="sighting_grid_wrapper">
+	</div>
 
 </div>
 <script type="text/javascript">
@@ -197,8 +197,53 @@ jQuery(function($){
 	
 	{% endif %}
 
-});
+	function need_more() {
+		
+		if ( $('main').scrollTop() + $('main').height() >= $('#sighting_grid_wrapper').height() ){
+			return true;
+		}else{
+			return false;
+		}
+	}
 
+	function load_sighting(page){
+		data = {
+			'csrfmiddlewaretoken': '{{ csrf_token }}',
+			'user': '{{ this_user.id }}'
+		}
+		
+		if ( page > -1 ) {
+			data['page'] = page
+		}
+
+		$.ajax({
+			url: "{% url 'birds:sightings_search' %}",
+			data: data,
+			type: "POST",
+			dataType: "json",
+			success: function(data) {
+				$('#sighting_grid_wrapper').append(data['html']);
+				if ( data['next_page'] != "done" ) {
+					if ( need_more() ) {
+						load_sighting(data['next_page']);
+					}else{
+						$('main').unbind('scroll').scroll(function(){
+							if ( need_more() ){
+								load_sighting(data['next_page']);
+							}
+						});
+					}
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				alert(textStatus);
+			}
+		});
+	}
+	
+	load_sighting();
+	
+});
 
 </script>
 

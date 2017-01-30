@@ -2,24 +2,74 @@
 
 {% block content %}
 
+<div class="mdl-grid" id="sighting_grid_wrapper">
+
+{% if search and info_window == None %}
+	<div class="mdl-cell mdl-cell--12-col mdl-card">
+		<div class="mdl-card__supporting-text">
+		{% for s in search %}
+			<span class="mdl-chip mdl-chip--deletable">
+				<span class="mdl-chip__text">{{ s.value }}</span>
+				<button type="button" class="mdl-chip__action" onclick="clear_search('{{ s.type }}');"><i class="material-icons">cancel</i></button>
+			</span>
+		{% endfor %}
+		</div>
+	</div>
+{% endif %}
+
+</div>
+
+
 
 <script type="text/javascript">
 
 jQuery(function($) {
 
-	jQuery.ajax({
-		url: "{% url 'birds:sightings_search' %}",
-		data: { 'csrfmiddlewaretoken': '{{ csrf_token }}' },
-		type: "POST",
-		dataType: "html",
-		success: function(data) {
-			$('.page-content').html(data);
-		},
-		error: function(jqXHR, textStatus, errorThrown){
-			alert(textStatus);
+	function need_more() {
+		
+		if ( $('main').scrollTop() + $('main').height() >= $('#sighting_grid_wrapper').height() ){
+			return true;
+		}else{
+			return false;
 		}
-	});
+	}
 
+	function load_sighting(page){
+		data = {
+			'csrfmiddlewaretoken': '{{ csrf_token }}'
+		}
+		
+		if ( page > -1 ) {
+			data['page'] = page
+		}
+
+		$.ajax({
+			url: "{% url 'birds:sightings_search' %}",
+			data: data,
+			type: "POST",
+			dataType: "json",
+			success: function(data) {
+				$('#sighting_grid_wrapper').append(data['html']);
+				if ( data['next_page'] != "done" ) {
+					if ( need_more() ) {
+						load_sighting(data['next_page']);
+					}else{
+						$('main').unbind('scroll').scroll(function(){
+							if ( need_more() ){
+								load_sighting(data['next_page']);
+							}
+						});
+					}
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				alert(textStatus);
+			}
+		});
+	}
+	
+	load_sighting();
+	
 });
 </script>
 {% endblock %}
