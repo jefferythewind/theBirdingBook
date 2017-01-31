@@ -257,11 +257,11 @@ def remove_photo(request):
 @login_required
 def add_avatar(request):	
 	if request.is_ajax():
-		try:
-			new_avatar = request.user.avatar
-		except Avatar.DoesNotExist:
-			new_avatar = Avatar.objects.create( user = request.user )
-			
+		if request.user.avatar:
+			request.user.avatar.delete()
+
+		new_avatar = Avatar.objects.create( user = request.user )
+		
 		S3_BUCKET = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 	
 		file_type = "image/png"
@@ -269,6 +269,7 @@ def add_avatar(request):
 		from time import time
 		filename = "%s%s.%s" % ( request.user.username, str(int(time())), "png" )
 		new_avatar.avatar = filename
+		new_avatar.thumbnail_url = "https://s3.amazonaws.com/birdingappsmall/%s" % filename
 		new_avatar.save()
 
 		s3 = boto3.client('s3')
@@ -283,7 +284,7 @@ def add_avatar(request):
 			],
 			ExpiresIn = 3600
 		)
-		return HttpResponse(json.dumps({'data': presigned_post,'filename': filename, 'url': new_avatar.avatar.url}), content_type='application/json')
+		return HttpResponse(json.dumps({'data': presigned_post,'thumbnail_url':new_avatar.thumbnail_url,'filename': filename, 'url': new_avatar.avatar.url}), content_type='application/json')
 	
 def image_inspect(request):
 	if request.is_ajax():

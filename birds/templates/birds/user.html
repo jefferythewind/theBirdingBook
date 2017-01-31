@@ -35,7 +35,7 @@
 		<div class="mdl-card__supporting-text">
 			<div id="avatar_container">
 			{% if this_user.avatar %}
-				<img src="{{ this_user.avatar.avatar.url }}">
+				<img src="{{ this_user.avatar.thumbnail_url }}">
 			{% endif %}
 			</div>
 			{% if user == this_user %}
@@ -48,7 +48,7 @@
 			<div id="photo_load_spinner" class="mdl-spinner mdl-js-spinner"></div>
 			<span id="photo_load_text"></span>
 		
-			<input id="avatar_photo" type="file" style="display:none">
+			<input id="avatar_photo" name="file" type="file" style="display:none">
 			{% endif %}
 		</div>
 	</div>
@@ -68,7 +68,6 @@ jQuery(function($){
 		window.location = "{% url 'birds:setusername' %}"
 	});
 
-
 	$('#add_avatar_button').click(function(){
 		$('#avatar_photo').trigger('click');
 	});
@@ -82,7 +81,8 @@ jQuery(function($){
 				alert("this is not an image file.  Please upload only images.");
 				return;
 			}
-			ResizeFile(file);
+			//ResizeFile(file);
+			getSignedRequest(this);
 			loading_files += 1;
 			$('#photo_load_spinner').addClass('is-active');
 			$('#photo_load_text').text(loading_files+" files loading.  Please wait.");
@@ -93,7 +93,7 @@ jQuery(function($){
 	/*
 	Avatar Upload with Resize
 	*/
-	function getSignedRequest(data_url){
+	function getSignedRequest(file){
 		$.ajax({
 			url: "{% url 'birds:add_avatar' %}",
 			data: {
@@ -102,7 +102,7 @@ jQuery(function($){
 			type: "POST",
 			dataType: "json",
 			success: function(response){
-				uploadFile(data_url, response.data, response.url, response.filename);
+				uploadFile(file, response.data, response.url, response.filename, response.thumbnail_url);
 			},
 			error: function(jqXHR, textStatus, errorThrown){
 				alert("Could not get signed URL.");
@@ -110,31 +110,26 @@ jQuery(function($){
 		});
 	}
 	
-	function uploadFile(data_url, s3Data, url, filename){
-		var xhr = new XMLHttpRequest();
-		xhr.open("POST", s3Data.url);
-
-		var postData = new FormData();
+	function uploadFile(file, s3Data, url, filename, thumbnail_url){
+		var myForm = document.createElement('form');
 		for(key in s3Data.fields){
-			postData.append(key, s3Data.fields[key]);
+			var this_input = document.createElement('input');
+			this_input.setAttribute('name',key);
+			this_input.setAttribute('value',s3Data.fields[key]);
+			myForm.appendChild(this_input);
 		}
 		
-		var blobData = dataURItoBlob(data_url);
+		myForm.appendChild(file);
 		
-		postData.append('file', new File([blobData], filename));
+		postData = new FormData(myForm);
+	
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", s3Data.url);
 
 		xhr.onreadystatechange = function() {
 			if(xhr.readyState === 4){
 				if(xhr.status === 200 || xhr.status === 204){
-					$('#avatar_container').html('<img crossorigin="anonymous" src="' + url + '">');
-
-					loading_files -= 1;
-					if ( loading_files == 0 ) {
-						$('#photo_load_spinner').removeClass('is-active');
-						$('#photo_load_text').text("");
-					}else{
-						$('#photo_load_text').text(loading_files+" files loading.  Please wait.");
-					}
+					show_this_thumbnail(thumbnail_url)
 				}else{
 					alert("Could not upload file. "+xhr.responseText);
 				}
@@ -142,54 +137,38 @@ jQuery(function($){
 		};
 		xhr.send(postData);
 	}
-	   
-	function ResizeFile(raw_file) {
-		
-		var reader = new FileReader();
-		reader.onload = function(e) {
-			var img = document.createElement("img");
-			img.src = e.target.result;
-			
-			var canvas = document.createElement('canvas');
+	
+	function show_this_thumbnail(thumbnail_url) {
+		urlExists(thumbnail_url, function(exists){
+			if ( exists ) {
+				$('#avatar_container').html('<img src="' + thumbnail_url + '">');
 
-			var ctx = canvas.getContext("2d");
-			ctx.drawImage(img, 0, 0);
-
-			var MAX = 200;
-			var width = img.width;
-			var height = img.height;
-
-			if (width > height) {
-			  if (width > MAX) {
-				height *= MAX / width;
-				width = MAX;
-			  }
-			} else {
-			  if (height > MAX) {
-				width *= MAX / height;
-				height = MAX;
-			  }
+				loading_files -= 1;
+				if ( loading_files == 0 ) {
+					$('#photo_load_spinner').removeClass('is-active');
+					$('#photo_load_text').text("");
+				}else{
+					$('#photo_load_text').text(loading_files+" files loading.  Please wait.");
+				}
+			}else{
+				setTimeout(function(){
+					show_this_thumbnail(thumbnail_url)
+				}, 1000);
 			}
-			canvas.width = width;
-			canvas.height = height;
-			var ctx = canvas.getContext("2d");
-			ctx.drawImage(img, 0, 0, width, height);
-
-			var dataurl = canvas.toDataURL("image/png");
-			
-			getSignedRequest(dataurl);
-		}
-		reader.readAsDataURL(raw_file);
-
+		});
 	}
 	
-	function dataURItoBlob(dataURI) {
-		var binary = atob(dataURI.split(',')[1]);
-		var array = [];
-		for(var i = 0; i < binary.length; i++) {
-			array.push(binary.charCodeAt(i));
-		}
-		return new Blob([new Uint8Array(array)], {type: 'image/png'});
+	function urlExists(url, callback){
+		$.ajax({
+			type: 'GET',
+			url: url,
+			success: function(){
+				callback(true);
+			},
+			error: function() {
+				callback(false);
+			}
+		});
 	}
 	
 	{% endif %}

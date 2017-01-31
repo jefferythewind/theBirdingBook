@@ -11,6 +11,7 @@ class Uid(models.Model):
 class Avatar(models.Model):
     user = models.OneToOneField(User)
     avatar = models.ImageField()
+    thumbnail_url = models.CharField(default=None, null=True, max_length=200)
 
 class SpeciesFile(models.Model):
     species_list = models.FileField()

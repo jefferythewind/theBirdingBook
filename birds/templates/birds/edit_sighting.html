@@ -184,8 +184,7 @@
 		}
 		
 		function uploadFile(file_input, s3Data, url, filename, id, thumbnail_url){
-			//
-			//try creating FormData object without using append
+
 			var myForm = document.createElement('form');
 			for(key in s3Data.fields){
 				var this_input = document.createElement('input');
