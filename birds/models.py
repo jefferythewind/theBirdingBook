@@ -104,6 +104,7 @@ class BirdPhoto(models.Model):
     photo = models.ImageField()
     order = models.IntegerField()
     thumbnail_url = models.CharField(max_length=200, default=None, null=True)
+    medium_url = models.CharField(max_length=200, default=None, null=True)
     
     def __str__(self):
         return self.photo.name

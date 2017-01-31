@@ -52,6 +52,7 @@ def signs3(request):
 		filename = "%s.%s" % ( new_photo.id, "png" )
 		new_photo.photo = filename
 		new_photo.thumbnail_url = "https://s3.amazonaws.com/birdingappsmall/%s.%s" % ( new_photo.id, "png" )
+		new_photo.medium_url = "https://s3.amazonaws.com/birdingappmedium/%s.%s" % ( new_photo.id, "png" )
 		new_photo.save()
 
 		s3 = boto3.client('s3')

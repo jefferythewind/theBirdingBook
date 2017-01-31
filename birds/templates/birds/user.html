@@ -1,65 +1,64 @@
 {% extends 'birds/base.html' %}
 
 {% block content %}
-<div class="page-content">
-	<section class="mdl-grid">
-		<div class="mdl-cell mdl-cell--12-col">	
-		<div class="mdl-cell mdl-cell--10-col-desktop mdl-cell--1-offset-desktop mdl-card">
-			<div class="mdl-card__title" id="faq">
-				<h2 class="mdl-card__title-text capitalize">{{ this_user.username }}</h2>
-				{% if user == this_user %}
-				<div id="edit_username_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
-					<div id="edit_username_id" class="mdl-tooltip--right material-icons">edit</div>
-					<div class="mdl-tooltip mdl-tooltip--right" for="edit_username_id">
-						Edit Username
-					</div>
+<section class="mdl-grid">
+	<div class="mdl-cell mdl-cell--12-col">	
+	<div class="mdl-cell mdl-cell--10-col-desktop mdl-cell--1-offset-desktop mdl-card">
+		<div class="mdl-card__title" id="faq">
+			<h2 class="mdl-card__title-text capitalize">{{ this_user.username }}</h2>
+			{% if user == this_user %}
+			<div id="edit_username_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
+				<div id="edit_username_id" class="mdl-tooltip--right material-icons">edit</div>
+				<div class="mdl-tooltip mdl-tooltip--right" for="edit_username_id">
+					Edit Username
 				</div>
-				{% endif %}
 			</div>
-			<div class="mdl-card__supporting-text">
-				<span class="mdl-chip mdl-chip--contact badge-chips">
-					<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.sighting_count }}</span>
-					<span class="mdl-chip__text">Sightings</span>
-				</span>
-				<span class="mdl-chip mdl-chip--contact badge-chips">
-					<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.species_count }}</span>
-					<span class="mdl-chip__text">Species</span>
-				</span>
-				<span class="mdl-chip mdl-chip--contact badge-chips">
-					<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.species_count_ytd }}</span>
-					<span class="mdl-chip__text">Big Year</span>
-				</span>
-				<span class="mdl-chip mdl-chip--contact badge-chips">
-					<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.helper_species_count }}</span>
-					<span class="mdl-chip__text">Accepted Species Suggestions</span>
-				</span>
-			</div>
-			<div class="mdl-card__supporting-text">
-				<div id="avatar_container">
-				{% if this_user.avatar %}
-					<img src="{{ this_user.avatar.avatar.url }}">
-				{% endif %}
-				</div>
-				{% if user == this_user %}
-				<div id="add_avatar_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
-					<div id="photo" class="mdl-tooltip--right material-icons">add_a_photo</div>
-					<div class="mdl-tooltip mdl-tooltip--right" for="photo">
-						Add/Replace Avatar
-					</div>
-				</div>
-				<div id="photo_load_spinner" class="mdl-spinner mdl-js-spinner"></div>
-				<span id="photo_load_text"></span>
-			
-				<input id="avatar_photo" type="file" style="display:none">
-				{% endif %}
-			</div>
+			{% endif %}
 		</div>
+		<div class="mdl-card__supporting-text">
+			<span class="mdl-chip mdl-chip--contact badge-chips">
+				<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.sighting_count }}</span>
+				<span class="mdl-chip__text">Sightings</span>
+			</span>
+			<span class="mdl-chip mdl-chip--contact badge-chips">
+				<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.species_count }}</span>
+				<span class="mdl-chip__text">Species</span>
+			</span>
+			<span class="mdl-chip mdl-chip--contact badge-chips">
+				<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.species_count_ytd }}</span>
+				<span class="mdl-chip__text">Big Year</span>
+			</span>
+			<span class="mdl-chip mdl-chip--contact badge-chips">
+				<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.helper_species_count }}</span>
+				<span class="mdl-chip__text">Accepted Species Suggestions</span>
+			</span>
 		</div>
-	</section>
-	<div class="mdl-grid" id="sighting_grid_wrapper">
+		<div class="mdl-card__supporting-text">
+			<div id="avatar_container">
+			{% if this_user.avatar %}
+				<img src="{{ this_user.avatar.avatar.url }}">
+			{% endif %}
+			</div>
+			{% if user == this_user %}
+			<div id="add_avatar_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
+				<div id="photo" class="mdl-tooltip--right material-icons">add_a_photo</div>
+				<div class="mdl-tooltip mdl-tooltip--right" for="photo">
+					Add/Replace Avatar
+				</div>
+			</div>
+			<div id="photo_load_spinner" class="mdl-spinner mdl-js-spinner"></div>
+			<span id="photo_load_text"></span>
+		
+			<input id="avatar_photo" type="file" style="display:none">
+			{% endif %}
+		</div>
 	</div>
-
+	</div>
+</section>
+<div class="mdl-grid" id="sighting_grid_wrapper">
 </div>
+
+
 <script type="text/javascript">
 var loading_files = 0;
 
@@ -199,7 +198,7 @@ jQuery(function($){
 
 	function need_more() {
 		
-		if ( $('main').scrollTop() + $('main').height() >= $('#sighting_grid_wrapper').height() ){
+		if ( $('main').scrollTop() + $('main').height() >= $('.page_content').height() ){
 			return true;
 		}else{
 			return false;
