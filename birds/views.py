@@ -111,7 +111,11 @@ def authenticate_user(request):
 		
 @login_required
 def new_sighting(request):
-	new_sighting = Sighting.objects.create(user_id = request.user.id)
+	sightings = Sighting.objects.filter(user_id = request.user.id, sighting_date = None)
+	if sightings.count() > 0:
+		new_sighting = sightings[0]
+	else:
+		new_sighting = Sighting.objects.create(user_id = request.user.id)
 	return redirect('/edit_sighting/'+str(new_sighting.id), pk=new_sighting.id)
 # 	return render(request, 'birds/edit_sighting.html', {'form': form, 'this_sighting': edit_sighting})
 	
