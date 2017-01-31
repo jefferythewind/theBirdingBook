@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.template.loader import render_to_string
 from django.utils import timezone
-from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions, BirdPhoto, Avatar, Uid
+from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions, BirdPhoto, Avatar, Uid, Feedback
 from django.http import HttpResponse
 import json
 from django.db.models import Q, IntegerField, Value
@@ -299,8 +299,13 @@ def star_photo(request):
 		BirdPhoto.objects.filter(sighting = photo.sighting).exclude(pk = photo.id).update(order = 0)
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
 
+@login_required
 def feedback(request):
-	return render(request, 'birds/feedback.html')
+	if request.method == "POST":
+		Feedback.objects.create(user = request.user, feedback_text = request.POST.get('feedback_text'))
+		return render(request, 'birds/feedback.html', {'thanks': 'true' })
+	else:
+		return render(request, 'birds/feedback.html')
 
 def map_view(request):
 	return render(request, 'birds/map.html')

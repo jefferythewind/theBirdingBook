@@ -12,93 +12,90 @@
     {% endfor %}
 {% endfor %}
 
-
-<div class="page-content">
-	<section class="mdl-grid">
-        <div class="mdl-components__warning" id="warning-msg" style="display:none">
-			<b>Alert:</b> Broswer location access should be enabled for automatic positioning.
-		</div>
-		<div class="mdl-cell mdl-cell--8-col mdl-cell--1-offset-desktop">
-            
-			<div class="card-bird mdl-card">
-				<div class="mdl-card__title news-title">
-					<h2 class="mdl-card__title-text">Edit Sighting</h2>
-				</div>
-				<div class="mdl-card__supporting-text">
-					<form class="edit-sighting-form" method="POST" enctype="multipart/form-data">{% csrf_token %}
-						<div id="add_photo_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
-							<i class="material-icons">add_a_photo</i>
-						</div>
-						<div id="photo_load_spinner" class="mdl-spinner mdl-js-spinner"></div>
-						<span id="photo_load_text"></span>
-						
-						<div class="mdl-grid" id="photo_container">
-						{% for image in this_sighting.images %}
-							<div id="image_container_{{ image.id }}" class="hover-card mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
-								<div style="position:absolute;z-index:1;">
-									<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="close-image material-icons">close</i></a>
-									{% if image.order == 1 %}
-										<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="star-image material-icons">star</i></a>
-									{% else %}
-										<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="star-image material-icons">star_border</i></a>
-									{% endif %}
-									
-								</div>
-								<div class="image image-block-m sighting-page sub-image" style="background: url({{ image.thumbnail_url }}) no-repeat center;background-size:cover;">
-								</div>
-							</div>
-						{% endfor %}
-						</div>
-                        {% for field in form.visible_fields %}
-							{% if field.field.widget.attrs.id == "post_text_textarea" %}
-								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="post_text_wrapper">
-                                    <label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
-                                    <textarea class="mdl-textfield__input" cols="40" id="post_text_textarea" maxlength="1000" name="post_text">{{ field.value }}</textarea>
-                                </div>
-								
-							{% elif field.html_name == "species_tag" %}
-								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <label class="mdl-textfield__label" for="species_tag_helper">{{ field.label }}</label>
-									{% if form.instance.species_tag %}
-										<input class="mdl-textfield__input" id="id_species_tag_helper" name="species_tag_helper" type="text" value="{{ form.instance.species_tag }}">
-										<input id="id_species_tag" name="species_tag" type="hidden" value="{{ field.value }}">
-									{% else %}
-										<input class="mdl-textfield__input" id="id_species_tag_helper" name="species_tag_helper" type="text">
-										<input id="id_species_tag" name="species_tag" type="hidden">
-									{% endif %}
-                                </div>
-                            {% elif field.field.widget.attrs.class == "mdl-textfield__input" %}
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
-                                    {{ field }}
-                                </div>
-                            {% else %}
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <label class="" for="{{ field.name }}">{{ field.label }}</label>
-                                    {{ field }}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                        {% for field in form.hidden_fields %}
-                            {{ field }}
-                        {% endfor %}
-						
-						<div id="msg"><p>CENTER of maps marks sighting location.</p></div>
-						<input id="pac-input" class="controls" type="text" placeholder="Search Box" value="{{ form.location.value }}">
-						<div id="editor_map"></div>
-						
-						
-						
-                        <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="save_button" type="submit" value="Save" />
-						<a class="mdl-button mdl-js-button mdl-button--accent" href="{% url 'birds:index' %}">Cancel</a>
-						
-					</form>
+<section class="mdl-grid">
+	<div class="mdl-components__warning" id="warning-msg" style="display:none">
+		<b>Alert:</b> Broswer location access should be enabled for automatic positioning.
+	</div>
+	<div class="mdl-cell mdl-cell--8-col mdl-cell--1-offset-desktop">
+		
+		<div class="card-bird mdl-card">
+			<div class="mdl-card__title news-title">
+				<h2 class="mdl-card__title-text">Edit Sighting</h2>
+			</div>
+			<div class="mdl-card__supporting-text">
+				<form class="edit-sighting-form" method="POST" enctype="multipart/form-data">{% csrf_token %}
+					<div id="add_photo_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
+						<i class="material-icons">add_a_photo</i>
+					</div>
+					<div id="photo_load_spinner" class="mdl-spinner mdl-js-spinner"></div>
+					<span id="photo_load_text"></span>
 					
-				</div>
+					<div class="mdl-grid" id="photo_container">
+					{% for image in this_sighting.images %}
+						<div id="image_container_{{ image.id }}" class="hover-card mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
+							<div style="position:absolute;z-index:1;">
+								<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="close-image material-icons">close</i></a>
+								{% if image.order == 1 %}
+									<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="star-image material-icons">star</i></a>
+								{% else %}
+									<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="star-image material-icons">star_border</i></a>
+								{% endif %}
+								
+							</div>
+							<div class="image image-block-m sighting-page sub-image" style="background: url({{ image.thumbnail_url }}) no-repeat center;background-size:cover;">
+							</div>
+						</div>
+					{% endfor %}
+					</div>
+					{% for field in form.visible_fields %}
+						{% if field.field.widget.attrs.id == "post_text_textarea" %}
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="post_text_wrapper">
+								<label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
+								<textarea class="mdl-textfield__input" cols="40" id="post_text_textarea" maxlength="1000" name="post_text">{{ field.value }}</textarea>
+							</div>
+							
+						{% elif field.html_name == "species_tag" %}
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+								<label class="mdl-textfield__label" for="species_tag_helper">{{ field.label }}</label>
+								{% if form.instance.species_tag %}
+									<input class="mdl-textfield__input" id="id_species_tag_helper" name="species_tag_helper" type="text" value="{{ form.instance.species_tag }}">
+									<input id="id_species_tag" name="species_tag" type="hidden" value="{{ field.value }}">
+								{% else %}
+									<input class="mdl-textfield__input" id="id_species_tag_helper" name="species_tag_helper" type="text">
+									<input id="id_species_tag" name="species_tag" type="hidden">
+								{% endif %}
+							</div>
+						{% elif field.field.widget.attrs.class == "mdl-textfield__input" %}
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+								<label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
+								{{ field }}
+							</div>
+						{% else %}
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+								<label class="" for="{{ field.name }}">{{ field.label }}</label>
+								{{ field }}
+							</div>
+						{% endif %}
+					{% endfor %}
+					{% for field in form.hidden_fields %}
+						{{ field }}
+					{% endfor %}
+					
+					<div id="msg"><p>CENTER of maps marks sighting location.</p></div>
+					<input id="pac-input" class="controls" type="text" placeholder="Search Box" value="{{ form.location.value }}">
+					<div id="editor_map"></div>
+					
+					
+					
+					<input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="save_button" type="submit" value="Save" />
+					<a class="mdl-button mdl-js-button mdl-button--accent" href="{% url 'birds:index' %}">Cancel</a>
+					
+				</form>
+				
 			</div>
 		</div>
-	</section>
-</div>
+	</div>
+</section>
 
 <script type="text/javascript">
 	var loading_files = 0;

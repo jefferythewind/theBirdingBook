@@ -2,8 +2,7 @@
 
 {% block content %}
 <section class="mdl-grid">
-	<div class="mdl-cell mdl-cell--12-col">	
-	<div class="mdl-cell mdl-cell--10-col-desktop mdl-cell--1-offset-desktop mdl-card">
+	<div class="mdl-cell mdl-cell--12-col mdl-card">
 		<div class="mdl-card__title" id="faq">
 			<h2 class="mdl-card__title-text capitalize">{{ this_user.username }}</h2>
 			{% if user == this_user %}
@@ -52,7 +51,6 @@
 			<input id="avatar_photo" type="file" style="display:none">
 			{% endif %}
 		</div>
-	</div>
 	</div>
 </section>
 <div class="mdl-grid" id="sighting_grid_wrapper">
@@ -198,7 +196,7 @@ jQuery(function($){
 
 	function need_more() {
 		
-		if ( $('main').scrollTop() + $('main').height() >= $('.page_content').height() ){
+		if ( $('main').scrollTop() + $('main').height() >= $('#sighting_grid_wrapper').parent().height() ){
 			return true;
 		}else{
 			return false;

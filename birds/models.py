@@ -135,3 +135,7 @@ class SpeciesSuggestions(models.Model):
     def num_votes(self):
         return SpeciesVote.objects.filter( sighting = self.sighting, species = self.species ).count()
     
+class Feedback(models.Model):
+    user = models.ForeignKey(User)
+    feedback_text = models.CharField(max_length=2500)
+    post_ts = models.DateTimeField(auto_now_add=True)
