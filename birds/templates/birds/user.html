@@ -19,42 +19,42 @@
 			</div>
 			{% endif %}
 		</div>
+		
 		<div class="mdl-card__supporting-text">
-			<span class="mdl-chip mdl-chip--contact badge-chips">
-				<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.sighting_count }}</span>
-				<span class="mdl-chip__text">Sightings</span>
-			</span>
-			<span class="mdl-chip mdl-chip--contact badge-chips">
-				<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.species_count }}</span>
-				<span class="mdl-chip__text">Species</span>
-			</span>
-			<span class="mdl-chip mdl-chip--contact badge-chips">
-				<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.species_count_ytd }}</span>
-				<span class="mdl-chip__text">Big Year</span>
-			</span>
-			<span class="mdl-chip mdl-chip--contact badge-chips">
-				<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.helper_species_count }}</span>
-				<span class="mdl-chip__text">Accepted Species Suggestions</span>
-			</span>
-		</div>
-		<div class="mdl-card__supporting-text">
-			<div id="avatar_container">
-			{% if this_user.avatar %}
-				<img src="{{ this_user.avatar.thumbnail_url }}">
-			{% endif %}
-			</div>
-			{% if user == this_user %}
-			<div id="add_avatar_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
-				<div id="photo" class="mdl-tooltip--right material-icons">add_a_photo</div>
-				<div class="mdl-tooltip mdl-tooltip--right" for="photo">
-					Add/Replace Avatar
+			<div class="mdl-grid">
+				<div id="avatar_card" class="mdl-card mdl-cell mdl-cell--4-col" style="height:256px;width:256px;background: url({{ this_user.avatar.thumbnail_url }}) center / cover">
+					{% if user == this_user %}
+					<div id="add_avatar_button" class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
+						<div id="photo" class="mdl-tooltip--right material-icons">add_a_photo</div>
+						<div class="mdl-tooltip mdl-tooltip--right" for="photo">
+							Add/Replace Avatar
+						</div>
+					</div>
+					<div id="photo_load_spinner" class="mdl-spinner mdl-js-spinner"></div>
+					<span id="photo_load_text"></span>
+				
+					<input id="avatar_photo" name="file" type="file" style="display:none">
+					{% endif %}
+				</div>
+				<div class="mdl-cell--4-col mdl-cell mdl-cell--8-col-desktop">
+					<span class="mdl-chip mdl-chip--contact badge-chips">
+						<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.sighting_count }}</span>
+						<span class="mdl-chip__text">Sightings</span>
+					</span>
+					<span class="mdl-chip mdl-chip--contact badge-chips">
+						<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.species_count }}</span>
+						<span class="mdl-chip__text">Species</span>
+					</span>
+					<span class="mdl-chip mdl-chip--contact badge-chips">
+						<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.species_count_ytd }}</span>
+						<span class="mdl-chip__text">Big Year</span>
+					</span>
+					<span class="mdl-chip mdl-chip--contact badge-chips">
+						<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user_stats.helper_species_count }}</span>
+						<span class="mdl-chip__text">Accepted Species Suggestions</span>
+					</span>
 				</div>
 			</div>
-			<div id="photo_load_spinner" class="mdl-spinner mdl-js-spinner"></div>
-			<span id="photo_load_text"></span>
-		
-			<input id="avatar_photo" name="file" type="file" style="display:none">
-			{% endif %}
 		</div>
 	</div>
 </section>
@@ -146,7 +146,7 @@ jQuery(function($){
 	function show_this_thumbnail(thumbnail_url) {
 		urlExists(thumbnail_url, function(exists){
 			if ( exists ) {
-				$('#avatar_container').html('<img src="' + thumbnail_url + '">');
+				$('#avatar_card').css('background','url(' + thumbnail_url + ') center / cover');
 
 				loading_files -= 1;
 				if ( loading_files == 0 ) {
