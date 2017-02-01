@@ -83,6 +83,7 @@
 </div>
 
 <script type="text/javascript">
+jQuery(function($){
 	// Initialize Firebase
 	var config = {
 		apiKey: "AIzaSyAyEUXCLWQDXNZ9XAoRb073AJtYDQAPUvk",
@@ -143,7 +144,7 @@
 	var ui = new firebaseui.auth.AuthUI(firebase.auth());
 	// The start method will wait until the DOM is loaded.
 	ui.start('#firebaseui-auth-container', uiConfig);
-
+});
 
 </script>
 {% endblock %}
