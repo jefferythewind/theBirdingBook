@@ -149,7 +149,7 @@ def view_sighting(request, pk):
 def index_view(request):
 	if request.method == 'GET':
 		#latest_sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
-		pre_url = BirdPhoto.objects.latest('sighting__post_ts').medium_url
+		pre_url = BirdPhoto.objects.latest('sighting__post_ts').thumbnail_url
 		return render(request, 'birds/index.html', {'preview_url':pre_url})
 		
 def species_query(request):
