@@ -68,6 +68,7 @@ jQuery(function($) {
 					}else{
 						$('main').unbind('scroll').scroll(function(){
 							if ( need_more() ){
+								$('main').unbind('scroll');
 								load_sighting(data['next_page']);
 							}
 						});
