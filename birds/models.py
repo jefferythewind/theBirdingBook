@@ -50,10 +50,10 @@ class Subspecies(models.Model):
     subspecies = models.CharField(max_length=100)
     
     def __str__(self):
-        return self.species.species_english+" "+self.species.genus.genus+" "+self.species.species+" "+self.subspecies
+        return self.species.species_english+" - "+self.species.genus.genus+" "+self.species.species+" "+self.subspecies
 
     def __unicode__(self):
-        return self.species.species_english+" "+self.species.genus.genus+" "+self.species.species+" "+self.subspecies
+        return self.species.species_english+" - "+self.species.genus.genus+" "+self.species.species+" "+self.subspecies
 
 class Sighting(models.Model):
     caption = models.CharField(max_length=50, default=None, null=True)
