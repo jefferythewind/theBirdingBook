@@ -1,6 +1,9 @@
 {% extends 'birds/base.html' %}
 
-
+{% block desc_title %}
+<meta name="description" content="{% if sighting.species_tag %}{{ sighting.species_tag }}.  {% endif %}{{ sighting.post_text }}">
+<title>{{ sighting.caption }}</title>
+{% endblock %}
 
 {% block content %}
 

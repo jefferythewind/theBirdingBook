@@ -17,9 +17,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="The Birding Book, bird science.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>The Birding Book</title>
+	{% block desc_title %}
+	{% endblock %}
     <link rel="shortcut icon" href="https://www.iconexperience.com/_img/o_collection_png/green_dark_grey/256x256/plain/bird.png">
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -87,7 +87,7 @@
               <input class="mdl-textfield__input" type="text" id="search_species" placeholder="Species">
               <label class="mdl-textfield__label" for="search_species">Enter your query...</label>
             </div>
-			<div class="mdl-tooltip mdl-tooltip--bottom" for="species_search_icon">
+			<div class="mdl-tooltip" for="species_search_icon">
 				Species Lookup
 			</div>
           </div>
