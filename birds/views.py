@@ -114,6 +114,8 @@ def new_sighting(request):
 	sightings = Sighting.objects.filter(user_id = request.user.id, sighting_date = None)
 	if sightings.count() > 0:
 		new_sighting = sightings[0]
+		new_sighting.post_ts = timezone.now()
+		new_sighting.save()
 	else:
 		new_sighting = Sighting.objects.create(user_id = request.user.id)
 	return redirect('/edit_sighting/'+str(new_sighting.id), pk=new_sighting.id)
