@@ -30,8 +30,8 @@ def terms_of_service(request):
 def user(request, pk):
 	this_user = get_object_or_404(User, pk=pk)
 	sighting_count = Sighting.objects.exclude(sighting_date__isnull=True).filter(user = this_user).count()
-	species_count = Sighting.objects.exclude(species_tag__isnull=True).count()
-	species_count_ytd = Sighting.objects.filter(sighting_date__year=datetime.datetime.now().year).exclude(species_tag__isnull=True).count()
+	species_count = Sighting.objects.exclude(species_tag__isnull=True).filter(user = this_user).count()
+	species_count_ytd = Sighting.objects.filter(sighting_date__year=datetime.datetime.now().year, user = this_user).exclude(species_tag__isnull=True).count()
 	helper_species_count = SpeciesSuggestions.objects.filter( user=this_user, accepted=True).count()
 	user_stats = {
 		"sighting_count":sighting_count,
@@ -264,7 +264,7 @@ def remove_photo(request):
 @login_required
 def add_avatar(request):	
 	if request.is_ajax():
-		if request.user.avatar:
+		if hasattr( request.user, 'avatar'):
 			request.user.avatar.delete()
 
 		new_avatar = Avatar.objects.create( user = request.user )
