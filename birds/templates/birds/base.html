@@ -102,7 +102,7 @@
 				Search by Location
 			</div>
           </div>
-		  <div>
+		  <div id="clear_search_container">
 			<label class="mdl-button mdl-js-button mdl-button--icon" id="clear_search_button">
               <i class="material-icons">clear</i>
             </label>
@@ -246,7 +246,7 @@
 					type: "POST",
 					dataType: "html",
 					success: function(data) {
-						$('#top-layout-spacer').after(data);
+						$('#clear_search_container').after(data);
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						alert(textStatus);
