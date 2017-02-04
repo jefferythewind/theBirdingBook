@@ -28,6 +28,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+ADMINS = (('Tim', os.environ.get('DEFAULT_FROM_EMAIL')))
 SERVER_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 
 SECURE_SSL_REDIRECT = True
