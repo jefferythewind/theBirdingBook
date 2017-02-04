@@ -27,7 +27,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = os.environ.get('DJANGO_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ADMINS = (('Tim', os.environ.get('DEFAULT_FROM_EMAIL')))
 SERVER_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 
