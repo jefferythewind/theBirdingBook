@@ -168,7 +168,7 @@
 					<tr>
 						<td>
 						{% if sighting.user.avatar %}
-							<div class="mdl-shadow--8dp" style="height:50px;width:50px;"><img style="height:100%;width:100%;" src="{{ sighting.user.avatar.thumbnail_url }}"></div>
+							<div class="mdl-shadow--8dp" style="height:50px;width:50px;background: url({{ sighting.user.avatar.thumbnail_url }}) no-repeat center;background-size:cover"></div>
 						{% else %}
 							<i class="material-icons">account_circle</i>
 						{% endif %}
@@ -234,7 +234,7 @@
 				
         </div>
     </div>
-	<div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card">
+	<div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-card">
 		<div class="mdl-card__title" style="display:inline">
 			{{ sighting.location }}
 		</div>
