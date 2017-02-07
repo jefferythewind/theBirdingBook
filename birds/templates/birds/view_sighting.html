@@ -186,34 +186,54 @@
         </div>
         <div class="mdl-card__supporting-text">
 			<div >
-				<a href="https://en.wikipedia.org/wiki/Special:Search?search={{ sighting.species_tag }}" target="_blank"><i class="material-icons">local_offer</i><b> {{ sighting.species_tag }}</b></a>
-				<i class="material-icons">import_export</i>
-				<span id="{{ sighting.species_tag.id }}_num_votes">{{ species_votes }}</span>
-				{% if user.is_authenticated %}
-						{% if is_voted > 0 %}
-						<button data-species_tag-id="{{ sighting.species_tag.id }}" class="up_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="up_vote_species" style="display:none">
-							<i class="material-icons md-light">expand_less</i>
-						</button>
-						<button data-species_tag-id="{{ sighting.species_tag.id }}" class="down_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species">
-							<i class="material-icons md-light">expand_more</i>
-						</button>
-						{% else %}
-						<button data-species_tag-id="{{ sighting.species_tag.id }}" class="up_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="up_vote_species">
-							<i class="material-icons md-light">expand_less</i>
-						</button>
-						<button data-species_tag-id="{{ sighting.species_tag.id }}" class="down_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="down_vote_species" style="display:none">
-							<i class="material-icons md-light">expand_more</i>
-						</button>
-						{% endif %}
-					<div class="mdl-tooltip" for="up_vote_species">
-						agree
-					</div>
-					<div class="mdl-tooltip" for="down_vote_species">
-						undo agree
-					</div>
-				{% endif %}
+				<a href="https://en.wikipedia.org/wiki/Special:Search?search={{ sighting.species_tag }}" target="_blank" style="text-decoration: none;">
+					<span class="mdl-chip mdl-chip--contact">
+						<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white"><i class="material-icons">local_offer</i></span>
+						<span class="mdl-chip__text">{{ sighting.species_tag }}</span>
+					</span>
+				
+				</a>
+				
+				
+				
+				
+					
+				
+					{% if user.is_authenticated and sighting.species_tag %}
+						<span class="mdl-chip mdl-chip--contact mdl-chip--deletable">
+							<span id="{{ sighting.species_tag.id }}_num_votes" class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ species_votes }}</span>
+							<span class="mdl-chip__text">birders agree</span>
+							{% if is_voted > 0 %}
+							<button id="up_vote_species" data-species_tag-id="{{ sighting.species_tag.id }}" type="button" class="up_vote_species mdl-chip__action" style="display:none">
+								<i class="material-icons">thumb_up</i>
+							</button>
+							<button id="down_vote_species" data-species_tag-id="{{ sighting.species_tag.id }}" type="button" class="down_vote_species mdl-chip__action">
+								<i class="material-icons">thumb_down</i>
+							</button>
+							{% else %}
+							<button id="up_vote_species" data-species_tag-id="{{ sighting.species_tag.id }}" type="button" class="up_vote_species mdl-chip__action">
+								<i class="material-icons">thumb_up</i>
+							</button>
+							<button id="down_vote_species" data-species_tag-id="{{ sighting.species_tag.id }}" type="button" class="down_vote_species mdl-chip__action" style="display:none">
+								<i class="material-icons">thumb_down</i>
+							</button>
+							{% endif %}
+							<div class="mdl-tooltip" for="up_vote_species">
+								agree
+							</div>
+							<div class="mdl-tooltip" for="down_vote_species">
+								undo agree
+							</div>
+						</span>
+					{% else %}
+						<span class="mdl-chip mdl-chip--contact">
+							<span id="{{ sighting.species_tag.id }}_num_votes" class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ species_votes }}</span>
+							<span class="mdl-chip__text">birders agree</span>
+						</span>
+					{% endif %}
+				
 			</div>
-			{% if user.is_authenticated %}
+			{% if user.is_authenticated and user != sighting.user %}
 			
 				<button class="mdl-button mdl-js-button mdl-js-ripple-effect {% if not sighting.species_tag %}pulsate_button{% endif %}" id="suggest_species">
 					Suggest Different Species
