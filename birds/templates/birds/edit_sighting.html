@@ -35,7 +35,7 @@
 					
 					<div class="mdl-grid" id="photo_container">
 					{% for image in this_sighting.images %}
-						<div id="image_container_{{ image.id }}" class="hover-card mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
+						<div id="image_container_{{ image.id }}" class="mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
 							<div style="position:absolute;z-index:1;">
 								<a href="" onclick="return false;"><i data-image_id="{{ image.id }}" class="close-image material-icons">close</i></a>
 								{% if image.order == 1 %}

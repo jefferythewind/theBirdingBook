@@ -120,11 +120,18 @@ TABEL OF CONTENTS END*/
 		padding: 0px;
 	}
 	.mdl-cell {
-		margin: 5px;
+		/*margin: 5px;
+		margin-top: 5px;
+		margin-bottom: 5px;*/
 		width: 100%;
 	}
 	.mdl-cell--4-col-phone.mdl-cell--4-col-phone {
 		width: 100%;
+	}
+	.full-width-card {
+		margin: 0px;
+		margin-top: 5px;
+		margin-bottom: 5px;
 	}
 }
 

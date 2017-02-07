@@ -23,7 +23,7 @@
 
 <div class="mdl-grid" id="view-sighting-main-grid">
 	{% if sighting.images.count == 0 %}
-		<div class="hover-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
+		<div class="full-width-card hover-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
 			<div style="height:100px;" class="image image-block-m mdl-color--blue-grey-800">
 				<div class="sighting-grid-image-description">
 					<div class="sighting-grid-caption">
@@ -86,7 +86,7 @@
 	{% else %}
 		{% for image in sighting.images %}
 			{% if forloop.counter == 1 %}
-				<div class="hover-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
+				<div class="full-width-card hover-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
 					<a href="#" class="image-expand-on-click" data-image_id="{{ image.id }}">
 						<div class="image image-block-m sighting-page" style="background: url({{ image.medium_url }}) no-repeat center;background-size:cover;">
 							<div class="sighting-grid-image-description">
@@ -160,8 +160,8 @@
 	{% endif %}
 	
 	</div>
-	<div class=mdl-grid>
-    <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-card">
+
+    <div class="full-width-card mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-card">
         <div class="mdl-card__supporting-text">
 			<a href="{% url 'birds:user' sighting.user.id %}">
 				<table>
@@ -185,7 +185,7 @@
             <!--<i class="material-icons md-36">format_quote</i>--><b>{{ sighting.post_text }}</b><!--<i class="material-icons md-36">format_quote</i>-->
         </div>
         <div class="mdl-card__supporting-text">
-			<div >
+			<div>
 				<a href="https://en.wikipedia.org/wiki/Special:Search?search={{ sighting.species_tag }}" target="_blank" style="text-decoration: none;">
 					<span class="mdl-chip mdl-chip--contact">
 						<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white"><i class="material-icons">local_offer</i></span>
@@ -193,46 +193,42 @@
 					</span>
 				
 				</a>
-				
-				
-				
-				
-					
-				
-					{% if user.is_authenticated and sighting.species_tag %}
-						<span class="mdl-chip mdl-chip--contact mdl-chip--deletable">
-							<span id="{{ sighting.species_tag.id }}_num_votes" class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ species_votes }}</span>
-							<span class="mdl-chip__text">birders agree</span>
-							{% if is_voted > 0 %}
-							<button id="up_vote_species" data-species_tag-id="{{ sighting.species_tag.id }}" type="button" class="up_vote_species mdl-chip__action" style="display:none">
-								<i class="material-icons">thumb_up</i>
-							</button>
-							<button id="down_vote_species" data-species_tag-id="{{ sighting.species_tag.id }}" type="button" class="down_vote_species mdl-chip__action">
-								<i class="material-icons">thumb_down</i>
-							</button>
-							{% else %}
-							<button id="up_vote_species" data-species_tag-id="{{ sighting.species_tag.id }}" type="button" class="up_vote_species mdl-chip__action">
-								<i class="material-icons">thumb_up</i>
-							</button>
-							<button id="down_vote_species" data-species_tag-id="{{ sighting.species_tag.id }}" type="button" class="down_vote_species mdl-chip__action" style="display:none">
-								<i class="material-icons">thumb_down</i>
-							</button>
-							{% endif %}
-							<div class="mdl-tooltip" for="up_vote_species">
-								agree
-							</div>
-							<div class="mdl-tooltip" for="down_vote_species">
-								undo agree
-							</div>
-						</span>
-					{% else %}
-						<span class="mdl-chip mdl-chip--contact">
-							<span id="{{ sighting.species_tag.id }}_num_votes" class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ species_votes }}</span>
-							<span class="mdl-chip__text">birders agree</span>
-						</span>
-					{% endif %}
+
+				{% if user.is_authenticated and sighting.species_tag %}
+					<span class="mdl-chip mdl-chip--contact mdl-chip--deletable">
+						<span id="{{ sighting.species_tag.id }}_num_votes" class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ species_votes }}</span>
+						<span class="mdl-chip__text">birders agree</span>
+						{% if is_voted > 0 %}
+						<button id="up_vote_species" data-species_tag-id="{{ sighting.species_tag.id }}" type="button" class="up_vote_species mdl-chip__action" style="display:none">
+							<i class="material-icons">thumb_up</i>
+						</button>
+						<button id="down_vote_species" data-species_tag-id="{{ sighting.species_tag.id }}" type="button" class="down_vote_species mdl-chip__action">
+							<i class="material-icons">thumb_down</i>
+						</button>
+						{% else %}
+						<button id="up_vote_species" data-species_tag-id="{{ sighting.species_tag.id }}" type="button" class="up_vote_species mdl-chip__action">
+							<i class="material-icons">thumb_up</i>
+						</button>
+						<button id="down_vote_species" data-species_tag-id="{{ sighting.species_tag.id }}" type="button" class="down_vote_species mdl-chip__action" style="display:none">
+							<i class="material-icons">thumb_down</i>
+						</button>
+						{% endif %}
+						<div class="mdl-tooltip" for="up_vote_species">
+							agree
+						</div>
+						<div class="mdl-tooltip" for="down_vote_species">
+							undo agree
+						</div>
+					</span>
+				{% else %}
+					<span class="mdl-chip mdl-chip--contact">
+						<span id="{{ sighting.species_tag.id }}_num_votes" class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ species_votes }}</span>
+						<span class="mdl-chip__text">birders agree</span>
+					</span>
+				{% endif %}
 				
 			</div>
+			<div id="species_suggestion_info"></div>
 			{% if user.is_authenticated and user != sighting.user %}
 			
 				<button class="mdl-button mdl-js-button mdl-js-ripple-effect {% if not sighting.species_tag %}pulsate_button{% endif %}" id="suggest_species">
@@ -250,11 +246,11 @@
 					<button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" id="new_species_cancel_button">Cancel</button>
 				</form>
 			{% endif %}
-			<div class="mdl-card__supporting-text" id="species_suggestion_info"></div>
+			
 				
         </div>
     </div>
-	<div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-card">
+	<div class="full-width-card mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-card">
 		<div class="mdl-card__title" style="display:inline">
 			{{ sighting.location }}
 		</div>
@@ -263,7 +259,7 @@
 		</div>
     </div>
    
-	<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
+	<div class="full-width-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
 		<div class="mdl-card__title">
 			<h2 class="mdl-card__title-text">Comments</h2>
 		</div>

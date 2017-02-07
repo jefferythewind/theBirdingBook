@@ -1,35 +1,51 @@
 {% for suggestion in species_suggestions %}
+
 	<div>
-		{{ suggestion.species }}
-		<span id="{{ suggestion.species.id }}_num_votes">
-			{{ suggestion.num_votes }}
-		</span>
+		<a href="https://en.wikipedia.org/wiki/Special:Search?search={{ suggestion.species }}" target="_blank" style="text-decoration: none;">
+			<span class="mdl-chip mdl-chip--contact">
+				<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white"><i class="material-icons">local_offer</i></span>
+				<span class="mdl-chip__text">{{ suggestion.species }}</span>
+			</span>
+		
+		</a>
+
 		{% if user.is_authenticated %}
-			{% if suggestion.is_voted > 0 %}
-				<button data-species_tag-id="{{ suggestion.species.id }}" class="up_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" style="display:none">
-					<i class="material-icons md-light">expand_less</i>
+			<span class="mdl-chip mdl-chip--contact mdl-chip--deletable">
+				<span id="{{ suggestion.species.id }}_num_votes" class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ suggestion.num_votes }}</span>
+				<span class="mdl-chip__text">birders agree</span>
+				{% if suggestion.is_voted > 0 %}
+				<button id="up_vote_species" data-species_tag-id="{{ suggestion.species.id }}" type="button" class="up_vote_species mdl-chip__action" style="display:none">
+					<i class="material-icons">thumb_up</i>
 				</button>
-				<button data-species_tag-id="{{ suggestion.species.id }}" class="down_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-					<i class="material-icons md-light">expand_more</i>
+				<button id="down_vote_species" data-species_tag-id="{{ suggestion.species.id }}" type="button" class="down_vote_species mdl-chip__action">
+					<i class="material-icons">thumb_down</i>
 				</button>
-			{% else %}
-				<button data-species_tag-id="{{ suggestion.species.id }}" class="up_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-					<i class="material-icons md-light">expand_less</i>
+				{% else %}
+				<button id="up_vote_species" data-species_tag-id="{{ suggestion.species.id }}" type="button" class="up_vote_species mdl-chip__action">
+					<i class="material-icons">thumb_up</i>
 				</button>
-				<button data-species_tag-id="{{ suggestion.species.id }}" class="down_vote_species mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" style="display:none">
-					<i class="material-icons md-light">expand_more</i>
+				<button id="down_vote_species" data-species_tag-id="{{ suggestion.species.id }}" type="button" class="down_vote_species mdl-chip__action" style="display:none">
+					<i class="material-icons">thumb_down</i>
 				</button>
-			{% endif %}
-			{% if suggestion.sighting.user_id == user.id %}
-				<a data-suggestion-id="{{ suggestion.id }}" class="accept-species-suggestion">accept</a>
-			{% endif %}
-			<div class="mdl-tooltip" for="up_vote_species">
-				agree
-			</div>
-			<div class="mdl-tooltip" for="down_vote_species">
-				undo agree
-			</div>
+				{% endif %}
+				{% if suggestion.sighting.user_id == user.id %}
+					<a data-suggestion-id="{{ suggestion.id }}" class="accept-species-suggestion">accept</a>
+				{% endif %}
+				<div class="mdl-tooltip" for="up_vote_species">
+					agree
+				</div>
+				<div class="mdl-tooltip" for="down_vote_species">
+					undo agree
+				</div>
+			</span>
+		{% else %}
+			<span class="mdl-chip mdl-chip--contact">
+				<span id="{{ suggestion.species.id }}_num_votes" class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ suggestion.num_votes }}</span>
+				<span class="mdl-chip__text">birders agree</span>
+			</span>
 		{% endif %}
+		
 	</div>
+
 
 {% endfor %}

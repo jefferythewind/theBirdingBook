@@ -403,3 +403,6 @@ def sightings_search(request):
 		
 def certcode(request):
 	return HttpResponse("u8rJYLDlWBRLVWrVAHWdOjLR_wFG1QhZVeq8YbXN9Vk.kkUUZ7wDSk_Ruptr4ve-eoVyTSusZ4Q8H6nPxyDIeh0", content_type='text/plain')
+
+def robots(request):
+	return render(request, 'birds/robots.txt', content_type="text/plain")
