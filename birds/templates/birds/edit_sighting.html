@@ -54,7 +54,7 @@
 						{% if field.field.widget.attrs.id == "post_text_textarea" %}
 							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="post_text_wrapper">
 								<label class="mdl-textfield__label" for="{{ field.name }}">{{ field.label }}</label>
-								<textarea class="mdl-textfield__input" cols="40" id="post_text_textarea" maxlength="1000" name="post_text">{{ field.value }}</textarea>
+								<textarea class="mdl-textfield__input" cols="40" id="post_text_textarea" maxlength="1000" name="post_text">{% if field.value %}{{ field.value }}{% endif %}</textarea>
 							</div>
 							
 						{% elif field.html_name == "species_tag" %}

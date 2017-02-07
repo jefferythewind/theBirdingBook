@@ -21,7 +21,7 @@
 	</div>
 {% endif %}
 
-<div class="mdl-grid" id="view-sighting-main-grid">
+<div class="mdl-grid">
 	{% if sighting.images.count == 0 %}
 		<div class="full-width-card hover-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
 			<div style="height:100px;" class="image image-block-m mdl-color--blue-grey-800">
@@ -158,9 +158,8 @@
 			{% endif %}
 		{% endfor %}
 	{% endif %}
-	
-	</div>
-
+</div>
+<div class="mdl-grid">
     <div class="full-width-card mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-card">
         <div class="mdl-card__supporting-text">
 			<a href="{% url 'birds:user' sighting.user.id %}">
