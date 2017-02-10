@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.template.loader import render_to_string
 from django.utils import timezone
-from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions, BirdPhoto, Avatar, Uid, Feedback
+from .models import *
 from django.http import HttpResponse, HttpResponseForbidden
 import json
 from django.db.models import Q, IntegerField, Value
@@ -145,7 +145,7 @@ def view_sighting(request, pk):
 	this_sighting = get_object_or_404(Sighting, pk=pk)
 	species_votes = SpeciesVote.objects.filter( sighting = this_sighting, species = this_sighting.species_tag ).count()
 	if request.user.is_authenticated():
-		Comment.objects.filter( sighting = this_sighting, sighting__user_id = request.user.id ).all().update(viewed_by_user = True)
+		Notifications.objects.filter( sighting = this_sighting, user_id = request.user.id ).all().update(quiet = True)
 		is_liked = Like.objects.filter( user = request.user, sighting = this_sighting ).count()
 		is_voted = SpeciesVote.objects.filter( user = request.user, sighting = this_sighting, species = this_sighting.species_tag ).count()	
 		return render(request, 'birds/view_sighting.html', { 'sighting': this_sighting, 'is_liked': is_liked, 'is_voted': is_voted,'species_votes': species_votes})
@@ -178,10 +178,10 @@ def get_comments(request):
 		return HttpResponseForbidden()
 
 @login_required
-def get_new_comments_for_user(request):
+def get_new_notifications_for_user(request):
 	if request.is_ajax():
-		comments = Comment.objects.filter( sighting__user_id = request.user.id, viewed_by_user = False ).order_by('-post_ts')
-		return render_to_response('birds/user_comments.html', {'comments': comments})
+		notifications = Notifications.objects.filter( user = request.user, quiet = False ).order_by('-not_ts')
+		return render_to_response('birds/user_notifications.html', {'notifications': notifications})
 	else:
 		return HttpResponseForbidden()
 		
@@ -189,7 +189,18 @@ def get_new_comments_for_user(request):
 @login_required
 def new_comment(request):
 	if request.is_ajax():
-		Comment.objects.create( comment = request.POST.get('new_comment'), sighting_id = request.POST.get('sighting_id'), user_id = request.user.id )
+		new_comment = Comment.objects.create( comment = request.POST.get('new_comment'), sighting_id = request.POST.get('sighting_id'), user_id = request.user.id )
+		
+		if request.user != new_comment.sighting.user:
+			notification_message = str(request.user)+": "+request.POST.get('new_comment')[:100]
+			Notifications.objects.create( user = new_comment.sighting.user, sighting_id = request.POST.get('sighting_id'), caption = "Comment", msg = notification_message)
+		
+		user_replies = Comment.objects.filter( sighting_id = request.POST.get('sighting_id') ).exclude(user = new_comment.sighting.user).exclude(user = request.user).values('user').distinct()
+		print user_replies
+		for reply in user_replies:
+			notification_message = str(request.user)+": "+request.POST.get('new_comment')[:100]
+			Notifications.objects.create( user_id = reply['user'], sighting_id = request.POST.get('sighting_id'), caption = "Reply", msg = notification_message)
+		
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
 	else:
 		return HttpResponseForbidden()
@@ -278,10 +289,6 @@ def accept_species_suggestion(request):
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
 	else:
 		return HttpResponseForbidden()
-
-#
-#
-#
 	
 @login_required
 def remove_photo(request):

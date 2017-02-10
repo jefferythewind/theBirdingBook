@@ -123,6 +123,7 @@
 				Clear Search
 			</div>
 		  </div>
+		  <div id="header-row-spacer" class="mdl-layout-spacer"></div>
 		  <!--
           <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
             <i class="material-icons">more_vert</i>
@@ -253,12 +254,12 @@
 		jQuery(function($){
 			{% if user.is_authenticated %}
 				$.ajax({
-					url: "{% url 'birds:get_new_comments_for_user' %}",
+					url: "{% url 'birds:get_new_notifications_for_user' %}",
 					data: { 'csrfmiddlewaretoken': '{{ csrf_token }}' },
 					type: "POST",
 					dataType: "html",
 					success: function(data) {
-						$('#clear_search_container').after(data);
+						$('#header-row-spacer').after(data);
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						alert(textStatus);

@@ -1,0 +1,19 @@
+{% if notifications|length > 0 %}
+<button id="comment_notification_button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+	<div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{ notifications|length }}">insert_comment</div>
+</button>
+<ul id="new_comment_menu" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="comment_notification_button">
+	{% for notification in notifications %}
+	<li class="mdl-menu__item">
+		<a class="notification-item" href="{% url 'birds:view_sighting' notification.sighting.id %}">
+			<div style="max-width:300px;">
+				<div class="item-location">{{ notification.caption }} on {{ notification.sighting.caption }}</div>
+				<div class="item-summary">{{ notification.msg }}</div>
+			</div>
+		</a>
+	</li>
+	{% endfor %}
+</ul>
+{% endif %}
+
+

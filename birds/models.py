@@ -140,3 +140,11 @@ class Feedback(models.Model):
     user = models.ForeignKey(User)
     feedback_text = models.CharField(max_length=2500)
     post_ts = models.DateTimeField(auto_now_add=True)
+
+class Notifications(models.Model):
+    user = models.ForeignKey(User)
+    sighting = models.ForeignKey(Sighting)
+    quiet = models.BooleanField(default=False)
+    caption = models.CharField(max_length=50)
+    msg = models.CharField(max_length=200)
+    not_ts = models.DateTimeField(auto_now_add=True)

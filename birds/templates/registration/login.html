@@ -8,77 +8,12 @@
 
 <div class="page-content">
     <section class="mdl-grid">
-        <div class="mdl-cell mdl-cell--4-col mdl-cell--1-offset-desktop">
+        <div class="mdl-cell mdl-cell--6-col mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet">
 			<div id="firebaseui-auth-container"></div>
-            <!--<div class="card-bird mdl-card mdl-shadow--3dp">
-                <div class="mdl-card__title">
-                    <h2 class="mdl-card__title-text">Log into your Birding Book</h2>
-                </div>
-                
-                <div class="mdl-card__supporting-text news-text">
-                    <img class="birding-sign-in-logo" src="https://www.iconexperience.com/_img/o_collection_png/green_dark_grey/512x512/plain/bird.png" alt="birding-logo"/>
-                        <form method="post" action="{% url 'login' %}">
-                            {% csrf_token %}
-                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <label class="mdl-textfield__label" for="username">Username</label>
-                                <input class="mdl-textfield__input" type="text" id="id_username" name="username"/>
-                            </div>
-                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <label class="mdl-textfield__label" for="password">Password</label>
-                                <input class="mdl-textfield__input" type="password" id="id_password" name="password"/>
-                            </div>
-                            {% if form.errors %}
-                                <div class="login-error">
-                                    <p>Your username and password didn't match.<br> Please try again.</p>
-                                </div>    
-                            {% endif %}
-                            <br>
-                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="login"> Log In</button>
-                            <input type="hidden" name="next" value="{{ next }}" />
-                        </form>
-
-                        {# Assumes you setup the password_reset view in your URLconf #}
-                        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" href="{% url 'password_reset' %}">Lost password?</a>
-                </div>
-            </div>-->
+			<div class="mdl-card__supporting-text">
+				Please review the <a href="{% url 'birds:about' %}#tos">Terms of Service</a> and <a href="{% url 'birds:about' %}#privacy-policy">Privacy Policy</a> before signing up.
+			</div>
         </div>
-        <!--<div class="mdl-cell mdl-cell--8-col mdl-cell--1-offset-desktop">
-            <div class="card-bird mdl-card mdl-shadow--3dp">
-                <div class="mdl-card__title">
-                    <h2 class="mdl-card__title-text">Sign Up</h2>
-                </div>
-                <div class="social-sign-in-buttons">
-                    <div class="g-signin2" data-onsuccess="onSignIn"></div>
-                </div>
-                <div class="hr-sect">or</div>
-                <div class="mdl-card__supporting-text news-text">
-                        <form method="post" action="{% url 'login' %}">
-                            {% csrf_token %}
-                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <label class="mdl-textfield__label" for="username">Email</label>
-                                <input class="mdl-textfield__input" type="text" id="id_username" name="username"/>
-                            </div>
-                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <label class="mdl-textfield__label" for="password">Password</label>
-                                <input class="mdl-textfield__input" type="password" id="id_password" name="password"/>
-                            </div>
-                            {% if form.errors %}
-                                <div class="login-error">
-                                    <p>Your username and password didn't match.<br> Please try again.</p>
-                                </div>    
-                            {% endif %}
-                            <br>
-                            <button style="background-color:rgba(45,192,45, .75);" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="login"> Sign Up</button>
-                            <input type="hidden" name="next" value="{{ next }}" />
-                        </form>
-
-                        {# Assumes you setup the password_reset view in your URLconf #}
-                        <br>
-                        <p>By signing up, you agree to the <a href="/about/#tos">Terms of Service</a>.</p>
-                        <p>Already have an account? <a href="/accounts/login">Log In</a></p>
-                </div>
-            </div>
-        </div>-->
     </section>
 </div>
 
