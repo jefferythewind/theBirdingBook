@@ -39,7 +39,7 @@ jQuery(function($) {
 
 	function need_more() {
 		
-		if ( $('main').scrollTop() + $('main').height() >= $('#sighting_grid_wrapper').height() ){
+		if ( $('main').scrollTop() + $('main').height() >= $('#sighting_grid_wrapper').height() - 200 ){
 			return true;
 		}else{
 			return false;

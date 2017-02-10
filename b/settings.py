@@ -23,13 +23,13 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# SECURITY WARNING: don't frun with debug turned on in production!
+DEBUG = True
 ALLOWED_HOSTS = ["www.thebirdingbook.com","localhost"]
 ADMINS = [('Tim', os.environ.get('DEFAULT_FROM_EMAIL'))]
 SERVER_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 #SESSION_COOKIE_SECURE = True
 #CSRF_COOKIE_SECURE = True
 #SECURE_HSTS_SECONDS = 3600

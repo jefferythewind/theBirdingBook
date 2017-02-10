@@ -5,96 +5,65 @@
 {% if sighting_list %}
 		
 	{% for sighting in sighting_list %}
-		<div class="full-width-card hover-card mdl-cell {% if info_window %}mdl-cell--12-col{% else %}mdl-cell--6-col-desktop mdl-cell--8-col-tablet{% endif %} mdl-card">
-			<a href="{% url 'birds:user' sighting.user.id %}">
-				<span class="mdl-chip mdl-card__supporting-text user-chip">
-					<div class="mdl-chip__contact"  style="background: url({{ sighting.user.avatar.thumbnail_url }}) no-repeat center;background-size:cover;"></div>
-					<span class="mdl-chip__text">{{ sighting.user }}</span>
-				</span>
-			</a>
-			<a class="no-decoration" href="{% url 'birds:view_sighting' sighting.id %}">
-				{% if sighting.images.count == 0 %}
-					<div style="height:100px;" class="image image-block-m mdl-color--blue-grey-800">
-						<div class="sighting-grid-image-description">
-							<div class="sighting-grid-caption">{{ sighting.caption }}
-							
-							<span style="position:absolute;right:0;top:5px;align-text:center; padding:5px;">
-							{% if sighting.num_likes > 0 %}
-								<i class="material-icons" style="vertical-align:middle;font-size:18px;">thumb_up</i>{{ sighting.num_likes }}
-							{% endif %}
-							{% if sighting.num_comments > 0 %}
-								<i class="material-icons" style="margin-left:2px;vertical-align:middle;font-size:18px;">comment</i>{{ sighting.num_comments }}
-							{% endif %}
-							</span>
-							
-							</div>
-							
-							<hr>
-							<div class="sighting-grid-species-tag">
-								<i class="material-icons">local_offer</i> <span style="color:inherit">{{sighting.species_tag}}</span>
-							</div>
-						</div>
-					</div>
-				{% else %}
-					{% for image in sighting.images %}
-						{% if forloop.counter == 1 %}
-							<div class="image image-block-m" style="background: url({{ image.thumbnail_url }}) no-repeat center;background-size:cover;">
-								<div class="sighting-grid-image-description">
-									<div class="sighting-grid-caption">{{ sighting.caption }}
-									
-									<span style="position:absolute;right:0;top:5px;align-text:center; padding:5px;">
-									{% if sighting.images.count > 0 %}
-										<i class="material-icons" style="vertical-align:middle;font-size:18px;">photo_album</i>{{ sighting.images.count }}
-									{% endif %}
-									{% if sighting.num_likes > 0 %}
-										<i class="material-icons" style="margin-left:2px;vertical-align:middle;font-size:18px;">thumb_up</i>{{ sighting.num_likes }}
-									{% endif %}
-									{% if sighting.num_comments > 0 %}
-										<i class="material-icons" style="margin-left:2px;vertical-align:middle;font-size:18px;">comment</i>{{ sighting.num_comments }}
-									{% endif %}
-									</span>
-									
-									</div>
-									
-									<hr>
-									<div class="sighting-grid-species-tag">
-										<i class="material-icons">local_offer</i> <span style="color:inherit">{{sighting.species_tag}}</span>
-									</div>
+
+		{% if sighting.images.count == 0 %}
+
+		{% else %}
+			<div class="full-width-card hover-card mdl-cell {% if info_window %}mdl-cell--12-col{% else %}mdl-cell--6-col-desktop mdl-cell--8-col-tablet{% endif %} mdl-card">
+				<a href="{% url 'birds:user' sighting.user.id %}">
+					<span class="mdl-chip mdl-card__supporting-text user-chip">
+						<div class="mdl-chip__contact"  style="background: url({{ sighting.user.avatar.thumbnail_url }}) no-repeat center;background-size:cover;"></div>
+						<span class="mdl-chip__text">{{ sighting.user }}</span>
+					</span>
+				</a>
+				<a class="no-decoration" href="{% url 'birds:view_sighting' sighting.id %}">
+				{% for image in sighting.images %}
+					{% if forloop.counter == 1 %}
+						<div class="image image-block-m" style="background: url({{ image.thumbnail_url }}) no-repeat center;background-size:cover;">
+							<div class="sighting-grid-image-description">
+								<div class="sighting-grid-caption">
+									<table style="width:100%">
+										<tr><td>
+											{{ sighting.caption }}
+										</td>
+										<td style="text-align:right;white-space: nowrap">
+					
+											{% if sighting.images.count > 0 %}
+												<i class="material-icons" style="vertical-align:middle;font-size:18px;">photo_album</i>{{ sighting.images.count }}
+											{% endif %}
+											{% if sighting.num_likes > 0 %}
+												<i class="material-icons" style="margin-left:2px;vertical-align:middle;font-size:18px;">thumb_up</i>{{ sighting.num_likes }}
+											{% endif %}
+											{% if sighting.num_comments > 0 %}
+												<i class="material-icons" style="margin-left:2px;vertical-align:middle;font-size:18px;">comment</i>{{ sighting.num_comments }}
+											{% endif %}
+											
+										</td></tr>
+										
+									</table>
+								
+								</div>
+								
+								<hr>
+								<div class="sighting-grid-species-tag">
+									<i class="material-icons">local_offer</i> <span style="color:inherit">{{sighting.species_tag}}</span>
 								</div>
 							</div>
-						{% endif %}
-					{% endfor %}
-				{% endif %}
-			</a>
-			{% if sighting.images.count == 0 %}
-			<div style="font-weight:600;" class="mdl-card__supporting-text">
-				
-				<div style="float:left">{{ sighting.time_diff }}</div>
-
-				<div style="float:right">
-				{% if sighting.num_likes  == 0 %}
+						</div>
+					{% endif %}
+				{% endfor %}
+				</a>
+				<div style="padding-top: 13px; padding-bottom: 13px; font-weight:600;" class="mdl-card__supporting-text">
 					
-				{% else %}
-					<i class="material-icons">thumb_up</i>{{ sighting.num_likes }}
-				{% endif %}
-				{% if sighting.num_comments  == 0 %}
-					
-				{% else %}
-					<i class="material-icons">comment</i> {{ sighting.num_comments }}
-				{% endif %}
-				</div>	
-			</div>	
-			{% else %}
-			<div style="padding-top: 13px; padding-bottom: 13px; font-weight:600;" class="mdl-card__supporting-text">
-				
 
-				<div>{{ sighting.location }}</div>
-				<div>{{ sighting.time_diff }}</div>
+					<div>{{ sighting.location }}</div>
+					<div>{{ sighting.time_diff }}</div>
 
 
-			</div>	
-			{% endif %}
-		</div>
+				</div>
+			</div>
+		{% endif %}
+			
 	{% endfor %}
 
 {% endif %}
