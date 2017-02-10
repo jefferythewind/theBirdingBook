@@ -37,6 +37,6 @@ urlpatterns = [
 	url(r'^get_map_points/', views.get_map_points, name="get_map_points"),
 	url(r'^sightings_search', views.sightings_search, name="sightings_search"),
 	url(r'^update_search', views.update_search_session, name="update_search"),
-	url(r'^.well-known/acme-challenge/u8rJYLDlWBRLVWrVAHWdOjLR_wFG1QhZVeq8YbXN9Vk', views.certcode, name="certcode"),
+	#url(r'^.well-known/acme-challenge/u8rJYLDlWBRLVWrVAHWdOjLR_wFG1QhZVeq8YbXN9Vk', views.certcode, name="certcode"),
 	url(r'^robots\.txt$', views.robots, name="robots"),
 ]

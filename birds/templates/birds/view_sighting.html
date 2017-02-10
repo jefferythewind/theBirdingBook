@@ -6,7 +6,7 @@
 <meta property="og:url"                content="www.thebirdingbook.com/{% url 'birds:view_sighting' sighting.id %}" />
 <meta property="og:type"               content="website" />
 <meta property="og:title"              content="{{ sighting.caption }}" />
-<meta property="og:description"        content="{% if sighting.species_tag %}{{ sighting.species_tag }}.  {% endif %}{{ sighting.post_text }}" />
+<meta property="og:description"        content="{% if sighting.species_tag %}{{ sighting.species_tag }}.  {% endif %}Do you know this bird?  {{ sighting.post_text }}" />
 <meta property="og:image"              content="{{ sighting.images.0.thumbnail_url }}" />
 
 
@@ -190,7 +190,6 @@
 						<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white"><i class="material-icons">local_offer</i></span>
 						<span class="mdl-chip__text">{{ sighting.species_tag }}</span>
 					</span>
-				
 				</a>
 
 				{% if user.is_authenticated and sighting.species_tag %}

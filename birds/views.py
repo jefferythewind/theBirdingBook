@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404, render_to_resp
 from django.template.loader import render_to_string
 from django.utils import timezone
 from .models import Sighting, Subspecies, Comment, Like, SpeciesVote, SpeciesSuggestions, BirdPhoto, Avatar, Uid, Feedback
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 import json
 from django.db.models import Q, IntegerField, Value
 from django.contrib.auth.models import User
@@ -11,12 +11,9 @@ import boto3
 import datetime
 from django.core import serializers
 
-
-
 from .forms import SightingsForm
 
 from django.contrib.auth.decorators import login_required
-from django.http.response import HttpResponseForbidden
 
 def about(request):
 	return render(request, 'birds/about.html')
@@ -39,7 +36,6 @@ def user(request, pk):
 		"species_count_ytd":species_count_ytd,
 		"helper_species_count":helper_species_count
 	}
-	
 	return render(request, 'birds/user.html', {"this_user": this_user, "user_stats": user_stats})
 
 def signs3(request):
@@ -68,6 +64,8 @@ def signs3(request):
 			ExpiresIn = 3600
 		)
 		return HttpResponse(json.dumps({'data': presigned_post,'filename': filename, 'url': new_photo.photo.url, 'id': new_photo.id, 'thumbnail_url': new_photo.thumbnail_url}), content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 
 @login_required
 def setusername(request):
@@ -81,6 +79,8 @@ def setusername(request):
 			return redirect('/user/'+str(request.user.pk), pk=request.user.pk)
 	elif request.method == "GET":
 		return render(request, 'birds/setusername.html')
+	else:
+		return HttpResponseForbidden()
 
 def authenticate_user(request):
 	if request.is_ajax():
@@ -108,6 +108,8 @@ def authenticate_user(request):
 			uid.save()
 			login(request, user)
 			return HttpResponse(json.dumps({'msg':'new_user'}), content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 		
 @login_required
 def new_sighting(request):
@@ -136,6 +138,8 @@ def edit_sighting(request, pk):
 			return render(request, 'birds/edit_sighting.html', { 'form': form, 'this_sighting': this_sighting })
 	elif request.method == "GET":
 		return render(request, 'birds/edit_sighting.html', { 'form': form, 'this_sighting': this_sighting })
+	else:
+		return HttpResponseForbidden()
 
 def view_sighting(request, pk):
 	this_sighting = get_object_or_404(Sighting, pk=pk)
@@ -153,6 +157,8 @@ def index_view(request):
 		#latest_sighting_list = Sighting.objects.filter(sighting_date__lte=timezone.now()).order_by('-post_ts')[:10]
 		pre_url = BirdPhoto.objects.latest('sighting__post_ts').thumbnail_url
 		return render(request, 'birds/index.html', {'preview_url':pre_url})
+	else:
+		return HttpResponseForbidden()
 		
 def species_query(request):
 	if request.method == "GET":
@@ -161,17 +167,23 @@ def species_query(request):
 		l2 = [{'value':unicode(i), 'id':i.pk} for i in l]
 		data = json.dumps(l2)
 		return HttpResponse(data, content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 
 def get_comments(request):
 	if request.is_ajax():
 		comments = Comment.objects.filter( sighting = request.POST.get('this_sighting') ).order_by('post_ts')
 		return render_to_response('birds/comments.html', {'comments': comments})
+	else:
+		return HttpResponseForbidden()
 
 @login_required
 def get_new_comments_for_user(request):
 	if request.is_ajax():
 		comments = Comment.objects.filter( sighting__user_id = request.user.id, viewed_by_user = False ).order_by('-post_ts')
 		return render_to_response('birds/user_comments.html', {'comments': comments})
+	else:
+		return HttpResponseForbidden()
 		
 
 @login_required
@@ -179,6 +191,8 @@ def new_comment(request):
 	if request.is_ajax():
 		Comment.objects.create( comment = request.POST.get('new_comment'), sighting_id = request.POST.get('sighting_id'), user_id = request.user.id )
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 	
 @login_required 
 def like(request):
@@ -189,6 +203,8 @@ def like(request):
 			Like.objects.create( user = request.user, sighting_id = request.POST.get('sighting_id') )
 			new_likes = Sighting.objects.get( pk = request.POST.get('sighting_id') ).num_likes
 			return HttpResponse(json.dumps({'msg':'success', 'new_likes': new_likes}), content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 		
 @login_required 
 def unlike(request):
@@ -199,6 +215,8 @@ def unlike(request):
 			Like.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id') ).delete()
 			new_likes = Sighting.objects.get( pk = request.POST.get('sighting_id') ).num_likes
 			return HttpResponse(json.dumps({'msg':'success', 'new_likes': new_likes}), content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 
 #
 #Species Suggestions
@@ -213,6 +231,8 @@ def up_vote_species(request):
 			SpeciesVote.objects.create(  user = request.user, sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id') )
 			new_votes = SpeciesVote.objects.filter( sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id') ).count()
 			return HttpResponse(json.dumps({'msg':'success', 'new_votes': new_votes, 'species_id': request.POST.get('species_id')}), content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 		
 @login_required 
 def down_vote_species(request):
@@ -223,6 +243,8 @@ def down_vote_species(request):
 			SpeciesVote.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id') ).delete()
 			new_votes = SpeciesVote.objects.filter( sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id') ).count()
 			return HttpResponse(json.dumps({'msg':'success', 'new_votes': new_votes, 'species_id': request.POST.get('species_id')}), content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 
 @login_required
 def suggest_new_species(request):
@@ -232,6 +254,8 @@ def suggest_new_species(request):
 		else:
 			SpeciesSuggestions.objects.create( user = request.user, sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id'))
 			return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 
 def get_species_suggestions(request):
 	if request.is_ajax():
@@ -239,6 +263,8 @@ def get_species_suggestions(request):
 		for suggestion in species_suggestions:
 			suggestion.is_voted = SpeciesVote.objects.filter( sighting_id = request.POST.get('sighting_id'), species = suggestion.species, user = request.user ).count()
 		return render_to_response('birds/species_suggestions.html', {'species_suggestions': species_suggestions,'user': request.user})
+	else:
+		return HttpResponseForbidden()
 
 @login_required
 def accept_species_suggestion(request):
@@ -250,6 +276,8 @@ def accept_species_suggestion(request):
 		this_suggestion.accepted = True
 		this_suggestion.save()
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 
 #
 #
@@ -260,6 +288,8 @@ def remove_photo(request):
 	if request.is_ajax():
 		get_object_or_404(BirdPhoto, pk=request.POST.get('image_id')).delete()
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 	
 @login_required
 def add_avatar(request):	
@@ -292,11 +322,15 @@ def add_avatar(request):
 			ExpiresIn = 3600
 		)
 		return HttpResponse(json.dumps({'data': presigned_post,'thumbnail_url':new_avatar.thumbnail_url,'filename': filename, 'url': new_avatar.avatar.url}), content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 	
 def image_inspect(request):
 	if request.is_ajax():
 		image = get_object_or_404(BirdPhoto, pk = request.POST.get('image_id'))
 		return render_to_response('birds/image_inspect.html', {'image': image})
+	else:
+		return HttpResponseForbidden()
 	
 @login_required
 def star_photo(request):
@@ -306,6 +340,8 @@ def star_photo(request):
 		photo.save()
 		BirdPhoto.objects.filter(sighting = photo.sighting).exclude(pk = photo.id).update(order = 0)
 		return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 
 @login_required
 def feedback(request):
@@ -322,6 +358,8 @@ def info_window(request):
 	if request.is_ajax():
 		this_sighting = get_object_or_404(Sighting, pk=request.POST.get('sighting_id'))
 		return render_to_response('birds/sighting_grid.html', {'sighting_list': [this_sighting], 'the_template': 'empty_wrapper.html', 'info_window': 'true'})
+	else:
+		return HttpResponseForbidden()
 	
 def update_search_session(request):
 	if request.is_ajax():
@@ -360,6 +398,8 @@ def update_search_session(request):
 			request.session['location'] = request.POST.get('location')
 			
 		return HttpResponse(json.dumps({'message': 'done'}), content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 	
 def get_sightings(request):		
 	search = []
@@ -387,6 +427,8 @@ def get_map_points(request):
 	if request.is_ajax():
 		[search, sighting_list] = get_sightings(request)
 		return HttpResponse(json.dumps({'search': search, 'sighting_list': [ {'pk':s.id, 'lat':s.lat, 'lng': s.lng} for s in sighting_list.only('id','lat','lng')]}), content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 
 def sightings_search(request):
 	if request.is_ajax():
@@ -401,8 +443,8 @@ def sightings_search(request):
 		else:
 			return HttpResponse(json.dumps({'html': "", 'next_page': 'done'}) , content_type='application/json')
 		
-def certcode(request):
-	return HttpResponse("u8rJYLDlWBRLVWrVAHWdOjLR_wFG1QhZVeq8YbXN9Vk.kkUUZ7wDSk_Ruptr4ve-eoVyTSusZ4Q8H6nPxyDIeh0", content_type='text/plain')
+#def certcode(request):
+	#return HttpResponse("u8rJYLDlWBRLVWrVAHWdOjLR_wFG1QhZVeq8YbXN9Vk.kkUUZ7wDSk_Ruptr4ve-eoVyTSusZ4Q8H6nPxyDIeh0", content_type='text/plain')
 
 def robots(request):
 	return render(request, 'birds/robots.txt', content_type="text/plain")
