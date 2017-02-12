@@ -36,7 +36,12 @@ def user(request, pk):
 		"species_count_ytd":species_count_ytd,
 		"helper_species_count":helper_species_count
 	}
-	return render(request, 'birds/user.html', {"this_user": this_user, "user_stats": user_stats})
+	preview_images = BirdPhoto.objects.filter( sighting__user = this_user ).order_by('-sighting__post_ts')
+	preview_url = ""
+	if preview_images.count() > 0:
+		preview_url = preview_images[0].thumbnail_url
+	
+	return render(request, 'birds/user.html', {"this_user": this_user, "user_stats": user_stats, "preview_url": preview_url })
 
 def signs3(request):
 	if request.is_ajax():
@@ -359,7 +364,12 @@ def feedback(request):
 		return render(request, 'birds/feedback.html')
 
 def map_view(request):
-	return render(request, 'birds/map.html')
+	preview_images = ImagePreview.objects.filter( desc = "map" )
+	if preview_images.count() > 0:
+		preview_url = preview_images[0].image.url
+	else:
+		preview_url = ""
+	return render(request, 'birds/map.html', { 'preview_url': preview_url })
 
 def info_window(request):
 	if request.is_ajax():

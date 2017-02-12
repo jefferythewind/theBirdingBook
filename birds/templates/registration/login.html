@@ -1,5 +1,19 @@
 {% extends "birds/base.html" %}
 
+
+{% block desc_title %}
+<title>The Birding Book Login</title>
+<meta name="description" content="Login to The Birding Book to post sightings, suggest species, and more.">
+
+<meta property="og:url"                content="www.thebirdingbook.com/accounts/login/" />
+<meta property="og:type"               content="website" />
+<meta property="og:title"              content="The Birding Book Login" />
+<meta property="og:description"        content="Login to The Birding Book to post sightings, suggest species, and more." />
+<meta property="og:image"              content="{{ preview_url }}" />
+
+{% endblock %}
+
+
 {% block content %}
 
 <!-- Firebase UI -->

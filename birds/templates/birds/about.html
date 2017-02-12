@@ -1,8 +1,15 @@
 {% extends 'birds/base.html' %}
 
 {% block desc_title %}
-<meta name="description" content="The Birding Book, bird science.">
-<title>The Birding Book</title>
+<title>The Birding Book - About</title>
+<meta name="description" content="Learn about The Birding Book by reviewing the FAQ, privacy policy, and terms of service.">
+
+<meta property="og:url"                content="www.thebirdingbook.com/about/" />
+<meta property="og:type"               content="website" />
+<meta property="og:title"              content="The Birding Book - About" />
+<meta property="og:description"        content="Learn about The Birding Book by reviewing the FAQ, privacy policy, and terms of service." />
+<meta property="og:image"              content="{{ preview_url }}" />
+
 {% endblock %}
 
 {% block content %}

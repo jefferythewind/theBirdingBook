@@ -13,4 +13,5 @@ admin.site.register(Comment)
 admin.site.register(BirdPhoto)
 admin.site.register(Uid)
 admin.site.register(Feedback)
+admin.site.register(ImagePreview)
 # Register your models here.

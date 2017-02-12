@@ -1,8 +1,15 @@
 {% extends 'birds/base.html' %}
 
 {% block desc_title %}
-<meta name="description" content="The Birding Book, bird science.">
-<title>The Birding Book</title>
+<title>The Birding Book - Edit Sighting</title>
+<meta name="description" content="Use this form to add information about your sighting, including photos, date, location, species identification, and a story about the bird.">
+
+<meta property="og:url"                content="www.thebirdingbook.com/edit_sighting/" />
+<meta property="og:type"               content="website" />
+<meta property="og:title"              content="The Birding Book - Edit Sighting" />
+<meta property="og:description"        content="Use this form to add information about your sighting, including photos, date, location, species identification, and a story about the bird." />
+<meta property="og:image"              content="{{ preview_url }}" />
+
 {% endblock %}
 
 {% block content %}

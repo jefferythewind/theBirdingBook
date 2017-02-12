@@ -148,3 +148,11 @@ class Notifications(models.Model):
     caption = models.CharField(max_length=50)
     msg = models.CharField(max_length=200)
     not_ts = models.DateTimeField(auto_now_add=True)
+    
+class ImagePreview(models.Model):
+    desc = models.CharField(max_length=100)
+    image = models.ImageField()
+    
+    def __str__(self):
+        return self.desc
+        

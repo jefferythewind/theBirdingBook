@@ -415,8 +415,11 @@
 		});
 		
 		$('#reveal-comments').click(function(){
-			$('#save-comment-block').slideToggle("slow");
+			$('#save-comment-block').slideToggle("fast");
 			$(this).slideToggle("fast");
+			$('main').animate({
+				scrollTop: $("#save-comment-block").height() + $('#page-content').height()
+			}, "fast");
 		});
 		
 		$('#new_comment_cancel_button').click(function(){
