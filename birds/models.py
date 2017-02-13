@@ -156,3 +156,5 @@ class ImagePreview(models.Model):
     def __str__(self):
         return self.desc
         
+#class FlaggedSighting(models.Model):
+    

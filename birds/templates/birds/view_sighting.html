@@ -3,7 +3,7 @@
 {% block desc_title %}
 <meta name="description" content="{% if sighting.species_tag %}{{ sighting.species_tag }}.  {% else %}Do you know this bird?  {% endif %}{{ sighting.post_text }}">
 
-<meta property="og:url"                content="www.thebirdingbook.com/{% url 'birds:view_sighting' sighting.id %}" />
+<meta property="og:url"                content="www.thebirdingbook.com{% url 'birds:view_sighting' sighting.id %}" />
 <meta property="og:type"               content="website" />
 <meta property="og:title"              content="{{ sighting.caption }}" />
 <meta property="og:description"        content="{% if sighting.species_tag %}{{ sighting.species_tag }}.  {% else %}Do you know this bird?  {% endif %}{{ sighting.post_text }}" />

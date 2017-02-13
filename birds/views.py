@@ -168,9 +168,12 @@ def index_view(request):
 def species_query(request):
 	if request.method == "GET":
 		term = request.GET.get('term')
-		l = list(Subspecies.objects.filter( Q(subspecies__icontains=term) | Q(species__species__icontains=term) | Q(species__species_english__icontains=term) ).order_by('subspecies')[:10])
-		l2 = [{'value':unicode(i), 'id':i.pk} for i in l]
-		data = json.dumps(l2)
+		if term:
+			l = list(Subspecies.objects.filter( Q(subspecies__icontains=term) | Q(species__species__icontains=term) | Q(species__species_english__icontains=term) ).order_by('subspecies')[:10])
+			l2 = [{'value':unicode(i), 'id':i.pk} for i in l]
+			data = json.dumps(l2)
+		else:
+			data = []
 		return HttpResponse(data, content_type='application/json')
 	else:
 		return HttpResponseForbidden()

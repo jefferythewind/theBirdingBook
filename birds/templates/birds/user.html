@@ -7,7 +7,7 @@
 <meta property="og:url"                content="www.thebirdingbook.com/user/{{ this_user.id }}/" />
 <meta property="og:type"               content="website" />
 <meta property="og:title"              content="{{ this_user.username }} @ The Birding Book" />
-<meta property="og:description"        content="{{ this_user.username }} has identified {{ user_stats.species_count_ytd }} species this year, and logged {{ user_stats.sighting_count }} sightings overall.  {% if user_stats.helper_species_count > 0 %} This birder has helped ID {{ user_stats.helper_species_count }} birds for others.{% endif %}  Come check out all their birds a The Birding Book." />
+<meta property="og:description"        content="{{ this_user.username }} has identified {{ user_stats.species_count_ytd }} species this year, and logged {{ user_stats.sighting_count }} sightings overall.  {% if user_stats.helper_species_count > 0 %} This birder has helped ID {{ user_stats.helper_species_count }} birds for others.{% endif %}  Come check out all the birds at The Birding Book." />
 <meta property="og:image"              content="{{ preview_url }}" />
 
 {% endblock %}
