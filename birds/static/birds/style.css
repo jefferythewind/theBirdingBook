@@ -248,38 +248,6 @@ color:#f44336;
 
 /*IMAGES FOR BIRDS
 //===============*/
-.image-block-m {
-  /*border: 3px solid white;*/
-  position: relative;
-  background-color: black;
-  padding: 0px;
-  margin: 0px;
-  height: 250px;
-  vertical-align: bottom;
-  line-height: 1;
-}
-.image-block-m{
-  height: 250px;
-}
-.image-block-m span {
-  color: white;
-  vertical-align: text-bottom;
-}
-.image-block-m h4 {
-  position: absolute;
-  top: 150px;
-  left: 0;
-  width: 100%;
-  margin-bottom: 16px;
-}
-.image-block-m h4 span {
-  color: white;
-  font: bold 24px/45px "Noto Sans", Helvetica, Sans-Serif;
-  letter-spacing: -1px;
-  /*background: rgba(0, 0, 0, 0.3);*/
-  text-shadow: 2px 2px 4px #000000;
-  padding: 10px;
-}
 
 .image {
   position: relative;
@@ -314,7 +282,7 @@ color:#f44336;
 }
 
 .no-decoration:visited {
-	color
+	color: initial;
 }
 
 .mdl-card__actions i {
@@ -325,7 +293,50 @@ color:#f44336;
 	vertical-align: middle;
 	}
 
-/* SIGHTING GRID */
+/* 
+SIGHTING GRID 
+*/
+
+.image-block-m {
+  /*border: 3px solid white;*/
+  position: relative;
+  background-color: black;
+  padding: 0px;
+  margin: 0px;
+  height: 300px;
+  vertical-align: bottom;
+  line-height: 1;
+}
+.image-block-m span {
+  color: white;
+  vertical-align: text-bottom;
+}
+.image-block-m h4 {
+  position: absolute;
+  top: 150px;
+  left: 0;
+  width: 100%;
+  margin-bottom: 16px;
+}
+.image-block-m h4 span {
+  color: white;
+  font: bold 24px/45px "Noto Sans", Helvetica, Sans-Serif;
+  letter-spacing: -1px;
+  /*background: rgba(0, 0, 0, 0.3);*/
+  text-shadow: 2px 2px 4px #000000;
+  padding: 10px;
+}
+
+.sighting-grid-no-image-description {
+	width:auto;
+	/*background: rgba(255,255,255,0.0);*/
+	padding:0px 5px 0px 5px;
+	
+}
+.sighting-grid-no-image-description hr {
+	margin:auto;
+}
+
 .sighting-grid-image-description {
 	color: rgba(255,255,255,0.95);
 	/*background: rgba(255,255,255,0.0);*/

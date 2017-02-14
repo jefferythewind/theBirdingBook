@@ -92,7 +92,7 @@
 					{% endfor %}
 					
 					<div id="msg"><p>CENTER of maps marks sighting location.</p></div>
-					<input id="pac-input" class="controls" type="text" placeholder="Search Box" value="{{ form.location.value }}">
+					<input id="pac-input" class="controls" type="text" placeholder="Search Box" value="{% if form.location.value %}{{ form.location.value }}{% endif %}">
 					<div id="editor_map"></div>
 					
 					
