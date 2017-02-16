@@ -139,7 +139,7 @@
         <header class="demo-drawer-header">
           <div class="demo-avatar-dropdown">
                 {% if user.is_authenticated %}
-                    <a class="user-ident" href="{% url 'birds:user' user.id %}">
+                    <a class="user-ident no-decoration" href="{% url 'birds:user' user.id %}">
 						{% if user.avatar %}
 							<div class="mdl-shadow--8dp" style="height:50px;width:50px;background: url({{ user.avatar.thumbnail_url }}) no-repeat center;background-size:cover;"></div>
 						{% else %}

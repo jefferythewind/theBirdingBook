@@ -7,12 +7,18 @@
 	{% for sighting in sighting_list %}
 
 		<div class="full-width-card hover-card mdl-cell {% if info_window %}mdl-cell--12-col{% else %}mdl-cell--7-col-desktop mdl-cell--8-col-tablet{% endif %} mdl-card">
-			<a href="{% url 'birds:user' sighting.user.id %}">
-				<span class="mdl-chip mdl-card__supporting-text user-chip">
-					<div class="mdl-chip__contact"  style="background: url({{ sighting.user.avatar.thumbnail_url }}) no-repeat center;background-size:cover;"></div>
-					<span class="mdl-chip__text">{{ sighting.user }}</span>
+			<div class="mdl-card__actions">
+				<a href="{% url 'birds:user' sighting.user.id %}">
+					<span class="mdl-chip user-chip">
+						<div class="mdl-chip__contact"  style="background: url({{ sighting.user.avatar.thumbnail_url }}) no-repeat center;background-size:cover;"></div>
+						<span class="mdl-chip__text">{{ sighting.user }}</span>
+					</span>
+				</a>
+				<span style="float:right" class="user-chip mdl-chip">
+					<span class="mdl-chip__text">{{ sighting.time_diff }}</span>
 				</span>
-			</a>
+				
+			</div>
 			<a class="no-decoration" href="{% url 'birds:view_sighting' sighting.id %}">
 		{% if sighting.images.count == 0 %}
 			<div class="sighting-grid-no-image-description mdl-card__supporting-text">
@@ -78,9 +84,8 @@
 			
 		{% endif %}
 		
-			<div style="padding-top: 13px; padding-bottom: 13px; font-weight:600;" class="mdl-card__supporting-text">
+			<div class="mdl-card__supporting-text">
 				<div>{{ sighting.location }}</div>
-				<div>{{ sighting.time_diff }}</div>
 			</div>
 			</a>
 		</div>

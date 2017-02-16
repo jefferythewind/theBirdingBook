@@ -20,6 +20,7 @@
 				<h2 class="mdl-card__title-text">Set Username</h2>
 			</div>
 			<form method="post">{% csrf_token %}
+				<input type="hidden" value="{% if next %}{{ next }}{% else %} {% url 'birds:index' %} {% endif %}" name="next">
 				<div class="mdl-card__supporting-text">
 					
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label {% if error %}is-invalid{% endif %}">

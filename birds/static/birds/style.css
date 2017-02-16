@@ -257,12 +257,14 @@ color:#f44336;
 /*IMAGES FOR BIRD SIGHTING PAGE
 //===============*/
 .sighting-page{
-  height: 25em;
+  height: 380px;
 }
 
 .sighting-page h4{
   top: 300px;
 }
+
+
 
 /*WARNING MESSAGE
 //===============*/
@@ -282,7 +284,7 @@ color:#f44336;
 }
 
 .no-decoration:visited {
-	color: initial;
+	/*color: initial;*/
 }
 
 .mdl-card__actions i {
@@ -382,16 +384,31 @@ END SIGHTING GRID
 /*
 VIEW SIGHTING PAGE
 */
-.sighting-control-menu {
-	color: rgba(255,255,255,1);
-	text-shadow: 3px 3px 4px rgba(0, 0, 0, 0.8);
-	background: rgba(0,0,0,0.3);
-    border-radius: 3px;
-    padding: 5px;
+.tag-container {
+    padding: 6px;
+    margin: 2px;
+    background: rgba(0,0,0,.05);
+    border-radius: 4px;
 }
 
-.sighting-control-menu > button > i{
-	text-shadow: 3px 3px 4px rgba(0, 0, 0, 0.8);
+#suggest_species {
+	width:100%;
+}
+
+.sighting-control-menu {
+	color: rgba(255,255,255,1);
+	/*background: rgba(0,0,0,0.3);
+    border-radius: 3px;
+    padding: 5px;*/
+	top: initial;
+	bottom: 0px;
+}
+
+.sighting-image-top-menu {
+	position: absolute;
+    top: 0px;
+    z-index: 1;
+    width: 100%;
 }
 
 @keyframes pulse { 
@@ -399,7 +416,17 @@ VIEW SIGHTING PAGE
 }
 
 .pulsate_button {
-  animation: pulse .8s ease-out 20;
+  animation: pulse .8s ease-out 10;
+}
+
+.sighting-no-image-description {
+	/*background: rgba(255,255,255,0.0);*/
+	padding:0px 5px 0px 5px;
+	position:absolute;
+	bottom:0;
+	font-size: 24px;
+	margin-bottom:5px;
+	max-width: 80%;
 }
 
 /* 

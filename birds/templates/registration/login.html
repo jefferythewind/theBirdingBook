@@ -57,9 +57,9 @@ jQuery(function($){
 					dataType: "json",
 					success: function(data) {
 						if ( data.msg == "new_user" ){
-							window.location = "{% url 'birds:setusername' %}";
+							window.location = "{% url 'birds:setusername' %}?next={% if next %}{{ next }}{% else %} {% url 'birds:index' %} {% endif %}";
 						}else{
-							window.location = "{% url 'birds:index' %}";
+							window.location = "{% if next %}{{ next }}{% else %} {% url 'birds:index' %} {% endif %}";
 						}
 					},
 					error: function(jqXHR, textStatus, errorThrown){
@@ -69,14 +69,14 @@ jQuery(function($){
 				return false;
 			}
         },
-		'credentialHelper': firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM,
+		'credentialHelper': firebaseui.auth.CredentialHelper.NONE,
 		// Query parameter name for mode.
         'queryParameterForWidgetMode': 'mode',
         // Query parameter name for sign in success url.
         'queryParameterForSignInSuccessUrl': 'signInSuccessUrl',
         // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
         'signInFlow': 'redirect',
-		'signInSuccessUrl': "{% url 'birds:index' %}",
+		'signInSuccessUrl': "{{ next }}",
 		'signInOptions': [
 			// Leave the lines as is for the providers you want to offer your users.
 			firebase.auth.GoogleAuthProvider.PROVIDER_ID,

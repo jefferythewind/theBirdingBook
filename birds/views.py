@@ -76,14 +76,19 @@ def signs3(request):
 def setusername(request):
 	if request.method == "POST":
 		new_username = request.POST.get("username")
+		next_url = request.POST.get("next")
 		if User.objects.exclude(pk=request.user.pk).filter(username=new_username).exists():
-			return render(request, 'birds/setusername.html', { 'error': 'username already exists, please choose another'})
+			return render(request, 'birds/setusername.html', { 'error': 'username already exists, please choose another', 'next': next_url })
 		else:
 			request.user.username = new_username
 			request.user.save()
-			return redirect('/user/'+str(request.user.pk), pk=request.user.pk)
+			if next_url:
+				return redirect(next_url)
+			else:
+				return redirect('/user/'+str(request.user.pk), pk=request.user.pk)
 	elif request.method == "GET":
-		return render(request, 'birds/setusername.html')
+		next_url = request.GET.get("next")
+		return render(request, 'birds/setusername.html',  { 'next': next_url } )
 	else:
 		return HttpResponseForbidden()
 
