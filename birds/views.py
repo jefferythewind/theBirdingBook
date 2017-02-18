@@ -47,13 +47,13 @@ def signs3(request):
 	if request.is_ajax():
 		S3_BUCKET = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 	
-		file_type = "image/jpg"
+		file_type = "image/jpeg"
 		
 		new_photo = BirdPhoto.objects.create( sighting_id = request.POST.get('sighting_id'), order = 0 )
-		filename = "%s.%s" % ( new_photo.id, "jpg" )
+		filename = "%s.%s" % ( new_photo.id, "jpeg" )
 		new_photo.photo = filename
-		new_photo.thumbnail_url = "https://s3.amazonaws.com/birdingappsmall/%s.%s" % ( new_photo.id, "jpg" )
-		new_photo.medium_url = "https://s3.amazonaws.com/birdingappmedium/%s.%s" % ( new_photo.id, "jpg" )
+		new_photo.thumbnail_url = "https://s3.amazonaws.com/birdingappsmall/%s.%s" % ( new_photo.id, "jpeg" )
+		new_photo.medium_url = "https://s3.amazonaws.com/birdingappmedium/%s.%s" % ( new_photo.id, "jpeg" )
 		new_photo.save()
 
 		s3 = boto3.client('s3')
