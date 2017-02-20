@@ -57,9 +57,13 @@ jQuery(function($){
 					dataType: "json",
 					success: function(data) {
 						if ( data.msg == "new_user" ){
-							window.location = "{% url 'birds:setusername' %}?next={% if next %}{{ next }}{% else %} {% url 'birds:index' %} {% endif %}";
+							window.location = "{% url 'birds:setusername' %}{% if next %}?next={{ next }}{% endif %}";
 						}else{
-							window.location = "{% if next %}{{ next }}{% else %} {% url 'birds:index' %} {% endif %}";
+							{% if next %}
+								window.location = "{{ next }}";
+							{% else %}
+								window.location = "{% url 'birds:index' %}";
+							{% endif %}
 						}
 					},
 					error: function(jqXHR, textStatus, errorThrown){

@@ -258,65 +258,7 @@
 		
 		load_comments();
 		
-		function init_species_vote_buttons() {
-			function send_vote(url_location, tag_id) {
-				$.ajax({
-					url: url_location,
-					data: {
-						'sighting_id': {{ sighting.id }},
-						'species_id': tag_id,
-						'csrfmiddlewaretoken': '{{ csrf_token }}'
-					},
-					type: "POST",
-					dataType: "json",
-					success: function(data) {
-						if ( 'new_votes' in data ){
-							$('#'+data.species_id+'_num_votes').text(data.new_votes);
-						}
-					},
-					error: function(jqXHR, textStatus, errorThrown){
-						alert(textStatus);
-					}
-				});
-			}
 		
-			function accept_species(suggestion_id) {
-				$.ajax({
-					url: "{% url 'birds:accept_species_suggestion' %}",
-					data: {
-						'sighting_id': {{ sighting.id }},
-						'suggestion_id': suggestion_id,
-						'csrfmiddlewaretoken': '{{ csrf_token }}'
-					},
-					type: "POST",
-					dataType: "json",
-					success: function(data) {
-						location.reload()
-					},
-					error: function(jqXHR, textStatus, errorThrown){
-						alert(textStatus);
-					}
-				});
-			}
-		
-		
-			$('.vote_species').change(function(){
-				if ( $(this).is(':checked') ) {
-					send_vote("{% url 'birds:up_vote_species' %}", $(this).attr("data-species_tag-id"));
-					$('.vote_species').not(this).each(function(){
-						send_vote("{% url 'birds:down_vote_species' %}", $(this).attr("data-species_tag-id"));
-						$(this).attr('checked', false).parent().removeClass("is-checked");
-					});
-					if ( $(this).hasClass("accept-species-suggestion") ) {
-						accept_species($(this).attr("data-suggestion-id"));
-					}
-				}else{
-					send_vote("{% url 'birds:down_vote_species' %}", $(this).attr("data-species_tag-id"))
-				}
-			});
-			
-			
-		}
 		
 		function load_species_suggestions() {
 			$.ajax({
@@ -326,7 +268,12 @@
 				dataType: "html",
 				success: function(data) {
 					$('#species-list').append(data);
+					{% if user.is_authenticated %}
 					init_species_vote_buttons();
+					{% endif %}
+					$('.vote_species').change(function(){
+						window.location = "{% url 'login' %}?next={{ request.path }}";
+					});
 				}
 			});
 		}
@@ -431,12 +378,71 @@
 		
 		});
 		
+		function init_species_vote_buttons() {
+			function send_vote(url_location, tag_id) {
+				$.ajax({
+					url: url_location,
+					data: {
+						'sighting_id': {{ sighting.id }},
+						'species_id': tag_id,
+						'csrfmiddlewaretoken': '{{ csrf_token }}'
+					},
+					type: "POST",
+					dataType: "json",
+					success: function(data) {
+						if ( 'new_votes' in data ){
+							$('#'+data.species_id+'_num_votes').text(data.new_votes);
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown){
+						alert(textStatus);
+					}
+				});
+			}
+		
+			function accept_species(suggestion_id) {
+				$.ajax({
+					url: "{% url 'birds:accept_species_suggestion' %}",
+					data: {
+						'sighting_id': {{ sighting.id }},
+						'suggestion_id': suggestion_id,
+						'csrfmiddlewaretoken': '{{ csrf_token }}'
+					},
+					type: "POST",
+					dataType: "json",
+					success: function(data) {
+						location.reload()
+					},
+					error: function(jqXHR, textStatus, errorThrown){
+						alert(textStatus);
+					}
+				});
+			}
+		
+		
+			$('.vote_species').change(function(){
+				if ( $(this).is(':checked') ) {
+					send_vote("{% url 'birds:up_vote_species' %}", $(this).attr("data-species_tag-id"));
+					$('.vote_species').not(this).each(function(){
+						send_vote("{% url 'birds:down_vote_species' %}", $(this).attr("data-species_tag-id"));
+						$(this).attr('checked', false).parent().removeClass("is-checked");
+					});
+					if ( $(this).hasClass("accept-species-suggestion") ) {
+						accept_species($(this).attr("data-suggestion-id"));
+					}
+				}else{
+					send_vote("{% url 'birds:down_vote_species' %}", $(this).attr("data-species_tag-id"))
+				}
+			});
+			
+			
+		}
+		
 		{% else %}
 		
 		$('#like_button,#suggest_species').click(function(){
-			window.location = "{% url 'login' %}?next={{ request.path }}"
+			window.location = "{% url 'login' %}?next={{ request.path }}";
 		});
-			
 		
 		{% endif %}
 		

@@ -88,7 +88,10 @@ def setusername(request):
 				return redirect('/user/'+str(request.user.pk), pk=request.user.pk)
 	elif request.method == "GET":
 		next_url = request.GET.get("next")
-		return render(request, 'birds/setusername.html',  { 'next': next_url } )
+		if not next_url:
+			return render(request, 'birds/setusername.html')
+		else:
+			return render(request, 'birds/setusername.html',  { 'next': next_url } )
 	else:
 		return HttpResponseForbidden()
 
@@ -111,11 +114,18 @@ def authenticate_user(request):
 			return HttpResponse(json.dumps({'msg':'old_user'}), content_type='application/json')
 		else:
 			user = User()
-			user.username = firebase_user['sub']
 			user.save()
+			user.username = 'new_user'+str(user.id)
+			user.save()
+			
+			new_avatar = Avatar.objects.create( user = user )
+			filename = 'default_avatar.png'
+			new_avatar.avatar = 'default_avatar.png'
+			new_avatar.thumbnail_url = "https://s3.amazonaws.com/birdingappsmall/%s" % filename
+			new_avatar.save()
+			
 			uid = Uid.objects.create( uid = firebase_user['sub'], user = user )
 			user.backend = 'django.contrib.auth.backends.ModelBackend'
-			uid.save()
 			login(request, user)
 			return HttpResponse(json.dumps({'msg':'new_user'}), content_type='application/json')
 	else:
@@ -173,7 +183,10 @@ def index_view(request):
 def species_query(request):
 	if request.method == "GET":
 		term = request.GET.get('term')
+		
 		if term:
+			terms = term.split(' ')
+			s_query = Subspecies.objects.filter(  )
 			l = list(Subspecies.objects.filter( Q(subspecies__icontains=term) | Q(species__species__icontains=term) | Q(species__species_english__icontains=term) ).order_by('subspecies')[:10])
 			l2 = [{'value':unicode(i), 'id':i.pk} for i in l]
 			data = json.dumps(l2)
@@ -285,7 +298,10 @@ def get_species_suggestions(request):
 	if request.is_ajax():
 		species_suggestions = SpeciesSuggestions.objects.filter( sighting_id = request.POST.get('sighting_id') ).exclude( accepted=True ).annotate(is_voted=Value(0, output_field=IntegerField()))
 		for suggestion in species_suggestions:
-			suggestion.is_voted = SpeciesVote.objects.filter( sighting_id = request.POST.get('sighting_id'), species = suggestion.species, user = request.user ).count()
+			if not request.user.is_anonymous():
+				suggestion.is_voted = SpeciesVote.objects.filter( sighting_id = request.POST.get('sighting_id'), species = suggestion.species, user = request.user ).count()
+			else:
+				suggestion.is_voted = 0
 		return render_to_response('birds/species_suggestions.html', {'species_suggestions': species_suggestions,'user': request.user})
 	else:
 		return HttpResponseForbidden()
