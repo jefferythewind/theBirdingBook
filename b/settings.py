@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 import dj_database_url
+from __builtin__ import True
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,12 +25,18 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = os.environ.get('DJANGO_SECRET')
 
 # SECURITY WARNING: don't frun with debug turned on in production!
-DEBUG = False
+if os.environ.get('LOCAL'):
+    DEBUG = True
+    SECURE_SSL_REDIRECT = False
+else:
+    DEBUG = False
+    SECURE_SSL_REDIRECT = True
+
 ALLOWED_HOSTS = ["www.thebirdingbook.com","localhost"]
 ADMINS = [('Tim', os.environ.get('DEFAULT_FROM_EMAIL'))]
 SERVER_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 
-SECURE_SSL_REDIRECT = True
+
 #SESSION_COOKIE_SECURE = True
 #CSRF_COOKIE_SECURE = True
 #SECURE_HSTS_SECONDS = 3600

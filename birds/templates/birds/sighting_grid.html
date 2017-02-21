@@ -2,6 +2,20 @@
 
 {% block sighting_grid %}
 
+{% if search and info_window == None %}
+	<div class="mdl-cell mdl-cell--12-col mdl-card">
+		<div class="mdl-card__supporting-text">
+		{% for s in search %}
+			<span class="mdl-chip mdl-chip--deletable">
+				<span class="mdl-chip__text">{{ s.value }}</span>
+				<button type="button" class="mdl-chip__action" onclick="clear_search('{{ s.type }}');"><i class="material-icons">cancel</i></button>
+			</span>
+		{% endfor %}
+		</div>
+	</div>
+{% endif %}
+
+
 {% if sighting_list %}
 		
 	{% for sighting in sighting_list %}
