@@ -269,11 +269,12 @@
 				success: function(data) {
 					$('#species-list').append(data);
 					{% if user.is_authenticated %}
-					init_species_vote_buttons();
+						init_species_vote_buttons();
+					{% else %}
+						$('.vote_species').change(function(){
+							window.location = "{% url 'login' %}?next={{ request.path }}";
+						});
 					{% endif %}
-					$('.vote_species').change(function(){
-						window.location = "{% url 'login' %}?next={{ request.path }}";
-					});
 				}
 			});
 		}
