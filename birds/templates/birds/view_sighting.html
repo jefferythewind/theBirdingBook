@@ -58,9 +58,11 @@
 			</div>
 		</a>
 	{% endif %}
+		{% if sighting.post_text %}
 		<div class="mdl-card__supporting-text">
             <!--<i class="material-icons md-36">format_quote</i>--><b>{{ sighting.post_text }}</b><!--<i class="material-icons md-36">format_quote</i>-->
         </div>
+		{% endif %}
 		<div class="mdl-card__actions" style="color:rgba(0,0,0,.54);padding">
 		
 			<span id="num_likes">
