@@ -2,7 +2,7 @@
 
 {% block sighting_grid %}
 
-{% if search and info_window == None %}
+{% if search and info_window == None and page == 0 %}
 	<div class="mdl-cell mdl-cell--12-col mdl-card">
 		<div class="mdl-card__supporting-text">
 		{% for s in search %}
@@ -20,7 +20,7 @@
 		
 	{% for sighting in sighting_list %}
 
-		<div class="full-width-card hover-card mdl-cell {% if info_window %}mdl-cell--12-col{% else %}mdl-cell--7-col-desktop mdl-cell--8-col-tablet{% endif %} mdl-card">
+		<div class="full-width-card hover-card mdl-cell {% if info_window %}mdl-cell--12-col{% else %}mdl-cell--4-col-desktop mdl-cell--4-col-tablet{% endif %} mdl-card">
 			<div class="mdl-card__actions">
 				<a href="{% url 'birds:user' sighting.user.id %}">
 					<span class="mdl-chip user-chip">

@@ -99,43 +99,42 @@
     </style>
   </head>
   <body>
-    <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-      <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
-        <div class="mdl-layout__header-row">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-100">
+        <div class="mdl-layout__header-row mdl-color--blue-grey-900">
 			
-          <!--<div id="top-layout-spacer" class="mdl-layout-spacer"></div>-->
+			
+			
+			<!--<div id="top-layout-spacer" class="mdl-layout-spacer"></div>-->
 
-			<div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
-            <label class="mdl-button mdl-js-button mdl-button--icon" for="search_species" id="species_search_icon">
-              <i class="material-icons">search</i>
-            </label>
-            <div class="mdl-textfield__expandable-holder">
-              <input class="mdl-textfield__input" type="text" id="search_species" placeholder="Species">
-              <label class="mdl-textfield__label" for="search_species">Enter your query...</label>
-            </div>
-			<div class="mdl-tooltip" for="species_search_icon">
+			<i class="material-icons">search</i>
+			<div class="mdl-tooltip" for="search_icon">
 				Species Lookup
 			</div>
-          </div>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
-            <label class="mdl-button mdl-js-button mdl-button--icon" for="search_location" id="location_search_icon">
-              <i class="material-icons">place</i>
-            </label>
-            <div class="mdl-textfield__expandable-holder">
-              <input class="mdl-textfield__input" type="text" id="search_location" placeholder="Location">
-            </div>
-			<div class="mdl-tooltip mdl-tooltip--bottom" for="location_search_icon">
-				Search by Location
+			<div class="mdl-textfield mdl-js-textfield mdl-color-text--grey-100" style="width:auto">
+				<input class="mdl-textfield__input" type="text" id="search_bar">
+				<label class="mdl-textfield__label mdl-color-text--grey-400" for="search_bar">Search</label>
+				<span class="mdl-textfield__error"></span>
 			</div>
-          </div>
-		  <div id="clear_search_container">
-			<label class="mdl-button mdl-js-button mdl-button--icon" id="clear_search_button">
-              <i class="material-icons">clear</i>
-            </label>
-			<div class="mdl-tooltip mdl-tooltip--bottom" for="clear_search_button">
-				Clear Search
+			<!--<div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+				<label class="mdl-button mdl-js-button mdl-button--icon" for="search_bar" id="location_search_icon">
+				  <i class="material-icons">place</i>
+				</label>
+				<div class="mdl-textfield__expandable-holder">
+				  <input class="mdl-textfield__input" type="text" id="search_bar" placeholder="Location">
+				</div>
+				<div class="mdl-tooltip mdl-tooltip--bottom" for="location_search_icon">
+					Search by Location
+				</div>
 			</div>
-		  </div>
+			<div id="clear_search_container mdl-color-text--grey-100">
+				<label class="mdl-button mdl-js-button mdl-button--icon" id="clear_search_button">
+					<i class="material-icons">clear</i>
+				</label>
+				<div class="mdl-tooltip mdl-tooltip--bottom" for="clear_search_button">
+					Clear Search
+				</div>
+			</div>-->
 		  <div id="header-row-spacer" class="mdl-layout-spacer"></div>
 		  <!--
           <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
@@ -146,56 +145,41 @@
             <li class="mdl-menu__item">Contact</li>
             <li class="mdl-menu__item">Legal information</li>
           </ul>-->
-        </div>
-      </header>
-      <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
-        <header class="demo-drawer-header">
-          <div class="demo-avatar-dropdown">
+
                 {% if user.is_authenticated %}
                     <a class="user-ident no-decoration" href="{% url 'birds:user' user.id %}">
 						{% if user.avatar %}
-							<div class="mdl-shadow--8dp" style="height:50px;width:50px;background: url({{ user.avatar.thumbnail_url }}) no-repeat center;background-size:cover;"></div>
+							<div class="mdl-shadow--8dp" style="border-radius:25px;height:50px;width:50px;background: url({{ user.avatar.thumbnail_url }}) no-repeat center;background-size:cover;"></div>
 						{% else %}
 							<i class="material-icons">account_circle</i>
 						{% endif %}
-						<span style="margin-left:8px; margin-top:16px;"> {{ user.username }}</span>
+						<!--<span style="margin-left:8px; margin-top:16px;"> {{ user.username }}</span>-->
 					</a>
                 {% else %}
                     <span><a class="mdl-button mdl-js-button mdl-button--accent" href="{% url 'login' %}">Sign Up/ Login</a></span>
                 {% endif %}
-            <div class="mdl-layout-spacer"></div>
+				
             <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
               <i class="material-icons" role="presentation">more_vert</i>
               <span class="visuallyhidden">Accounts</span>
             </button>
             <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-              <!--<li class="mdl-menu__item">hello@example.com</li>
-              <li class="mdl-menu__item">info@example.com</li>-->
-              <li class="mdl-menu__item"><a class="mdl-navigation__link" href="{% url 'logout'  %}"><i class="material-icons">eject</i>Logout</a></li>
+              <a class="mdl-navigation__link" href="{% url 'logout'  %}"><li class="mdl-menu__item"><i class="material-icons">eject</i>Logout</li></a>
             </ul>
-            
-          </div>
-        </header>
-        <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
-          <a class="mdl-navigation__link" href="{% url 'birds:index' %}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>Home</a>
-          <a class="mdl-navigation__link" href="{% url 'birds:new_sighting' %}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">add</i>New Sighting</a>
-		  <a class="mdl-navigation__link" href="{% url 'birds:map' %}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">map</i>Map</a>
+        </div>
+      </header>
+      <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+		<!-- Title -->
+		<span class="mdl-layout-title mdl-color--blue-grey-900"><div style="margin:8px;height:96px;width:32px;background: url({% static 'birds/images/feather2.png' %}) no-repeat center;background-size:contain;"></div></span>
+        <nav class="demo-navigation mdl-navigation">
+          <a class="mdl-color-text--blue-grey-50 mdl-navigation__link" href="{% url 'birds:index' %}"><i class="mdl-color-text--blue-grey-100 material-icons" role="presentation">home</i>Home</a>
+          <a class="mdl-color-text--blue-grey-50 mdl-navigation__link" href="{% url 'birds:new_sighting' %}"><i class="mdl-color-text--blue-grey-100 material-icons" role="presentation">add</i>New Sighting</a>
+		  <a class="mdl-color-text--blue-grey-50 mdl-navigation__link" href="{% url 'birds:map' %}"><i class="mdl-color-text--blue-grey-100 material-icons" role="presentation">map</i>Map</a>
 		  <div class="mdl-layout-spacer"></div>
 		  {% if user.is_authenticated %}
-		  <a class="mdl-navigation__link" href="{% url 'birds:feedback' %}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">feedback</i>Feedback</a>
+		  <a class="mdl-color-text--blue-grey-50 mdl-navigation__link" href="{% url 'birds:feedback' %}"><i class="mdl-color-text--blue-grey-100 material-icons" role="presentation">feedback</i>Feedback</a>
 		  {% endif %}
-		  <a class="mdl-navigation__link" href="{% url 'birds:about' %}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i>About</a>
-		  <!--<a class="mdl-navigation__link" href="{% url 'birds:privacy_policy' %}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">description</i>Privacy Policy</a>-->
-		  <!--<a class="mdl-navigation__link" href="{% url 'birds:terms_of_service' %}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">description</i>Terms of Service</a>-->
-          <!--<a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">delete</i>Trash</a>
-          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">report</i>Spam</a>
-          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">forum</i>Forums</a>
-          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">flag</i>Updates</a>
-          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">local_offer</i>Promos</a>
-          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">shopping_cart</i>Purchases</a>
-          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">people</i>Social</a>-->
-		  
-		  
+		  <a class="mdl-color-text--blue-grey-50 mdl-navigation__link" href="{% url 'birds:about' %}"><i class="mdl-color-text--blue-grey-100 material-icons" role="presentation">help_outline</i>About</a>
         </nav>
       </div>
 		<main class="mdl-layout__content mdl-color--grey-100">
@@ -206,6 +190,25 @@
 				<div class="mdl-snackbar__text"></div>
 				<button class="mdl-snackbar__action" type="button"></button>
 			</div>
+			<div class="mdl-shadow--2dp" id="search_dialog" style="display:none">
+				<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+					<div class="mdl-tabs__tab-bar">
+						<a href="#species-panel" class="mdl-tabs__tab is-active">Species</a>
+						<a id="location-panel-tab" href="#location-panel" class="mdl-tabs__tab">Location</a>
+						<a href="#user-panel" class="mdl-tabs__tab">User</a>
+					</div>
+
+					<div class="mdl-tabs__panel is-active" id="species-panel">
+					
+					</div>
+					<div class="mdl-tabs__panel" id="location-panel">
+					
+					</div>
+					<div class="mdl-tabs__panel" id="user-panel">
+					
+					</div>
+				</div>
+			</div>
 		</main>
     </div>
 		
@@ -215,6 +218,12 @@
 		
 		<!-- base.html functionality -->
 		<script type="text/javascript">
+		
+		var search_org = {
+			'species': 0,
+			'locations': 0,
+			'users': 0
+		}
 		
 		function clear_search( arg ) {
 			$.ajax({
@@ -227,8 +236,7 @@
 						window.location = "{% url 'birds:index' %}";
 					}else{
 						map_get_data($);
-						$('#search_species').val('').parent().parent().removeClass('is-dirty');
-						$('#search_location').val('').parent().parent().removeClass('is-dirty');
+						$('#search_bar').val('').parent().parent().removeClass('is-dirty');
 					}
 				},
 				error: function(jqXHR, textStatus, errorThrown){
@@ -246,7 +254,7 @@
 					type: "POST",
 					dataType: "html",
 					success: function(data) {
-						$('#header-row-spacer').after(data);
+						$('.mdl-layout__header-row').append(data);
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						alert(textStatus);
@@ -254,30 +262,71 @@
 				});
 			{% endif %}
 			
-			$('#search_species').autocomplete({
+			/*
+			function to toggle visible tab on search
+			*/
+			function toggle_search_viz() {
+				if ( search_org['species'] == 0 ) {
+					if ( search_org['locations'] > 0 && !$('location-panel').is(':visible') ) {
+						$('#location-panel-tab')[0].click();
+					}
+				}
+			}
+			
+			/*
+			hide custom search dialog if open when click off, but keep open when click on search bar
+			*/
+			$('html').click(function() {
+				$('#search_dialog').hide();
+			});
+			
+			$('#search_dialog').click(function(event){
+				event.stopPropagation();
+			})
+			
+			$('#search_bar').click(function(event){
+				event.stopPropagation();
+			}).focus(function(){
+				if ( !$('#search_dialog').is(':visible') ) {
+					$('#search_dialog').show();
+				}
+			})
+			
+			$('#search_bar').autocomplete({
 				source: "{% url 'birds:species_query' %}",
-				minLength: 2,
+				minLength: 1,
 				response: function( event, ui ) {
-			
-					//alert('got response');
-			
+					if ( ui.content.length == 0 ){
+						$("ul.ui-autocomplete").hide();
+					}
+					search_org['species'] = ui.content.length;
 				},
 				select: function( event, ui ){
 				
 					//$('#id_species_tag').val(ui.item.id);
-					search_species( ui.item.id );
+					search_bar( ui.item.id );
 					
 				},
-				
+				appendTo: '#species-panel',
+				open: function(event, ui) {
+					$(".ui-autocomplete").css("position", "relative");
+					$(".ui-autocomplete").css("top", "0px");
+					$(".ui-autocomplete").css("left", "0px");
+				},
+				close: function( event, ui ) {
+					if (!$("ul.ui-autocomplete").is(":visible")) {
+						$("ul.ui-autocomplete").show();
+					}
+				}
 			}).keypress(function(event){
 				var keycode = (event.keyCode ? event.keyCode : event.which);
 				if(keycode == '13'){
-					search_species_text( $(this).val() );
-					$( "#search_species" ).autocomplete( "close" );
+					search_bar_text( $(this).val() );
+					$( "#search_bar" ).autocomplete( "close" );
 				}
 			});
 			
-			function search_species_text( text_string ){
+			function search_bar_text( text_string ){
 				$.ajax({
 					url: "{% url 'birds:update_search' %}",
 					data: { 'csrfmiddlewaretoken': '{{ csrf_token }}', species_text: text_string },
@@ -288,7 +337,7 @@
 							window.location = "{% url 'birds:index' %}";
 						}else{
 							map_get_data($);
-							//$('#search_species').val('').blur().parent().parent().removeClass('is-dirty');
+							//$('#search_bar').val('').blur().parent().parent().removeClass('is-dirty');
 						}
 					},
 					error: function(jqXHR, textStatus, errorThrown){
@@ -297,7 +346,7 @@
 				});
 			}
 			
-			function search_species( species_id ) {
+			function search_bar( species_id ) {
 				$.ajax({
 					url: "{% url 'birds:update_search' %}",
 					data: { 'csrfmiddlewaretoken': '{{ csrf_token }}', species_id: species_id },
@@ -308,7 +357,7 @@
 							window.location = "{% url 'birds:index' %}";
 						}else{
 							map_get_data($);
-							$('#search_species').val('').blur().parent().parent().removeClass('is-dirty');
+							$('#search_bar').val('').blur().parent().parent().removeClass('is-dirty');
 						}
 					},
 					error: function(jqXHR, textStatus, errorThrown){
@@ -316,12 +365,6 @@
 					}
 				});
 			}
-			
-			$('#clear_search_button').click(function(){
-			
-				clear_search( 'all' );
-				
-			});
 			
 			function search_place( place ) {
 				$.ajax({
@@ -341,7 +384,7 @@
 							window.location = "{% url 'birds:index' %}";
 						}else{
 							map_get_data($);
-							$('#search_location').val('').parent().parent().removeClass('is-dirty');
+							$('#search_bar').val('').parent().parent().removeClass('is-dirty');
 						}
 					},
 					error: function(jqXHR, textStatus, errorThrown){
@@ -351,75 +394,54 @@
 			}
 			
 			/*
-			map Search Box
+			Location Search Box
 			*/
-			//var map = new google.maps.Map(document.getElementById('map'))
-			// Create the search box and link it to the UI element.
-			var input = document.getElementById('search_location');
-			var searchBox = new google.maps.places.SearchBox(input);
-			
-			// Bias the SearchBox results towards current map's viewport.
-			//map.addListener('bounds_changed', function() {
-			//  searchBox.setBounds(map.getBounds());
-			//});
-			
-			var markers = [];
-			// Listen for the event fired when the user selects a prediction and retrieve
-			// more details for that place.
-			searchBox.addListener('places_changed', function() {
-				var places = searchBox.getPlaces();
-				
-
-				if (places.length == 0) {
+			var displaySuggestions = function(predictions, status) {
+				if (status != google.maps.places.PlacesServiceStatus.OK) {
+					//alert(status);
 					return;
 				}
-
-				// Clear out the old markers.
-				markers.forEach(function(marker) {
-					marker.setMap(null);
+				
+				search_org['locations'] = predictions.length;
+				
+				var menu = $('<ul></ul>').addClass('ui-menu ui-widget ui-widget-content');
+				$('#location-panel').html(menu);
+				
+				
+				predictions.forEach(function(prediction) {
+					var li = $('<li></li>').addClass('ui-menu-item');
+					$(li).hover(
+						function(){ $(this).addClass('ui-state-hover') },
+						function(){ $(this).removeClass('ui-state-hover') }
+					);
+					$(li).click(function(){
+						var service = new google.maps.places.PlacesService(document.createElement('div'));
+						service.getDetails({ placeId: prediction.place_id },
+							function(place, status) {
+								if (status == google.maps.places.PlacesServiceStatus.OK) {
+									search_place( place );
+								}
+							}
+						);
+					})
+					$(li).text(prediction.description);
+					$(menu).append(li);
+					//alert(prediction.);
 				});
-				markers = [];
+				
 
-				// For each place, get the icon, name and location.
-				var bounds = new google.maps.LatLngBounds();
-				places.forEach(function(place) {
-					
-					if (!place.geometry) {
-						console.log("Returned place contains no geometry");
-						return;
-					}else{
-						search_place( place );
-					}
-					//alert(place.geometry.location.lat()+" "+place.geometry.location.lng());
-					//var icon = {
-					//	url: place.icon,
-					//	size: new google.maps.Size(71, 71),
-					//	origin: new google.maps.Point(0, 0),
-					//	anchor: new google.maps.Point(17, 34),
-					//	scaledSize: new google.maps.Size(25, 25)
-					//};
+				
+			};
 
-					// Create a marker for each place.
-					//markers.push(new google.maps.Marker({
-					//	map: map,
-					//	icon: icon,
-					//	title: place.name,
-					//	position: place.geometry.location
-					//}));
-
-					//if (place.geometry.viewport) {
-						// Only geocodes have viewport.
-					//	bounds.union(place.geometry.viewport);
-					//} else {
-					//	bounds.extend(place.geometry.location);
-					//}
-				});
-				//map.fitBounds(bounds);
+			var service = new google.maps.places.AutocompleteService();
+			$('#search_bar').on('input', function(){
+				if ( $(this).val() ) {
+					service.getPlacePredictions({ input: $(this).val() }, displaySuggestions);
+				}
 			});
 			
-						
-			
 		});
+		
 		{% if not user.is_authenticated %}
 		r(function(){
 			var snackbarContainer = document.querySelector('#snackbar_login_alert');

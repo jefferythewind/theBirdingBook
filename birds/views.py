@@ -187,7 +187,7 @@ def species_query(request):
 		if term:
 			terms = term.split(' ')
 			s_query = Subspecies.objects.filter(  )
-			l = list(Subspecies.objects.filter( Q(subspecies__icontains=term) | Q(species__species__icontains=term) | Q(species__species_english__icontains=term) ).order_by('subspecies')[:10])
+			l = list(Subspecies.objects.filter( Q(species__species__icontains=term) | Q(species__species_english__icontains=term) ).exclude(subspecies__isnull=True).order_by('subspecies')[:100])
 			l2 = [{'value':unicode(i), 'id':i.pk} for i in l]
 			data = json.dumps(l2)
 		else:
@@ -289,7 +289,9 @@ def suggest_new_species(request):
 		if SpeciesSuggestions.objects.filter( user = request.user, sighting_id = request.POST.get('sighting_id') ).count() > 0:
 			return HttpResponse(json.dumps({'msg':'you have already suggested a species for this post'}), content_type='application/json')
 		else:
-			SpeciesSuggestions.objects.create( user = request.user, sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id'))
+			new_suggestion = SpeciesSuggestions.objects.create( user = request.user, sighting_id = request.POST.get('sighting_id'), species_id = request.POST.get('species_id'))
+			notification_message = str(request.user)+" has suggested a species on your sighting."
+			Notifications.objects.create( user = new_suggestion.sighting.user, sighting_id = request.POST.get('sighting_id'), caption = "Species Suggestion", msg = notification_message)
 			return HttpResponse(json.dumps({'msg':'success'}), content_type='application/json')
 	else:
 		return HttpResponseForbidden()
@@ -478,11 +480,11 @@ def sightings_search(request):
 			page = int( request.POST.get('page') )
 		else:
 			page = 0
+		html = render_to_string('birds/sighting_grid.html', {'search': search, 'sighting_list': sighting_list[page:page+2], 'the_template': 'empty_wrapper.html', 'page': page})
 		if page < sighting_list.count() :
-			html = render_to_string('birds/sighting_grid.html', {'search': search, 'sighting_list': sighting_list[page:page+2], 'the_template': 'empty_wrapper.html'})
 			return HttpResponse(json.dumps({'html': html, 'next_page': page+2}) , content_type='application/json')
 		else:
-			return HttpResponse(json.dumps({'html': "", 'next_page': 'done'}) , content_type='application/json')
+			return HttpResponse(json.dumps({'html': html, 'next_page': 'done'}) , content_type='application/json')
 		
 #def certcode(request):
 	#return HttpResponse("u8rJYLDlWBRLVWrVAHWdOjLR_wFG1QhZVeq8YbXN9Vk.kkUUZ7wDSk_Ruptr4ve-eoVyTSusZ4Q8H6nPxyDIeh0", content_type='text/plain')

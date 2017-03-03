@@ -22,183 +22,198 @@
 {% endif %}
 
 <div class="mdl-grid">
-	<div class="full-width-card hover-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-card mdl-shadow--2dp" style="min-height:100px;">
-		<div class="mdl-card__actions">
-			<a class="no-decoration" href="{% url 'birds:user' sighting.user.id %}">
-				<span class="mdl-chip mdl-chip--contact user-chip">
-					<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white" style="background: url({{ sighting.user.avatar.thumbnail_url }}) no-repeat center;background-size:cover">
-					</span>
-					<span class="mdl-chip__text">{{ sighting.user.username }}</span>
-				</span>
-			</a>
-			
-			<span class="mdl-chip user-chip" style="float:right">
-				<span class="mdl-chip__text">{{ sighting.sighting_date }}</span>
-			</span>
 
-		</div>
-	{% if sighting.images.count == 0 %}
-	
-		<div class="mdl-card__title">
-			<h2 class="mdl-card__title-text" style="color:rgba(0,0,0,0.54)">
-				{{ sighting.caption }}
-			</h2>
-		</div>
-		
-			
-	{% else %}
-	
-		<a class="no-decoration image-expand-on-click" href="#" data-image_id="{{ sighting.images.0.id }}">
-			<div class="image sighting-page" style="background: url({{ sighting.images.0.medium_url }}) no-repeat center;background-size:cover;">
-				<div class="sighting-grid-image-description">
-					<div class="sighting-grid-caption">{{ sighting.caption }}
-					
-					</div>
+	<div class="full-width-card mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
+
+		<div class="full-width-card hover-card mdl-cell mdl-cell--12-col mdl-card mdl-shadow--2dp" style="min-height:100px;">
+			<div class="mdl-card__actions">
+				<a class="no-decoration" href="{% url 'birds:user' sighting.user.id %}">
+					<span class="mdl-chip mdl-chip--contact user-chip">
+						<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white" style="background: url({{ sighting.user.avatar.thumbnail_url }}) no-repeat center;background-size:cover">
+						</span>
+						<span class="mdl-chip__text">{{ sighting.user.username }}</span>
+					</span>
+				</a>
+				
+				<span class="mdl-chip user-chip" style="float:right">
+					<span class="mdl-chip__text">{{ sighting.sighting_date }}</span>
+				</span>
+
+			</div>
+			<div class="mdl-card__menu" style="top:76px;z-index:2;">
+				<span class="mdl-chip mdl-chip--deletable" style="background:rgba(255,255,255,.8)">
+					<span class="mdl-chip__text">
+						<span id="num_likes">
+							{% if sighting.num_likes == 1 %}
+								{{ sighting.num_likes }} like
+							{% elif sighting.num_likes > 1 %}
+								{{ sighting.num_likes }} likes
+							{% else %}
+								like
+							{% endif %}
+						</span>
+					</span>
+					{% if is_liked > 0 %}
+					<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect mdl-button--colored" id="unlike_button">
+					  <i class="material-icons md-light">thumb_down</i>
+					</button>
+					<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect mdl-button--colored" id="like_button">
+					  <i class="material-icons md-light">thumb_up</i>
+					</button>
+					{% else %}
+					<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect mdl-button--colored" id="unlike_button">
+					  <i class="material-icons md-light">thumb_down</i>
+					</button>
+					<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect mdl-button--colored" id="like_button">
+					  <i class="material-icons md-light">thumb_up</i>
+					</button>
+					{% endif %}
+				</span>
+				<div class="mdl-tooltip" for="like_button">
+					like
+				</div>
+				<div class="mdl-tooltip" for="unlike_button">
+					Unlike
 				</div>
 			</div>
-		</a>
-	{% endif %}
-		{% if sighting.post_text %}
-		<div class="mdl-card__supporting-text">
-            <!--<i class="material-icons md-36">format_quote</i>--><b>{{ sighting.post_text }}</b><!--<i class="material-icons md-36">format_quote</i>-->
-        </div>
-		{% endif %}
-		<div class="mdl-card__actions" style="color:rgba(0,0,0,.54);padding">
+		{% if sighting.images.count == 0 %}
 		
-			<span id="num_likes">
-				{% if sighting.num_likes == 1 %}
-					{{ sighting.num_likes }} like
-				{% elif sighting.num_likes > 1 %}
-					{{ sighting.num_likes }} likes
-				{% endif %}
-			</span>
-			{% if is_liked > 0 %}
-			<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="unlike_button">
-			  <i class="material-icons md-light">thumb_down</i>
-			</button>
-			<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="like_button">
-			  <i class="material-icons md-light">thumb_up</i>
-			</button>
-			{% else %}
-			<button style="display:none" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="unlike_button">
-			  <i class="material-icons md-light">thumb_down</i>
-			</button>
-			<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="like_button">
-			  <i class="material-icons md-light">thumb_up</i>
-			</button>
-			{% endif %}
-			<div class="mdl-tooltip" for="like_button">
-				like
-			</div>
-			<div class="mdl-tooltip" for="unlike_button">
-				Unlike
+			<div class="mdl-card__title">
+				<h2 class="mdl-card__title-text" style="color:rgba(0,0,0,0.54)">
+					{{ sighting.caption }}
+				</h2>
 			</div>
 			
-			<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons" id="flag_post">
-			  <i class="material-icons md-light">flag</i>			      
-			</button>
-			<div class="mdl-tooltip" for="flag_post">
-				flag post
-			</div>
-			{% if sighting.user_id == user.id %}
-			<button id="edit_button" class="mdl-button md-light mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons">
-				<i class="material-icons md-light">mode_edit</i>
-			</button>
-			<div class="mdl-tooltip" for="edit_button">
-				edit post
-			</div>
-			
-			{% endif %}
-			
-		</div>
-	</div>
-	{% for image in sighting.images %}
-		{% if forloop.counter > 1 %}
-			<div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
-				<a href="#" class="image-expand-on-click" data-image_id="{{ image.id }}">
-					<div class="image image-block-m sighting-page sub-image" style="background: url({{ image.thumbnail_url }}) no-repeat center;background-size:cover;"></div>
-				</a>
-			</div>
+				
+		{% else %}
+		
+			<a class="no-decoration image-expand-on-click" href="#" data-image_id="{{ sighting.images.0.id }}">
+				<div class="image" style="background: url({{ sighting.images.0.medium_url }}) no-repeat center;background-size:cover;height:70vh;">
+					<div class="sighting-grid-image-description">
+						<div class="sighting-grid-caption">{{ sighting.caption }}
+						
+						</div>
+						
+					</div>
+				</div>
+			</a>
 		{% endif %}
-	{% endfor %}
-</div>
-<div class="mdl-grid">
-    <div class="full-width-card mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-card">
-        <div class="mdl-card__actions">
+			{% if sighting.post_text %}
+			<div class="mdl-card__supporting-text">
+				<!--<i class="material-icons md-36">format_quote</i>--><b>{{ sighting.post_text }}</b><!--<i class="material-icons md-36">format_quote</i>-->
+			</div>
+			{% endif %}
+			<div class="mdl-card__actions" style="color:rgba(0,0,0,.54);padding">
 			
-			<ul id="species-list" class="mdl-list" style="margin:0px;">
-
-				{% if sighting.species_tag %}
-					<li class="mdl-list__item tag-container">
-						<span class="mdl-list__item-primary-content">
-							<a href="https://en.wikipedia.org/wiki/Special:Search?search={{ sighting.species_tag }}" target="_blank" style="text-decoration: none;">
-								{{ sighting.species_tag }}
-							</a>
-						</span>
-						<span class="mdl-list__item-primary-content">
-							<i class="material-icons">check</i>
-							<span id="{{ sighting.species_tag.id }}_num_votes">
-								{{ species_votes }}
-							</span>
-						</span>
-						<span class="mdl-list__item-secondary-action">
-							<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="check_{{ sighting.species_tag.id }}">
-								<input  data-species_tag-id="{{ sighting.species_tag.id }}" type="checkbox" id="check_{{ sighting.species_tag.id }}" class="vote_species mdl-checkbox__input" {% if is_voted %}checked{% endif %} />
-								<span class="mdl-checkbox__label">Agree</span>
-							</label>
-						</span>
-					</li>
-					
+			
+				
+				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons" id="flag_post">
+				  <i class="material-icons md-light">flag</i>			      
+				</button>
+				<div class="mdl-tooltip" for="flag_post">
+					flag post
+				</div>
+				{% if sighting.user_id == user.id %}
+				<button id="edit_button" class="mdl-button md-light mdl-button--icon mdl-js-button mdl-js-ripple-effect index-card-buttons">
+					<i class="material-icons md-light">mode_edit</i>
+				</button>
+				<div class="mdl-tooltip" for="edit_button">
+					edit post
+				</div>
+				
 				{% endif %}
 				
-			</ul>
-			{% if user != sighting.user %}
-			
-				<button class="mdl-button mdl-js-button mdl-button--accent mdl-button--raised mdl-js-ripple-effect" id="suggest_species">
-					Suggest Species
-				</button>
-				<form id="new_species_form" style="display:none">
-					<div class="mdl-textfield mdl-js-textfield" style="width:100%">
-						<input style="width:100%" class="mdl-textfield__input" name="new_species" id="new_species_input">
-						<label class="mdl-textfield__label" for="new_species">new species</label>
-						<input id="id_species_tag" name="species_id" type="hidden">
+			</div>
+		</div>
+		
+		{% for image in sighting.images %}
+			{% if forloop.counter > 1 %}
+				<div class="hover-card mdl-cell mdl-cell--3-col-desktop mdl-cell--4-col-tablet mdl-cell--2-col-phone mdl-shadow--2dp">
+					<a href="#" class="image-expand-on-click" data-image_id="{{ image.id }}">
+						<div class="image image-block-m sub-image" style="background: url({{ image.thumbnail_url }}) no-repeat center;background-size:cover;"></div>
+					</a>
+				</div>
+			{% endif %}
+		{% endfor %}
+		
+	</div>
+	
+	<div class="full-width-card mdl-cell mdl-cell--5-col mdl-cell--8-col-tablet">
+	
+		<div class="full-width-card mdl-cell mdl-cell--12-col mdl-card">
+			<div class="mdl-card__actions">
+				
+				<ul id="species-list" class="mdl-list" style="margin:0px;">
+
+					{% if sighting.species_tag %}
+						<li class="mdl-list__item tag-container">
+							<span class="mdl-list__item-primary-content">
+								<a href="https://en.wikipedia.org/wiki/Special:Search?search={{ sighting.species_tag }}" target="_blank" style="text-decoration: none;">
+									{{ sighting.species_tag }}
+								</a>
+							</span>
+							<span class="mdl-list__item-primary-content">
+								<i class="material-icons">check</i>
+								<span id="{{ sighting.species_tag.id }}_num_votes">
+									{{ species_votes }}
+								</span>
+							</span>
+							<span class="mdl-list__item-secondary-action">
+								<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="check_{{ sighting.species_tag.id }}">
+									<input  data-species_tag-id="{{ sighting.species_tag.id }}" type="checkbox" id="check_{{ sighting.species_tag.id }}" class="vote_species mdl-checkbox__input" {% if is_voted %}checked{% endif %} />
+									<span class="mdl-checkbox__label">Agree</span>
+								</label>
+							</span>
+						</li>
+						
+					{% endif %}
+					
+				</ul>
+				{% if user != sighting.user %}
+				
+					<button class="mdl-button mdl-js-button mdl-button--accent mdl-button--raised mdl-js-ripple-effect" id="suggest_species">
+						Suggest Species
+					</button>
+					<form id="new_species_form" style="display:none">
+						<div class="mdl-textfield mdl-js-textfield" style="width:100%">
+							<input style="width:100%" class="mdl-textfield__input" name="new_species" id="new_species_input">
+							<label class="mdl-textfield__label" for="new_species">new species</label>
+							<input id="id_species_tag" name="species_id" type="hidden">
+						</div>
+						{% csrf_token %}
+						<input name="sighting_id" value="{{ sighting.id }}" type="hidden">
+						<button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="new_species_save_button">Submit</button>
+						<button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" id="new_species_cancel_button">Cancel</button>
+					</form>
+				{% endif %}
+				
+					
+			</div>
+
+			<div class="mdl-card__title" style="display:inline">
+				{{ sighting.location }}
+			</div>
+			<div style="width:100%;height:200px">
+				<div id="view-sighting-map"></div>
+			</div>
+
+			<div class="mdl-card__title">
+				<h3 class="mdl-card__title-text">Comments</h2>
+			</div>
+			<div class="mdl-card__supporting-text comments-chain" id="existing_comments"></div>
+			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="reveal-comments">Comment</button>
+			<div class="mdl-card__actions mdl-card--border" id="save-comment-block" style="display:none">
+				<form id="new_comment_form">
+					<div style="width:100%" class="mdl-textfield mdl-js-textfield">
+						<textarea style="width:100%" class="mdl-textfield__input" type="text" rows= "3" name="new_comment" id="new_comment_input" ></textarea>
+						<label class="mdl-textfield__label" for="new_comment">New comment...</label>
 					</div>
 					{% csrf_token %}
-					<input name="sighting_id" value="{{ sighting.id }}" type="hidden">
-					<button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="new_species_save_button">Submit</button>
-					<button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" id="new_species_cancel_button">Cancel</button>
+					<input name="sighting_id" value="{{ sighting.id }}" type="hidden"></input>
 				</form>
-			{% endif %}
-			
-				
-        </div>
-    </div>
-	<div class="full-width-card mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-card">
-		<div class="mdl-card__title" style="display:inline">
-			{{ sighting.location }}
-		</div>
-		<div style="width:100%;height:100%">
-			<div id="view-sighting-map"></div>
-		</div>
-    </div>
-   
-	<div class="full-width-card mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
-		<div class="mdl-card__title">
-			<h2 class="mdl-card__title-text">Comments</h2>
-		</div>
-        <div class="mdl-card__supporting-text comments-chain" id="existing_comments"></div>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="reveal-comments">Comment</button>
-		<div class="mdl-card__actions mdl-card--border" id="save-comment-block" style="display:none">
-			<form id="new_comment_form">
-				<div style="width:100%" class="mdl-textfield mdl-js-textfield">
-					<textarea style="width:100%" class="mdl-textfield__input" type="text" rows= "3" name="new_comment" id="new_comment_input" ></textarea>
-					<label class="mdl-textfield__label" for="new_comment">New comment...</label>
-				</div>
-				{% csrf_token %}
-				<input name="sighting_id" value="{{ sighting.id }}" type="hidden"></input>
-			</form>
-			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="new_comment_save_button">Post</button>
-			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="new_comment_cancel_button">Cancel</button>
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="new_comment_save_button">Post</button>
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="new_comment_cancel_button">Cancel</button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -348,7 +363,7 @@
 						}else if ( data.new_likes > 1 ) {
 							$('#num_likes').text(data.new_likes+" like");
 						}else{
-							$('#num_likes').text("");
+							$('#num_likes').text("like");
 						}
 					}
 				},

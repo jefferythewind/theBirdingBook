@@ -9,6 +9,26 @@ html, body {
 	height: 100%;
 }
 
+/*
+BASE.html Search Dialog
+*/
+#search_dialog {
+	width: 100vw;
+	height:300px;
+	max-width:450px;
+	position:fixed;
+	z-index: 1000;
+	top:64px;
+	left:0px;
+	background-color: white;
+	overflow: scroll;
+}
+
+/*
+END BASE.html
+*/
+
+
 /*TABEL OF CONTENTS
 ===================*/
 
@@ -77,17 +97,6 @@ section .table-of-contents{
     }
 }
 
-
-
-.all-funds .RT-card__title-text {
-    font-weight: 500;
-    color: #adafb2;
-
-}
-.docs-toc li h3 {
-    margin: 24px 0;
-    font-size: 15px;
-}
 /*===================
 TABEL OF CONTENTS END*/
 
@@ -136,6 +145,13 @@ TABEL OF CONTENTS END*/
 }
 
 @media (min-width: 840px) {
+	.mdl-cell--12-col {
+		width: calc(100%);
+		margin: 0px;
+	}
+}
+
+@media (max-width: 839px) and (min-width: 480px) {
 	.mdl-cell--12-col {
 		width: calc(100%);
 		margin: 0px;
@@ -444,6 +460,10 @@ Notification Icon and Menu
 	text-decoration: none;
 }
 
+#comment-notification-button {
+	padding-right: 8px;
+}
+
 /*
 End Notification Section
 */
@@ -487,8 +507,6 @@ End Notification Section
 	width: 90%;
 }
 
-/* END ADDED BY TIM */
-
 
 /*.mdl-textfield {
   width: 100%;
@@ -514,8 +532,8 @@ End Notification Section
 .mdl-layout__drawer .avatar {
   margin-bottom: 16px;
 }
-.mdl-layout__header .mdl-layout__drawer-button {
-	color: rgba(0,0,0,0.70);
+.mdl-layout__drawer-button {
+	background-color: rgba(0,0,0,0) !important;
 }
 
 /* iOS Safari specific workaround */
@@ -568,7 +586,6 @@ End Notification Section
 
 /*COMMENTS*/
 .comments-chain {
-    margin: 8px 0px 8px 8px;
     padding: 0px 16px 0px 0px;
     border-left: 5px solid rgb(255,64,129);
 }
