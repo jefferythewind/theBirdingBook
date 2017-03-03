@@ -26,7 +26,7 @@ jQuery(function($) {
 
 	function need_more() {
 		
-		if ( $('main').scrollTop() + $('main').height() >= $('#sighting_grid_wrapper').height() - 200 ){
+		if ( $('main').scrollTop() + $('main').height() >= 0.5 * $('#sighting_grid_wrapper').height() ){
 			return true;
 		}else{
 			return false;
