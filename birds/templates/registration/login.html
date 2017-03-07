@@ -21,14 +21,29 @@
 <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/1.0.0/firebaseui.css" />
 
 <div class="page-content">
-    <section class="mdl-grid">
-        <div class="mdl-cell mdl-cell--6-col mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet">
-			<div id="firebaseui-auth-container"></div>
-			<div class="mdl-card__supporting-text">
+    <div class="mdl-grid">
+        <div class="full-width-card mdl-cell mdl-cell--6-col mdl-cell--3-offset-desktop mdl-cell--1-offset-tablet" style="background:white">
+			<div class="mdl-card__title">
+				<ul class="mdl-list" style="margin:auto;">
+					<li class="mdl-list__item">
+						<span class="mdl-list__item-primary-content" style="height:96px;width:32px;background: url(/static/birds/images/feather2.png) no-repeat center;background-size:contain;">
+						</span>
+						<span class="mdl-card__title-text mdl-list__item-primary-content" style="margin:auto;">The Birding Book</span>
+					</li>
+				</ul>
+			</div>
+			<div class="mdl-card__actions">
+				<div id="firebaseui-auth-container"></div>
+			</div>
+			
+			<div class="mdl-card__supporting-text mdl-card--border">
+				Create a Birding Book profile.  Automatically track <b>year</b> and <b>life</b> lists, Talk Bird, Contribute to The Birding Book <b>citizen science database</b>, and more.
+			</div>
+			<div class="mdl-card__supporting-text mdl-card--border">
 				Please review the <a href="{% url 'birds:about' %}#tos">Terms of Service</a> and <a href="{% url 'birds:about' %}#privacy-policy">Privacy Policy</a> before signing up.
 			</div>
         </div>
-    </section>
+    </div>
 </div>
 
 <script type="text/javascript">
