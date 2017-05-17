@@ -29,7 +29,7 @@
 			<div class="mdl-card__actions">
 				<a class="no-decoration" href="{% url 'birds:user' sighting.user.id %}">
 					<span class="mdl-chip mdl-chip--contact user-chip">
-						<span class="mdl-chip__contact mdl-color--teal mdl-color-text--white" style="background: url({{ sighting.user.avatar.thumbnail_url }}) no-repeat center;background-size:cover">
+						<span class="mdl-chip__contact" style="background: url({{ sighting.user.avatar.thumbnail_url }}) no-repeat center;background-size:cover">
 						</span>
 						<span class="mdl-chip__text">{{ sighting.user.username }}</span>
 					</span>

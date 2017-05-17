@@ -485,9 +485,11 @@ def sightings_search(request):
 			return HttpResponse(json.dumps({'html': html, 'next_page': page+2}) , content_type='application/json')
 		else:
 			return HttpResponse(json.dumps({'html': html, 'next_page': 'done'}) , content_type='application/json')
+	else:
+		return HttpResponseForbidden()
 		
-#def certcode(request):
-	#return HttpResponse("u8rJYLDlWBRLVWrVAHWdOjLR_wFG1QhZVeq8YbXN9Vk.kkUUZ7wDSk_Ruptr4ve-eoVyTSusZ4Q8H6nPxyDIeh0", content_type='text/plain')
+def certcode(request):
+	return HttpResponse("UkhVC-nEsTpRuv1r9DcGYM1gVR1Ew9BNqedHbc52Pak.kkUUZ7wDSk_Ruptr4ve-eoVyTSusZ4Q8H6nPxyDIeh0", content_type='text/plain')
 
 def robots(request):
 	return render(request, 'birds/robots.txt', content_type="text/plain")
