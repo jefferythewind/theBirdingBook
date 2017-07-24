@@ -1,4 +1,5 @@
 {% extends 'birds/base.html' %}
+{% load staticfiles %}
 
 {% block desc_title %}
 <title>The Birding Book - About</title>
@@ -40,13 +41,37 @@
 			<div class="mdl-card__supporting-text">
 				<ul class="mdl-list">
 					<li class="mdl-list__item">
-						<p>The Birding Book a web app that allows users to track their personal birding data, while collection structured community data about birds.</p>
+						<p>The Birding Book a new App for Birding.  Post your bird sightings and browse sightings from other members.  Birders can use the app to quickly review <b>which birds</b> have been seen, <b>where</b> and <b>when</b>.  Members can help each other confidently identify birds using the build in <b><a class="no-decoration" href="#species-suggestion">Species Suggestion Tool</a></b></p>
 					</li>
+				</ul>
+			</div>
+			<div class="mdl-card__title" id="faq">
+				<h2 class="mdl-card__title-text">How to post a sighting?</h2>
+			</div>
+			<div class="mdl-card__supporting-text">
+				<ul class="mdl-list">
 					<li class="mdl-list__item">
-						<p>Once the community embraces this platform, all the birding data will be at our fingertips.  A public RESTful API will be made available to facilitate scientific research.</p>
+						<p>Use the Main Menu ( top left of screen ) and select <a class="no-decoration" href="{% url 'birds:new_sighting' %}"><b>New Sighting</b></a>.  Fill out the few required information fields.  Add <b>as many pictures as you want</b> ( optional ).  Use the map to indicate where you saw the bird.</p>
 					</li>
+				</ul>
+			</div>
+			<div class="mdl-card__title" id="faq">
+				<h2 class="mdl-card__title-text">Species Selection Tool</h2>
+			</div>
+			<div class="mdl-card__supporting-text">
+				<ul class="mdl-list">
 					<li class="mdl-list__item">
-						<p>Birders can use the app to quickly review <b>which birds</b> have been seen, <b>where</b> and <b>when</b>.</p>
+						<p>When you see a bird that you know, use this tool to help a birder out, by <b>suggesting the right species</b>.  Other birders can vote, or "agree" which species they think is the correct one.</p>
+					</li>
+				</ul>
+			</div>
+			<div class="mdl-card__title" id="faq">
+				<h2 class="mdl-card__title-text">How do I view Bird Pictures near me?</h2>
+			</div>
+			<div class="mdl-card__supporting-text">
+				<ul class="mdl-list">
+					<li class="mdl-list__item">
+						<p>Use the location search tool.  Navigate to <b><a class="no-decoration" href="{% url 'birds:map' %}">The Birding Book Map</a></b> to see the birds by geographic location.</p>
 					</li>
 				</ul>
 			</div>

@@ -16,6 +16,7 @@ from .forms import SightingsForm
 from django.contrib.auth.decorators import login_required
 
 def about(request):
+	request.session['nothanks'] = 1
 	return render(request, 'birds/about.html')
 
 def privacy_policy(request):
@@ -493,3 +494,7 @@ def certcode(request):
 
 def robots(request):
 	return render(request, 'birds/robots.txt', content_type="text/plain")
+
+def nothanks(request):
+	request.session['nothanks'] = 1
+	return HttpResponse(json.dumps({'msg':'good'}) , content_type='application/json')

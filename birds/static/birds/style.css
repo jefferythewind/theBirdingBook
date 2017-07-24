@@ -600,3 +600,39 @@ End Notification Section
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
 /* END ICON SIZING */
+
+/* spinning icon */
+.spinning-icon {
+    -webkit-transition: all 1s ease;
+	-moz-transition: all 1s ease;
+	-o-transition: all 1s ease;
+	-ms-transition: all 1s ease;
+	transition: all 1s ease;
+}
+.spun {
+	background: gray;
+	-webkit-transform: rotate(1080deg);
+	-moz-transform: rotate(1080deg);
+	-o-transform: rotate(1080deg);
+	-ms-transform: rotate(1080deg);
+	transform: rotate(1080deg);
+}
+
+/*ABOUT PAGE*/
+.mdl-list__item p {
+	font-size: 22px;
+	letter-spacing:1px;
+}
+
+.about-card {
+	margin: 4px;
+}
+
+.tourpics {
+	max-height: 300px;
+	overflow-y: hidden;
+}
+
+.tourpics img {
+	width: 100%;
+}

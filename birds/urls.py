@@ -39,4 +39,5 @@ urlpatterns = [
 	url(r'^update_search', views.update_search_session, name="update_search"),
 	url(r'^.well-known/acme-challenge/UkhVC-nEsTpRuv1r9DcGYM1gVR1Ew9BNqedHbc52Pak', views.certcode, name="certcode"),
 	url(r'^robots\.txt$', views.robots, name="robots"),
+	url(r'^nothanks', views.nothanks, name="nothanks")
 ]
